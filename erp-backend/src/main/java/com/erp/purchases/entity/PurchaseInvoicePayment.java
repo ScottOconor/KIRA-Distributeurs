@@ -53,6 +53,10 @@ public class PurchaseInvoicePayment {
     @JoinColumn(name = "account_move_id")
     private AccountMove accountMove;
 
+    /** Si ce paiement est une compensation par avoir fournisseur : id de l'avoir utilisé */
+    @Column(name = "credit_note_id")
+    private Long creditNoteId;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 }

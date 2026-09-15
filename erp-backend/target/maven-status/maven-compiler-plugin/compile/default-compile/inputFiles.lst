@@ -1,202 +1,390 @@
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\RistournePaiementDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\entity\Enlevement.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\controller\ImportController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\ProductCategoryRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockQuantDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\ImportResult.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\AnalyticAccountRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\StockPickingType.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\service\PrecompteService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\controller\AccountController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\AnalyticLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\controller\SalesController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\dto\RemiseDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\controller\EnlevementController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\AccountMoveRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\dto\GroupDashboardDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\InvoicePaymentRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\repository\RistournePaiementRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\ProductCategory.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\service\ReportService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\repository\InvoicePaymentRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockAdjustmentRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\service\EnlevementService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\AnalyticDistributionItem.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\dto\EleaderImportResultDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\entity\SalesOrderLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\AnalyticAccount.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\service\WarehouseDataInitializer.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\service\EleaderPdfParserService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\AnalyticDistributionItemRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\dto\PurchaseInvoicePaymentRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\SalesStatsResponse.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\SalesOrderRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\Partner.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\entity\EnlevementClient.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\StockPickingRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\repository\CompanyGroupRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\controller\AnalyticController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\ProductDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\dto\EnlevementDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\controller\StockController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\service\EleaderImportService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\BalanceLineDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\entity\SalesInvoice.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\AnalyticAccountDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\controller\SalesStatsController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\SalesStatsLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\InvoicePaymentDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\dto\PurchaseOrderRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\SalesStatsClient.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockMoveDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\service\RistourneService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\entity\RistournePaiement.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\entity\EleaderConfig.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\entity\Remise.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\SalesOrderDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\entity\PurchaseOrderLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\ValuationLayerRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\WarehouseRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\ProductRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\SalesStatsRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\JournalDailyBalanceDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\auth\filter\JwtAuthFilter.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\repository\PrecompteRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\entity\RemisePaiementLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\entity\RemisePaiement.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\AgencyRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\GlobalExceptionHandler.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\service\SalesService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\entity\RolePermission.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\dto\RemisePaiementDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\StockAdjustment.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\AccountJournalDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\AccountMoveDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\auth\dto\AuthResponse.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\service\AccountingService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\ConsigneCodes.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\StockLocation.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\auth\entity\User.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\SalesInvoiceDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\entity\PurchaseInvoiceLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\StockQuantRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\auth\service\JwtService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\repository\PurchaseOrderRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\entity\SalesOrder.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\init\OhadaDataInitializer.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\AccountAccountRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\ReceptionBordereauDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\service\AnalyticService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\dto\PrecompteDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\repository\CompanyRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\dto\UserDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockPickingTypeDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\StockLocationRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\entity\PurchaseInvoicePayment.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\StockQuant.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\repository\EnlevementRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\ValuationLayerDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\controller\ConfigController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\Warehouse.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\AccountMoveLineRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockPickingDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\JournalDailyBalance.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\AccountMoveLineDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\service\StockService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\auth\service\UserDetailsServiceImpl.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\AccountAccountDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\controller\PrecompteImportExceptionHandler.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\repository\SalesInvoiceLineRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\StockAdjustmentRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\controller\EleaderController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\StockPicking.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\repository\SalesOrderRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\AccountJournal.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\JournalDailyBalanceRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\controller\PurchaseController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\InventorySheetDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\dto\EleaderImportLogDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\Product.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\ReportRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\dto\RoleDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockLocationDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\dto\CreateUserRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\entity\Precompte.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\service\EleaderConfigService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\dto\EleaderConfigDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\RistourneDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\ValuationLayer.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\JournalEntryRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockDashboardDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\AnalyticLineRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\StockMoveRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\service\SalesStatsService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\Agency.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\controller\RemiseController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\WarehouseDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\controller\ReportController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\auth\repository\UserRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\entity\Ristourne.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\controller\ChangePasswordController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\entity\Company.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\dto\PurchaseInvoiceDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\repository\EleaderConfigRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\auth\dto\AuthRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\service\BordereauExportService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\entity\InvoicePayment.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\dto\CompanyGroupDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\dto\EleaderEmballageMappingDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\entity\SalesInvoiceLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\service\RemiseService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\repository\EleaderEmballageMappingRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\CorsConfig.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\dto\CompanyDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\entity\StockMove.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\repository\SalesInvoiceRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\service\ImportService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\entity\PurchaseInvoice.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\service\PurchaseService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\repository\EnlevementClientRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\repository\PurchaseInvoiceRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\PartnerBalanceLineDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\entity\EleaderImportLog.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\repository\RistourneRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\controller\PrecompteImportResultDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\dto\PurchaseOrderDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\repository\EleaderImportLogRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\repository\StockPickingTypeRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\ProductCategoryDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\SpaController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\dto\SalesInvoiceRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\auth\controller\AuthController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\service\ConfigService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockAdjustmentDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\repository\RemisePaiementRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\AnalyticDistributionItemDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\StockPickingRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\ErpApplication.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\eleader\entity\EleaderEmballageMapping.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\AnalyticLineDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\service\PrecompteExcelImportService.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\repository\RolePermissionRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\entity\RistournePaiementLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\entity\PurchaseOrder.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\BalanceLine6ColsDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\sales\controller\RistourneController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\AccountMoveLine.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\stock\dto\AgencyDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\AccountMove.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\DataSeeder.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\SecurityConfig.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\dto\PartnerDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\controller\PrecompteController.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\entity\Role.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\PartnerRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\repository\RoleRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\dto\PurchaseInvoiceRequest.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\repository\RemiseRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\config\entity\CompanyGroup.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\repository\AccountJournalRepository.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\common\controller\PrecompteImportDTO.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\accounting\entity\AccountAccount.java
-C:\Users\K.I.T\OneDrive\Documents\ERP\erp-backend\src\main\java\com\erp\purchases\repository\PurchaseInvoicePaymentRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/SalesInvoiceLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/FiscalClosurePreviewResponse.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/PayslipInput.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/ImportResult.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/init/OhadaDataInitializer.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/controller/RistourneController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/Employee.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesStatsRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/StockQuantRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/controller/ImportController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/entity/OutboxStatus.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/SalaryRule.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/service/BackupService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/repository/EleaderImportLogRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/controller/BackupController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/repository/EnlevementRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/AccountMoveLineRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/WarehouseDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/controller/StockController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/repository/PurchaseInvoiceReconciliationRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/InvoicePayment.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/FiscalClosureExecuteResponse.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockDetailedLocationDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/StockPicking.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/controller/HelpdeskController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/audit/controller/AuditController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/entity/CaisseStatus.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/ProductCategory.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/StockMoveRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/controller/RemoteAgencyController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/entity/CaisseSession.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/JournalDailyBalanceDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/GlobalExceptionHandler.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/WarehouseRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseAvailableMoveDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/PurchaseInvoiceReconciliation.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/repository/SalesInvoiceRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/Echelon.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/license/LicenseStartupListener.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/repository/PurchaseOrderRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/controller/InterAgencyController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/JpaAuditingConfig.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/repository/PrecompteRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/controller/EnlevementController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/DataSeeder.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockReportWarehouseDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/repository/CaisseRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseInvoiceRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/dto/AuthRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/service/ModuleService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/dto/UserDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/AvoirRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/entity/SyncEventType.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/dto/ModuleStateDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/service/SnapshotService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/controller/PrecompteImportDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseReconcileRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/RemiseDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/entity/Role.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseStatsSupplier.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/dto/PrecompteDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/Product.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/controller/ModuleController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/dto/CaisseSessionDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/repository/RistournePaiementRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/service/StockService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/repository/SalesOrderRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/JournalEntryRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/service/PurchaseService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockAdjustmentRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/dto/PayslipRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/repository/CompanyRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/StockLocationRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/ValuationLayerRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockDashboardDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/init/PayrollSeeder.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/dto/TicketCommentDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockPickingDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/WorkedDaysType.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseInvoicePaymentRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/repository/ModuleInstallRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/service/PurchaseStatsService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/ProductCategoryRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/entity/TicketCategory.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/repository/RistourneRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/entity/OutboxEvent.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/SecurityUtils.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/controller/AuthController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/dto/SyncSummaryDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/JournalDailyBalance.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/JobPosition.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/AnalyticLineDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/AccountMoveRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/ProductRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/UnitOfMeasureDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/license/FingerprintService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/audit/repository/AuditLogRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesInvoiceReconciliationDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/SalesOrderLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/Partner.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/init/LeaveTypeSeeder.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseInvoiceReconciliationDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/ValuationLayer.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/Warehouse.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/UnitOfMeasure.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/ProductCategoryDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/service/SnapshotScheduler.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/permission/PermissionService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/FiscalClosurePreviewRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/PrixClientArticleDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/repository/RolePermissionRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesInvoiceRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/entity/TicketStatus.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/entity/AppSettings.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/InterAgencyTransferPayload.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockLossDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/dto/AddOperationRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/repository/RemisePaiementRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/service/SalesService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/TenantAuthenticationDetails.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/PayslipInputType.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/controller/CaisseController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/SpaController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/repository/TicketCommentRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesStatsResponse.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseInvoiceDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/service/InterAgencyReceptionService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/AccountJournalRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/PayslipRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/service/FiscalLockGuard.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockDetailedProductDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockPickingRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/AnalyticDistributionItemDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/AvailableCreditDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/dto/AuthResponse.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/repository/PrixFournisseurArticleRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/service/PrecompteService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/PurchaseInvoice.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/dto/EleaderEmballageMappingDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/entity/EleaderConfig.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/StockLocation.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/InvoicePaymentRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/dto/EnlevementRapportDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/PartnerDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/service/RemiseService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/AnalyticAccountRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/service/HubConfigService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/audit/entity/AuditLog.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/PayslipRunRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/ErpApplication.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockReportLineDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/Department.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/BalanceLine6ColsDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/repository/EleaderConfigRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/LeaveTypeRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/dto/OutboxEventDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/AnalyticDistributionItem.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/repository/OutboxEventRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/controller/HelpdeskSyncController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/service/JwtService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/controller/RemiseController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/controller/SpokeHealthController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockLossRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/PayslipWorkedDaysRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/entity/TicketPriority.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/entity/TicketComment.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/RistourneDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/LeaveDeclaration.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/Remise.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/controller/AccountController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/service/PrecompteExcelImportService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/PrixClientArticle.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/service/SalesStatsService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/repository/PurchaseInvoicePaymentRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/SalaryRuleCategoryRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/audit/dto/AuditLogDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/repository/SalesInvoiceReconciliationRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/CorsConfig.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/FiscalClosureExecuteRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/permission/PermissionRule.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/PayslipLineRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/dto/EleaderConfigDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/controller/SalesController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/RemisePaiement.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/LeaveBalanceRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/init/OrganisationSeeder.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/license/LicenseEnforcementFilter.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/SalaryRuleCategory.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/BalanceLineDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/ProfessionalCategoryRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/SalesInvoice.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesOrderRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/license/BuildIdentityService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/dto/EleaderImportResultDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesStatsLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/repository/RoleRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/EmployeeContractRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/repository/RemiseRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/service/ConfigExportService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/SalesInvoiceReconciliation.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/dto/SpokeSnapshotPayload.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockLocationDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/repository/CaisseOperationRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/InterAgencyApiKeyFilter.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/service/EleaderConfigService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/InventorySheetDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/StockAdjustment.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/PurchaseInvoiceLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/service/WarehouseDataInitializer.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseOrderDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/AccountAccountRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/Agency.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/service/UserDetailsServiceImpl.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/EchelonRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/PayslipRun.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/service/BordereauExportService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/service/RemoteAgencyService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/service/ConfigService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/repository/PurchaseInvoiceRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/PurchaseInvoicePayment.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/Payslip.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/AccountMoveLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/RemisePaiementDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PrixFournisseurArticleDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/repository/PrixClientArticleRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/controller/PurchaseStatsController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseStatsResponse.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/PartnerRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/InvoicePaymentDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/ProductDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/LeaveType.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/controller/PrecompteImportResultDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/controller/SyncStatusController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/service/ImportService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/controller/PurchaseController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/license/LicenseStatus.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/PayslipInputRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/dto/CaisseDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/service/EnlevementService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/dto/PayslipRunRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseAvoirRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/ReceptionBordereauDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/repository/RemoteAgencyRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/UnitOfMeasureRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/service/InterAgencyKeyService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/SalaryRuleRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/entity/Enlevement.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/StockPickingRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/AccountAccount.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseOrderRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/controller/HrController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/service/PayrollService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/PurchaseOrderLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/entity/OperationType.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/service/LeaveService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/controller/SalesStatsController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/PayslipInputTypeRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/DirectReceptionRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/repository/AppSettingsRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/AnalyticAccountDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/service/EleaderPdfParserService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/AccountMove.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesInvoiceDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/controller/ChangePasswordController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/dto/RoleDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/AgencyDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/ProductWarehouseValuationRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/entity/Precompte.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/repository/SalesInvoiceLineRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/controller/InterAgencyErpController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/repository/EleaderEmballageMappingRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/entity/RemoteAgency.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/StockMove.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/RabbitMQConfig.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/repository/EnlevementClientRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/AccountJournal.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesStatsClient.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/service/TenantGuard.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/service/SyncEventPublisher.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/service/ProductValuationService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/entity/RolePermission.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/service/HrService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/ValuationLayerDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/license/RuntimePackaging.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/init/ProfessionalCategorySeeder.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/service/EleaderImportService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/StockAdjustmentRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/permission/PermissionFilter.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/AgencyRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/ConsigneCodes.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/SecurityConfig.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/Ristourne.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/entity/EnlevementClient.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/RemisePaiementLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockAdjustmentDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/service/CaisseService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/dto/EleaderImportLogDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/CasseBordereauDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/LeaveBalance.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/service/PayrollEngine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/dto/RemoteAgencyDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/service/RistourneService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/controller/ReportController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/ProfessionalCategory.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/AccountAccountDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/license/LicenseService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockMoveDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/WorkedDaysTypeRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/StockLossLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/StockPickingType.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/ReconcileRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/entity/User.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/dto/TicketStatsDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/repository/PurchaseInvoiceLineRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/ProductWarehouseValuation.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/AnalyticLineRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/dto/BrouillardDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseStatsRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/SalesOrderDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/PurchaseOrder.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/audit/service/AuditService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/service/AccountingService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/AnalyticDistributionItemRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/ReportRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/entity/EleaderEmballageMapping.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/dto/FraisEnlevementSummaryDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/PartnerBalanceLineDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/service/StockReportService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/AccountJournalDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/dto/PurchaseStatsLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/AnalyticLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/JobPositionRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/repository/JournalDailyBalanceRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/dto/PayrollRegisterDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/controller/FiscalClosureController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/dto/EnlevementDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/entity/Company.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/controller/ConfigController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockPickingTypeDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sync/service/SyncDispatcherScheduler.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/StockPickingTypeRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/controller/LeaveController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/PayslipLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/AccountMoveDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockDetailedMoveDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/dto/LeaveBalanceSummary.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/service/AnalyticService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/RistournePaiementDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/dto/CompanyDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/entity/AnalyticAccount.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/LeaveDeclarationRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/StockQuant.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/EmployeeContract.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/license/controller/LicenseController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/dto/AvailableMoveDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/filter/JwtAuthFilter.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/controller/PayrollController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/dto/PayslipDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/purchases/entity/PrixFournisseurArticle.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/controller/EleaderController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/service/HelpdeskService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/entity/ModuleInstall.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/service/ReportService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/entity/StockLoss.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/repository/TicketRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/AuditorAwareImpl.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/RistournePaiementLine.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/DepartmentRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/eleader/entity/EleaderImportLog.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/common/controller/PrecompteController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/auth/repository/UserRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/SalesOrder.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/dto/StockQuantDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/JournalPreviewDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/repository/EmployeeRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/dto/AccountMoveLineDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/service/FiscalClosureService.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/repository/CaisseSessionRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/VersionColumnBackfillInitializer.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/entity/Caisse.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/entity/RistournePaiement.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/stock/repository/StockLossRepository.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/config/dto/CreateUserRequest.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/entity/Ticket.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/dto/CaisseOperationDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/caisse/entity/CaisseOperation.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/helpdesk/dto/TicketDTO.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/hr/entity/PayslipWorkedDays.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/accounting/controller/AnalyticController.java
+/home/automate/Documents/Projets 1.1/Projets/K.I.R.A Distributeurs/erp-backend/src/main/java/com/erp/sales/repository/InvoicePaymentRepository.java

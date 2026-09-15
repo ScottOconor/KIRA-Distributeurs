@@ -32,6 +32,10 @@ public class RistournePaiement {
 
     private LocalDate date;
 
+    /** Date effective du passage à l'état "done" (facture de ristourne générée) */
+    @Column(name = "date_paiement")
+    private LocalDate datePaiement;
+
     /** draft / confirmed / done / cancelled */
     @Builder.Default
     private String state = "draft";

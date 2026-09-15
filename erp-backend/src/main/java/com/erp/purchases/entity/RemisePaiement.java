@@ -32,6 +32,10 @@ public class RemisePaiement {
 
     private LocalDate date;
 
+    /** Date effective du passage à l'état "done" (avoir fournisseur généré) */
+    @Column(name = "date_paiement")
+    private LocalDate datePaiement;
+
     /** draft / confirmed / done / cancelled */
     @Builder.Default
     private String state = "draft";
@@ -60,6 +64,10 @@ public class RemisePaiement {
     @OneToMany(mappedBy = "paiement", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<RemisePaiementLine> lines = new ArrayList<>();
+
+    /** Type de génération : brasserie / guinness */
+    @Column(name = "type_remise")
+    private String typeRemise;
 
     @Column(name = "company_id", nullable = false)
     private Long companyId;
