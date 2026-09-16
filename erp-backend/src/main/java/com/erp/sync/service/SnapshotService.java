@@ -562,10 +562,20 @@ public class SnapshotService {
                         .build())
                 .collect(Collectors.toList());
 
-        // ── Lignes comptables (année en cours) ──────────────────────────────
+        // ── Lignes comptables (fenêtre glissante de 60 jours, PAS l'année en cours) ─────────
+        // Avant ce correctif, cette liste couvrait le 1er janvier → aujourd'hui : sur un client
+        // à gros volume d'écritures, elle grossit tout au long de l'année jusqu'à produire un
+        // message RabbitMQ dépassant la limite de taille du broker (ex: 16 Mo) — le Hub rejette
+        // alors la publication (406 PRECONDITION_FAILED), et l'événement FULL_SNAPSHOT, jamais
+        // acceptable en l'état, était réessayé indéfiniment (dispatch 30s + auto-requeue 5min),
+        // consommant CPU/mémoire à chaque tentative sur la machine du client (cf. incident
+        // Blessing du 2026-09-16, même code). Le snapshot horaire n'est qu'un filet de
+        // reconciliation (chaque écriture a déjà déclenché son propre événement temps réel) —
+        // 60 jours suffisent largement à cet usage.
+        LocalDate accountMoveLinesFrom = today.minusDays(60);
         List<SpokeSnapshotPayload.AccountMoveLineItem> accountMoveLines;
         try {
-            accountMoveLines = moveLineRepo.findPostedByCompanyAndDateRange(cid, yearStart, today).stream()
+            accountMoveLines = moveLineRepo.findPostedByCompanyAndDateRange(cid, accountMoveLinesFrom, today).stream()
                 .map(l -> SpokeSnapshotPayload.AccountMoveLineItem.builder()
                         .id(l.getId())
                         .date(l.getDate())

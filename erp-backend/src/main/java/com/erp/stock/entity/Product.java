@@ -8,7 +8,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "products")
+@Table(name = "products", indexes = {
+    // Toutes les requêtes de listing (getProducts, imports Eleader, recherche) filtrent par
+    // company_id — table sans aucun index jusqu'ici (contrairement à SalesInvoice/StockQuant/...
+    // déjà couvertes), donc scan complet à chaque écran "Articles" sur un catalogue volumineux.
+    @Index(name = "idx_products_company_active",  columnList = "company_id, active"),
+    @Index(name = "idx_products_company_code",    columnList = "company_id, default_code")
+})
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Product {
 

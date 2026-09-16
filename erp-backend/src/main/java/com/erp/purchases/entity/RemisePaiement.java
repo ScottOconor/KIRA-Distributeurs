@@ -16,7 +16,11 @@ import java.util.List;
  * Règlement d'une remise fournisseur.
  */
 @Entity
-@Table(name = "remise_paiements")
+@Table(name = "remise_paiements", indexes = {
+    // Même besoin côté achats que RistournePaiement (dashboard + snapshot horaire).
+    @Index(name = "idx_remise_paiements_company_state_date", columnList = "company_id, state, date"),
+    @Index(name = "idx_remise_paiements_partner",            columnList = "partner_id, company_id")
+})
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class RemisePaiement {
 

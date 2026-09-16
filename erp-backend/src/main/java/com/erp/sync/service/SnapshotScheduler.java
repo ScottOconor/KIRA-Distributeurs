@@ -39,8 +39,19 @@ public class SnapshotScheduler {
             return;
         }
         log.info("Snapshot horaire démarré…");
-        snapshotService.buildAndPublish();
-        lastSnapshotAt = now;
-        log.info("Snapshot horaire terminé.");
+        try {
+            snapshotService.buildAndPublish();
+            lastSnapshotAt = now;
+            log.info("Snapshot horaire terminé.");
+        } catch (Exception e) {
+            // buildAndPublish() encapsule déjà les erreurs par société ; ce catch ne couvre que
+            // ce qui peut échouer avant la boucle (ex: companyRepo.findAll()). Sans lui,
+            // l'exception remontait non catchée au handler par défaut de @Scheduled — le prochain
+            // passage se déclenchait quand même (fixedDelay) mais avec seulement la stacktrace
+            // générique du framework. lastSnapshotAt n'est délibérément PAS mis à jour ici : si
+            // aucune nouvelle activité ne survient avant le prochain passage, le garde-fou
+            // "aucune activité depuis lastSnapshotAt" ne doit pas faire sauter la retentative.
+            log.error("Snapshot horaire échoué : {}", e.getMessage(), e);
+        }
     }
 }

@@ -25,6 +25,11 @@ public class SyncEventPublisher {
     @Value("${sync.spoke.id}")
     private String spokeId;
 
+    /** Seuil d'alerte avant la limite réelle du broker (16 Mo) — laisse une marge pour repérer
+     *  la croissance avant le rejet 406 PRECONDITION_FAILED plutôt que de le découvrir en prod
+     *  (cf. incidents 2026-09-14/16 sur des listes non fenêtrées du snapshot horaire). */
+    private static final int PAYLOAD_WARN_BYTES = 8 * 1024 * 1024;
+
     /**
      * Publie un snapshot dans une nouvelle transaction indépendante.
      * REQUIRES_NEW évite d'hériter de la transaction readOnly du SnapshotService.
@@ -50,6 +55,12 @@ public class SyncEventPublisher {
             // l'atomicité "tout ou rien" attendue du pattern outbox.
             log.error("Impossible de sérialiser le payload pour l'événement {} id={} : {}", eventType, entityId, e.getMessage());
             throw new IllegalStateException("Échec de sérialisation de l'événement de synchronisation " + eventType, e);
+        }
+        int payloadBytes = json.getBytes(java.nio.charset.StandardCharsets.UTF_8).length;
+        if (payloadBytes >= PAYLOAD_WARN_BYTES) {
+            log.warn("Payload outbox volumineux ({} Mo) pour {} id={} — approche de la limite du "
+                    + "broker (16 Mo), vérifier les fenêtres de date des listes du snapshot",
+                    String.format("%.1f", payloadBytes / (1024.0 * 1024.0)), eventType, entityId);
         }
         OutboxEvent event = new OutboxEvent();
         event.setSpokeId(spokeId);

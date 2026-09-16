@@ -14,7 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "stock_pickings")
+@Table(name = "stock_pickings", indexes = {
+    // Un bon de mouvement par réception/livraison/transfert/ajustement — table à très fort volume
+    // sans aucun index jusqu'ici, alors que les écrans Réceptions/Livraisons/Transferts filtrent
+    // tous par company_id (+ type/état) au quotidien.
+    @Index(name = "idx_stock_pickings_company_type_state", columnList = "company_id, picking_type_code, state"),
+    @Index(name = "idx_stock_pickings_company_created",    columnList = "company_id, created_at"),
+    @Index(name = "idx_stock_pickings_origin",             columnList = "origin")
+})
 @EntityListeners(AuditingEntityListener.class)
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class StockPicking {
