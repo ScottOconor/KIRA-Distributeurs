@@ -130,8 +130,9 @@ public class SalesService {
     @Transactional(readOnly = true)
     public List<SalesOrderDTO> getAllOrders(Long companyId) {
         List<SalesOrder> orders = orderRepo.findByCompanyIdOrderByDateDescNameDesc(companyId);
-        Map<Long, SalesInvoice> invoiceByOrderId = invoiceRepo.findBySalesOrderIdIn(
-                orders.stream().map(SalesOrder::getId).collect(Collectors.toList())
+        Map<Long, SalesInvoice> invoiceByOrderId = batchedByIds(
+                orders.stream().map(SalesOrder::getId).collect(Collectors.toList()),
+                invoiceRepo::findBySalesOrderIdIn
             ).stream()
             .filter(i -> i.getSalesOrder() != null)
             .collect(Collectors.toMap(i -> i.getSalesOrder().getId(), i -> i, (a, b) -> a));
@@ -139,6 +140,21 @@ public class SalesService {
         return orders.stream()
                 .map(o -> toOrderDTO(o, invoiceByOrderId, warehouseNameCache))
                 .collect(Collectors.toList());
+    }
+
+    /** PostgreSQL refuse toute requête préparée au-delà de 65 535 paramètres (SQLSTATE 08P01) —
+     *  un `IN (:orderIds)` passé tel quel explose si un client à gros volume a accumulé plus de
+     *  65 535 commandes (même classe de bug que AccountingService#batchedByLineIds, cf. incident
+     *  du 2026-09-16 sur les écritures comptables). On découpe en lots largement sous la limite. */
+    private static final int SQL_IN_BATCH_SIZE = 10_000;
+
+    private static <T> List<T> batchedByIds(List<Long> ids, java.util.function.Function<List<Long>, List<T>> fetcher) {
+        if (ids.size() <= SQL_IN_BATCH_SIZE) return fetcher.apply(ids);
+        List<T> result = new ArrayList<>();
+        for (int i = 0; i < ids.size(); i += SQL_IN_BATCH_SIZE) {
+            result.addAll(fetcher.apply(ids.subList(i, Math.min(i + SQL_IN_BATCH_SIZE, ids.size()))));
+        }
+        return result;
     }
 
     /**

@@ -39,9 +39,35 @@ public interface OutboxEventRepository extends JpaRepository<OutboxEvent, Long> 
 
     long countByStatus(OutboxStatus status);
 
-    Page<OutboxEvent> findByEventTypeInOrderByCreatedAtDesc(List<SyncEventType> types, Pageable pageable);
+    // Projection fermée (sans `payload`) pour les écrans de liste — SyncStatusController#events()
+    // ne renvoie jamais le payload dans son DTO de liste (seul /events/{id} en a besoin). Charger
+    // l'entité complète ici forçait Hibernate à rapatrier la colonne TEXT `payload` de chaque ligne
+    // pour la jeter aussitôt : sur un FULL_SNAPSHOT (payload pouvant dépasser 100 Mo en JSON brut),
+    // ne serait-ce qu'une poignée de lignes dans la page suffit à épuiser le heap JVM côté client
+    // JDBC (incident Blessing du 2026-09-16, même code).
+    interface OutboxEventSummary {
+        Long getId();
+        String getSpokeId();
+        SyncEventType getEventType();
+        String getEntityId();
+        OutboxStatus getStatus();
+        int getRetryCount();
+        LocalDateTime getCreatedAt();
+        LocalDateTime getLastAttemptAt();
+        String getErrorMessage();
+    }
 
-    Page<OutboxEvent> findByStatusAndEventTypeInOrderByCreatedAtDesc(OutboxStatus status, List<SyncEventType> types, Pageable pageable);
+    @Query("SELECT e.id as id, e.spokeId as spokeId, e.eventType as eventType, e.entityId as entityId, "
+         + "e.status as status, e.retryCount as retryCount, e.createdAt as createdAt, "
+         + "e.lastAttemptAt as lastAttemptAt, e.errorMessage as errorMessage "
+         + "FROM OutboxEvent e WHERE e.eventType IN :types ORDER BY e.createdAt DESC")
+    Page<OutboxEventSummary> findByEventTypeInOrderByCreatedAtDesc(@Param("types") List<SyncEventType> types, Pageable pageable);
+
+    @Query("SELECT e.id as id, e.spokeId as spokeId, e.eventType as eventType, e.entityId as entityId, "
+         + "e.status as status, e.retryCount as retryCount, e.createdAt as createdAt, "
+         + "e.lastAttemptAt as lastAttemptAt, e.errorMessage as errorMessage "
+         + "FROM OutboxEvent e WHERE e.status = :status AND e.eventType IN :types ORDER BY e.createdAt DESC")
+    Page<OutboxEventSummary> findByStatusAndEventTypeInOrderByCreatedAtDesc(@Param("status") OutboxStatus status, @Param("types") List<SyncEventType> types, Pageable pageable);
 
     @Query("SELECT e.status, COUNT(e) FROM OutboxEvent e WHERE e.eventType IN :types GROUP BY e.status")
     List<Object[]> countByStatusForTypes(@Param("types") List<SyncEventType> types);

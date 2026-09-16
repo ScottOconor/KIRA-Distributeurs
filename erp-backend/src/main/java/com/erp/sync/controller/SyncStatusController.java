@@ -6,6 +6,7 @@ import com.erp.sync.entity.OutboxEvent;
 import com.erp.sync.entity.OutboxStatus;
 import com.erp.sync.entity.SyncEventType;
 import com.erp.sync.repository.OutboxEventRepository;
+import com.erp.sync.repository.OutboxEventRepository.OutboxEventSummary;
 import com.erp.sync.service.SnapshotService;
 import com.erp.sync.service.SyncDispatcherScheduler;
 import lombok.RequiredArgsConstructor;
@@ -153,7 +154,7 @@ public class SyncStatusController {
                 : Arrays.asList(SyncEventType.values());
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<OutboxEvent> raw;
+        Page<OutboxEventSummary> raw;
 
         if (status != null && !status.isBlank()) {
             OutboxStatus st = OutboxStatus.valueOf(status.toUpperCase());
@@ -225,7 +226,7 @@ public class SyncStatusController {
         }
     }
 
-    private OutboxEventDTO toDTO(OutboxEvent e) {
+    private OutboxEventDTO toDTO(OutboxEventSummary e) {
         String moduleName = MODULE_TYPES.entrySet().stream()
                 .filter(en -> en.getValue().contains(e.getEventType()))
                 .map(Map.Entry::getKey)

@@ -107,16 +107,33 @@ public class PurchaseService {
     @Transactional(readOnly = true)
     public List<PurchaseOrderDTO> getAllOrders(Long companyId) {
         List<PurchaseOrder> orders = orderRepo.findByCompanyIdOrderByCreatedAtDesc(companyId);
-        Map<Long, StockPicking> pickingById = pickingRepo.findAllById(
-                orders.stream().map(PurchaseOrder::getPickingId).filter(Objects::nonNull).collect(Collectors.toSet())
+        Map<Long, StockPicking> pickingById = batchedByIds(
+                new ArrayList<>(orders.stream().map(PurchaseOrder::getPickingId).filter(Objects::nonNull).collect(Collectors.toSet())),
+                pickingRepo::findAllById
             ).stream().collect(Collectors.toMap(StockPicking::getId, p -> p));
-        Map<Long, PurchaseInvoice> invoiceById = invoiceRepo.findAllById(
-                orders.stream().map(PurchaseOrder::getInvoiceId).filter(Objects::nonNull).collect(Collectors.toSet())
+        Map<Long, PurchaseInvoice> invoiceById = batchedByIds(
+                new ArrayList<>(orders.stream().map(PurchaseOrder::getInvoiceId).filter(Objects::nonNull).collect(Collectors.toSet())),
+                invoiceRepo::findAllById
             ).stream().collect(Collectors.toMap(PurchaseInvoice::getId, i -> i));
         Map<String, String> receptionWhCache = new HashMap<>();
         return orders.stream()
                 .map(o -> toOrderDTO(o, pickingById, invoiceById, receptionWhCache))
                 .collect(Collectors.toList());
+    }
+
+    /** PostgreSQL refuse toute requête préparée au-delà de 65 535 paramètres (SQLSTATE 08P01) —
+     *  un `IN (:ids)` passé tel quel explose si un client à gros volume a accumulé plus de 65 535
+     *  commandes (même classe de bug que AccountingService#batchedByLineIds, cf. incident du
+     *  2026-09-16 sur les écritures comptables). On découpe en lots largement sous la limite. */
+    private static final int SQL_IN_BATCH_SIZE = 10_000;
+
+    private static <T> List<T> batchedByIds(List<Long> ids, java.util.function.Function<List<Long>, List<T>> fetcher) {
+        if (ids.size() <= SQL_IN_BATCH_SIZE) return fetcher.apply(ids);
+        List<T> result = new ArrayList<>();
+        for (int i = 0; i < ids.size(); i += SQL_IN_BATCH_SIZE) {
+            result.addAll(fetcher.apply(ids.subList(i, Math.min(i + SQL_IN_BATCH_SIZE, ids.size()))));
+        }
+        return result;
     }
 
     /**
