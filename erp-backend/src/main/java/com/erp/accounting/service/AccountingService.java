@@ -780,15 +780,31 @@ public class AccountingService {
 
         MoveListCache cache = new MoveListCache();
         if (!lineIds.isEmpty()) {
-            cache.distributionsByLineId = analyticDistributionItemRepo.findByMoveLineIdIn(lineIds).stream()
+            cache.distributionsByLineId = batchedByLineIds(lineIds, analyticDistributionItemRepo::findByMoveLineIdIn).stream()
                     .collect(Collectors.groupingBy(d -> d.getMoveLine().getId()));
-            cache.analyticLinesByLineId = analyticLineRepo.findByMoveLineIdIn(lineIds).stream()
+            cache.analyticLinesByLineId = batchedByLineIds(lineIds, analyticLineRepo::findByMoveLineIdIn).stream()
                     .collect(Collectors.groupingBy(l -> l.getMoveLine().getId()));
         }
 
         return moves.stream()
                 .map(m -> toMoveDTO(m, cache))
                 .collect(Collectors.toList());
+    }
+
+    /** PostgreSQL refuse toute requête préparée au-delà de 65 535 paramètres (SQLSTATE 08P01) —
+     *  un `IN (:lineIds)` passé tel quel explose dès qu'un filtre par plage de dates large remonte
+     *  suffisamment d'écritures (incident du 2026-09-16 sur Blessing : 95 437 paramètres sur un
+     *  client à gros volume). On découpe en lots largement sous la limite plutôt que de plafonner
+     *  le nombre d'écritures remontées, pour ne rien changer au résultat retourné à l'appelant. */
+    private static final int SQL_IN_BATCH_SIZE = 10_000;
+
+    private static <T> List<T> batchedByLineIds(List<Long> lineIds, java.util.function.Function<List<Long>, List<T>> fetcher) {
+        if (lineIds.size() <= SQL_IN_BATCH_SIZE) return fetcher.apply(lineIds);
+        List<T> result = new ArrayList<>();
+        for (int i = 0; i < lineIds.size(); i += SQL_IN_BATCH_SIZE) {
+            result.addAll(fetcher.apply(lineIds.subList(i, Math.min(i + SQL_IN_BATCH_SIZE, lineIds.size()))));
+        }
+        return result;
     }
 
     /** Cache mémoïsé le temps d'un seul appel liste (jamais partagé entre requêtes : AccountingService

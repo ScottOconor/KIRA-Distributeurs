@@ -413,8 +413,17 @@ public class SnapshotService {
                         .build())
                 .collect(Collectors.toList());
 
+        // Fenêtrées comme saleInvoices/purchaseInvoices (2 ans, sans limite si snapshot forcé) —
+        // avant ce correctif, ristournePaiements/remisePaiements étaient les deux seules listes
+        // historiques du snapshot sans aucune borne de date, ce qui les faisait grossir
+        // indéfiniment avec l'ancienneté du site et contribuait au dépassement de la taille max
+        // du broker (16 Mo) reproduit chaque heure sur un client à gros volume (cf. incident
+        // Blessing du 2026-09-16, même code).
+        LocalDate twoYearsAgo = today.minusYears(2);
+
         List<SpokeSnapshotPayload.RistournePaiementItem> ristournePaiements =
                 ristournePaiementRepo.findByCompanyIdOrderByCreatedAtDesc(cid).stream()
+                .filter(r -> full || r.getDate() == null || !r.getDate().isBefore(twoYearsAgo))
                 .map(r -> SpokeSnapshotPayload.RistournePaiementItem.builder()
                         .id(r.getId()).name(r.getName())
                         .partnerName(r.getPartner() != null ? r.getPartner().getName() : null)
@@ -425,6 +434,7 @@ public class SnapshotService {
 
         List<SpokeSnapshotPayload.RemisePaiementItem> remisePaiements =
                 remisePaiementRepo.findByCompanyIdOrderByCreatedAtDesc(cid).stream()
+                .filter(r -> full || r.getDate() == null || !r.getDate().isBefore(twoYearsAgo))
                 .map(r -> SpokeSnapshotPayload.RemisePaiementItem.builder()
                         .id(r.getId()).name(r.getName())
                         .partnerName(r.getPartner() != null ? r.getPartner().getName() : null)
@@ -477,7 +487,6 @@ public class SnapshotService {
                 .collect(Collectors.toMap(com.erp.stock.entity.Warehouse::getId, com.erp.stock.entity.Warehouse::getName));
 
         // ── Factures de vente (2 dernières années, sans limite si snapshot forcé) ───────────
-        LocalDate twoYearsAgo = today.minusYears(2);
         List<SpokeSnapshotPayload.SaleInvoiceItem> saleInvoices =
                 salesInvoiceRepo.findByCompanyIdAndStateNotOrderByDateDescNameDesc(cid, "draft").stream()
                 .filter(inv -> full || inv.getDate() == null || !inv.getDate().isBefore(twoYearsAgo))
