@@ -81,6 +81,10 @@ public class SalesOrder {
     @Column(name = "eleader_reference")
     private String eleaderReference;
 
+    /** Vendeur ayant réalisé la vente (nullable — facultatif) */
+    @Column(name = "seller_id")
+    private Long sellerId;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

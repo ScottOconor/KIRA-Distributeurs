@@ -23,6 +23,8 @@ public class SalesInvoiceRequest {
     private String notes;
     private Long companyId;
     private Long warehouseId;
+    /** Vendeur ayant réalisé la vente (facultatif) */
+    private Long sellerId;
     private List<LineRequest> lines;
 
     @Data

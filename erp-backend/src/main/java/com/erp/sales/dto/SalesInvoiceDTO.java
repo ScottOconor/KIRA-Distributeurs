@@ -70,6 +70,10 @@ public class SalesInvoiceDTO {
     /** Total rabais TTC accordés aux clients, déduit du net à payer */
     private BigDecimal totalRabaisTTC;
 
+    /** Vendeur ayant réalisé la vente (facultatif) */
+    private Long sellerId;
+    private String sellerName;
+
     private List<LineDTO> lines;
     private List<RistourneDetailDTO> ristourneDetails;
     private List<InvoicePaymentDTO> payments;

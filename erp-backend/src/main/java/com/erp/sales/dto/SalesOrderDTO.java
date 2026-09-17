@@ -51,6 +51,10 @@ public class SalesOrderDTO {
     /** Référence eLeader si ce bon a été importé via le module eLeader */
     private String eleaderReference;
 
+    /** Vendeur ayant réalisé la vente (facultatif) */
+    private Long sellerId;
+    private String sellerName;
+
     @Data
     @Builder
     @NoArgsConstructor
