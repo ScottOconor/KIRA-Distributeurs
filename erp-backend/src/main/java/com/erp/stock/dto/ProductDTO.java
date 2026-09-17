@@ -22,6 +22,8 @@ public class ProductDTO {
     private boolean exemptTva;
     private boolean exemptTvaAchat;
     private Long companyId;
+    // Vrai si une photo est enregistrée (évite d'envoyer le binaire dans les listes)
+    private boolean hasPhoto;
     // Stock (calculé)
     private BigDecimal qtyOnHand;
     private BigDecimal qtyReserved;
