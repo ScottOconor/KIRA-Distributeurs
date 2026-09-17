@@ -63,6 +63,11 @@ public class RabbitMQConfig {
         // tentative puisque la taille ne change jamais entre deux retries. Le JSON compresse
         // typiquement 5-8x, ce qui passe largement sous la limite.
         tpl.setBeforePublishPostProcessors(new GZipPostProcessor());
+        // mandatory + publisher confirms (spring.rabbitmq.publisher-confirm-type/returns) : sans ça,
+        // un message rejeté par le broker après écriture sur le socket (taille max dépassée, routing
+        // key sans file liée...) reste invisible côté spoke — SyncDispatcherScheduler.confirmCallback
+        // s'appuie là-dessus pour corriger le statut SENT optimiste en cas de rejet réel.
+        tpl.setMandatory(true);
         return tpl;
     }
 }
