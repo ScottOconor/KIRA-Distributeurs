@@ -295,6 +295,27 @@
           }
         </div>
         <div class="form-group">
+          <label>Photo de l'article</label>
+          <input #photoInput type="file" accept="image/*" capture="environment" style="display:none" (change)="onPhotoSelected($event)" />
+          <div class="photo-field">
+            @if (photoPreviewUrl) {
+              <img [src]="photoPreviewUrl" class="photo-preview" alt="" />
+            } @else {
+              <div class="photo-placeholder"><span class="material-icons">image</span></div>
+            }
+            <div class="photo-actions">
+              <button type="button" class="btn-secondary" (click)="triggerPhotoPicker()">
+                <span class="material-icons">photo_camera</span> {{ photoPreviewUrl ? 'Changer' : 'Prendre / choisir une photo' }}
+              </button>
+              @if (photoPreviewUrl) {
+                <button type="button" class="btn-secondary" [disabled]="uploadingPhoto" (click)="removePhoto()">
+                  <span class="material-icons">delete</span> Retirer
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
           <label>Description</label>
           <textarea [(ngModel)]="form.description" class="form-control" rows="2"></textarea>
         </div>

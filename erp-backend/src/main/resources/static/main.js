@@ -4546,25 +4546,25 @@ var routes = [
   },
   {
     path: "sales",
-    loadChildren: () => import("./chunk-C3YMKTHG.js").then((m) => m.salesRoutes),
+    loadChildren: () => import("./chunk-RUBXNHQK.js").then((m) => m.salesRoutes),
     canActivate: [licenseGuard, authGuard, permissionGuard, moduleInstalledGuard],
     data: { permModule: "VENTES" }
   },
   {
     path: "purchases",
-    loadChildren: () => import("./chunk-X2JA64NW.js").then((m) => m.purchasesRoutes),
+    loadChildren: () => import("./chunk-YUK6CE5O.js").then((m) => m.purchasesRoutes),
     canActivate: [licenseGuard, authGuard, permissionGuard, moduleInstalledGuard],
     data: { permModule: "ACHATS" }
   },
   {
     path: "stock",
-    loadChildren: () => import("./chunk-AVSDN5NE.js").then((m) => m.stockRoutes),
+    loadChildren: () => import("./chunk-ZI5M7IAW.js").then((m) => m.stockRoutes),
     canActivate: [licenseGuard, authGuard, permissionGuard, moduleInstalledGuard],
     data: { permModule: "STOCK" }
   },
   {
     path: "config",
-    loadChildren: () => import("./chunk-IRN57EPF.js").then((m) => m.configRoutes),
+    loadChildren: () => import("./chunk-33C7G6CL.js").then((m) => m.configRoutes),
     canActivate: [licenseGuard, authGuard, permissionGuard],
     data: { permModule: "CONFIG" }
   },

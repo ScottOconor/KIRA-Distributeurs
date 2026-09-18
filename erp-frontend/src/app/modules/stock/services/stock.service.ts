@@ -41,6 +41,8 @@ export interface Product {
   qtyOnHand?: number;
   qtyReserved?: number;
   qtyAvailable?: number;
+  /** Vrai si une photo est enregistrée (le binaire n'est jamais inclus dans les listes) */
+  hasPhoto?: boolean;
   createdAt?: string;
 }
 
@@ -481,6 +483,19 @@ export class StockService {
   }
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/products/${id}`);
+  }
+
+  // Photo article
+  uploadProductPhoto(id: number, file: File): Observable<void> {
+    const form = new FormData();
+    form.append('file', file);
+    return this.http.post<void>(`${this.api}/products/${id}/photo`, form);
+  }
+  deleteProductPhoto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.api}/products/${id}/photo`);
+  }
+  getProductPhotoUrl(id: number): string {
+    return `${this.api}/products/${id}/photo`;
   }
 
   // Warehouses

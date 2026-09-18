@@ -21,6 +21,12 @@ const PRODUCT_SAMPLE  = ['Bière Castel 65cl', 'CAS65', '700', '500', 'Bières',
 })
 export class ProductListComponent implements OnInit {
   @ViewChild('importInput') importInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('photoInput') photoInput!: ElementRef<HTMLInputElement>;
+
+  // === Photo article ===
+  photoFile: File | null = null;
+  photoPreviewUrl: string | null = null;
+  uploadingPhoto = false;
 
   products: Product[] = [];
   categories: ProductCategory[] = [];
@@ -172,6 +178,7 @@ export class ProductListComponent implements OnInit {
     this.form = this.emptyForm();
     this.showModal = true;
     this.errorMsg = '';
+    this.resetPhotoState();
   }
 
   openEdit(p: Product): void {
@@ -179,6 +186,7 @@ export class ProductListComponent implements OnInit {
     this.form = { ...p };
     this.showModal = true;
     this.errorMsg = '';
+    this.resetPhotoState();
     this.showTarifsSection = false;
     this.showFournisseurTarifsSection = false;
     this.productPrices = [];
@@ -194,7 +202,14 @@ export class ProductListComponent implements OnInit {
     this.loadProductFournisseurPrices(p.id!);
   }
 
-  closeModal(): void { this.showModal = false; this.productPrices = []; this.productFournisseurPrices = []; }
+  closeModal(): void {
+    this.showModal = false;
+    this.productPrices = [];
+    this.productFournisseurPrices = [];
+    if (this.photoPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(this.photoPreviewUrl);
+    this.photoFile = null;
+    this.photoPreviewUrl = null;
+  }
 
   loadProductPrices(productId: number): void {
     this.loadingPrices = true;
@@ -314,8 +329,54 @@ export class ProductListComponent implements OnInit {
       ? this.stockService.updateProduct(this.editingProduct.id!, dto)
       : this.stockService.createProduct(dto);
     obs.subscribe({
-      next: () => { this.saving = false; this.showModal = false; this.load(); },
+      next: (saved) => {
+        if (this.photoFile && saved.id) {
+          this.stockService.uploadProductPhoto(saved.id, this.photoFile).subscribe({
+            next: () => { this.saving = false; this.showModal = false; this.load(); },
+            error: (e) => { this.saving = false; this.errorMsg = 'Article enregistré, mais erreur sur la photo : ' + (e.error?.message || 'erreur inconnue'); this.load(); }
+          });
+        } else {
+          this.saving = false;
+          this.showModal = false;
+          this.load();
+        }
+      },
       error: (e) => { this.saving = false; this.errorMsg = e.error?.message || 'Erreur'; }
+    });
+  }
+
+  // === Photo article ===
+
+  private resetPhotoState(): void {
+    this.photoFile = null;
+    if (this.photoPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(this.photoPreviewUrl);
+    this.photoPreviewUrl = this.editingProduct?.id && this.editingProduct.hasPhoto
+      ? this.stockService.getProductPhotoUrl(this.editingProduct.id)
+      : null;
+  }
+
+  triggerPhotoPicker(): void {
+    this.photoInput?.nativeElement.click();
+  }
+
+  onPhotoSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    this.photoFile = file;
+    if (this.photoPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(this.photoPreviewUrl);
+    this.photoPreviewUrl = URL.createObjectURL(file);
+  }
+
+  removePhoto(): void {
+    if (this.photoPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(this.photoPreviewUrl);
+    this.photoFile = null;
+    this.photoPreviewUrl = null;
+    if (!this.editingProduct?.id || !this.editingProduct.hasPhoto) return;
+    if (!confirm('Supprimer la photo de cet article ?')) return;
+    this.uploadingPhoto = true;
+    this.stockService.deleteProductPhoto(this.editingProduct.id).subscribe({
+      next: () => { this.uploadingPhoto = false; this.editingProduct!.hasPhoto = false; },
+      error: () => { this.uploadingPhoto = false; }
     });
   }
 
