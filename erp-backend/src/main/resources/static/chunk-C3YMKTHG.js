@@ -310,6 +310,8 @@ var SalesLayoutComponent = class _SalesLayoutComponent {
       ];
       items.push({ id: "clients", label: "Clients", icon: "people", children: clientChildren });
     }
+    if (this.can("VENDEURS", "VIEW"))
+      items.push({ id: "vendeurs", label: "Vendeurs", icon: "badge", route: "/sales/vendeurs" });
     if (this.can("PAIEMENTS", "VIEW"))
       items.push({ id: "payments", label: "Paiements", icon: "payments", route: "/sales/payments" });
     const commChildren = [];
@@ -620,19 +622,19 @@ var salesRoutes = [
       },
       {
         path: "orders/new",
-        loadComponent: () => import("./chunk-2WGQ6PHU.js").then((m) => m.OrderFormComponent)
+        loadComponent: () => import("./chunk-5YRVDF4X.js").then((m) => m.OrderFormComponent)
       },
       {
         path: "orders/:id",
-        loadComponent: () => import("./chunk-2WGQ6PHU.js").then((m) => m.OrderFormComponent)
+        loadComponent: () => import("./chunk-5YRVDF4X.js").then((m) => m.OrderFormComponent)
       },
       {
         path: "invoices",
-        loadComponent: () => import("./chunk-QRYUOHH5.js").then((m) => m.InvoiceListComponent)
+        loadComponent: () => import("./chunk-FH4WKDDQ.js").then((m) => m.InvoiceListComponent)
       },
       {
         path: "invoices/:id",
-        loadComponent: () => import("./chunk-LIFFCK7T.js").then((m) => m.InvoiceDetailComponent)
+        loadComponent: () => import("./chunk-TE7QXN3Y.js").then((m) => m.InvoiceDetailComponent)
       },
       {
         path: "avoirs",
@@ -649,6 +651,10 @@ var salesRoutes = [
       {
         path: "clients/prix",
         loadComponent: () => import("./chunk-PKB4LRNQ.js").then((m) => m.ClientPriceComponent)
+      },
+      {
+        path: "vendeurs",
+        loadComponent: () => import("./chunk-BDPGRHTO.js").then((m) => m.SellerListComponent)
       },
       {
         path: "reports/stats-ventes",
@@ -693,4 +699,4 @@ var salesRoutes = [
 export {
   salesRoutes
 };
-//# sourceMappingURL=chunk-LZD5KFHA.js.map
+//# sourceMappingURL=chunk-C3YMKTHG.js.map

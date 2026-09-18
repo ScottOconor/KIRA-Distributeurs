@@ -1,6 +1,6 @@
 import {
   ConfigService
-} from "./chunk-VB5464P6.js";
+} from "./chunk-Y6UTENYI.js";
 import {
   StockService
 } from "./chunk-LIGNVDFD.js";
@@ -2060,4 +2060,4 @@ tfoot td{font-weight:bold;background:#f5f5f5;border-top:2px solid #017E84}
 export {
   LivraisonDetailComponent
 };
-//# sourceMappingURL=chunk-CLHAFXRZ.js.map
+//# sourceMappingURL=chunk-OE3TENJ3.js.map

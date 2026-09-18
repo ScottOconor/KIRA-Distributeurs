@@ -263,15 +263,15 @@ var configRoutes = [
       { path: "groups", redirectTo: "remote-agencies", pathMatch: "full" },
       {
         path: "remote-agencies",
-        loadComponent: () => import("./chunk-ROTDVY5R.js").then((m) => m.GroupsComponent)
+        loadComponent: () => import("./chunk-HMPD5LYV.js").then((m) => m.GroupsComponent)
       },
       {
         path: "users",
-        loadComponent: () => import("./chunk-NEZHZSMP.js").then((m) => m.UsersComponent)
+        loadComponent: () => import("./chunk-BL6P4PND.js").then((m) => m.UsersComponent)
       },
       {
         path: "roles",
-        loadComponent: () => import("./chunk-XCDONWTS.js").then((m) => m.RolesComponent)
+        loadComponent: () => import("./chunk-KIEJK6AB.js").then((m) => m.RolesComponent)
       },
       {
         path: "company",
@@ -303,4 +303,4 @@ var configRoutes = [
 export {
   configRoutes
 };
-//# sourceMappingURL=chunk-W5CRJH5T.js.map
+//# sourceMappingURL=chunk-IRN57EPF.js.map

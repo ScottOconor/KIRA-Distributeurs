@@ -191,6 +191,10 @@
           <div class="info-value link">{{ invoice.salesOrderName }}</div>
         </div>
       }
+      <div class="info-card">
+        <div class="info-label">Vendeur</div>
+        <div class="info-value">{{ invoice.sellerName || '—' }}</div>
+      </div>
       @if (invoice.notes) {
         <div class="info-card">
           <div class="info-label">Notes</div>

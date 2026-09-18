@@ -439,4 +439,45 @@ $accent: #017E84;
   color: var(--text-muted); background: var(--bg-elevated);
   padding: 2px 7px; border-radius: 4px; flex-shrink: 0;
 }
+.ac-item.ac-create {
+  border-left-color: transparent;
+  .ac-name { color: $accent; font-weight: 600; }
+  .material-icons { color: $accent; font-size: 18px; }
+  &:hover { border-left-color: $accent; }
+}
+
+/* ── Modal création client à la volée ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(2px);
+  z-index: 1100; display: flex; align-items: center; justify-content: center;
+}
+.modal-box {
+  background: var(--bg-surface); border-radius: 16px; width: 440px; max-width: 95vw;
+  border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-header {
+  display: flex; align-items: center; gap: 10px; padding: 18px 20px; border-bottom: 1px solid var(--border);
+  .material-icons { font-size: 22px; color: $accent; }
+  h2 { flex: 1; font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 0; }
+}
+.btn-close {
+  width: 30px; height: 30px; border-radius: 6px; border: none; background: none; cursor: pointer; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  .material-icons { font-size: 18px; }
+}
+.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.field-row {
+  display: flex; flex-direction: column; gap: 5px;
+  label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+  input {
+    padding: 9px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-page);
+    color: var(--text-primary); font-size: 13px; outline: none;
+    &:focus { border-color: $accent; }
+  }
+}
+.modal-error {
+  padding: 8px 12px; background: rgba(220,38,38,0.1); color: #DC2626; border-radius: 6px; font-size: 12px;
+}
+.modal-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+.btn-cancel { padding: 8px 18px; border-radius: 8px; background: var(--bg-page); border: 1px solid var(--border); color: var(--text-muted); font-size: 13px; cursor: pointer; }
 

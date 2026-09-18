@@ -593,4 +593,4 @@ var purchasesRoutes = [
 export {
   purchasesRoutes
 };
-//# sourceMappingURL=chunk-LAZ7CFK6.js.map
+//# sourceMappingURL=chunk-X2JA64NW.js.map

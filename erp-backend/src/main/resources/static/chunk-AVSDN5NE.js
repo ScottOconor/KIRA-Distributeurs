@@ -579,8 +579,8 @@ var stockRoutes = [
       { path: "adjustments", loadComponent: () => import("./chunk-DBYWYNMB.js").then((m) => m.AdjustmentListComponent) },
       { path: "casses", loadComponent: () => import("./chunk-KEOZV5TX.js").then((m) => m.CasseListComponent) },
       { path: "expeditions", loadComponent: () => import("./chunk-QVXIUMWU.js").then((m) => m.LivraisonListComponent) },
-      { path: "expeditions/new", loadComponent: () => import("./chunk-CLHAFXRZ.js").then((m) => m.LivraisonDetailComponent) },
-      { path: "expeditions/:id", loadComponent: () => import("./chunk-CLHAFXRZ.js").then((m) => m.LivraisonDetailComponent) },
+      { path: "expeditions/new", loadComponent: () => import("./chunk-OE3TENJ3.js").then((m) => m.LivraisonDetailComponent) },
+      { path: "expeditions/:id", loadComponent: () => import("./chunk-OE3TENJ3.js").then((m) => m.LivraisonDetailComponent) },
       { path: "transferts", loadComponent: () => import("./chunk-HM2IEXCI.js").then((m) => m.TransfertListComponent) },
       { path: "transferts/new", loadComponent: () => import("./chunk-6VEMA2D7.js").then((m) => m.TransfertDetailComponent) },
       { path: "transferts/:id", loadComponent: () => import("./chunk-6VEMA2D7.js").then((m) => m.TransfertDetailComponent) },
@@ -599,4 +599,4 @@ var stockRoutes = [
 export {
   stockRoutes
 };
-//# sourceMappingURL=chunk-WRZ2B46C.js.map
+//# sourceMappingURL=chunk-AVSDN5NE.js.map

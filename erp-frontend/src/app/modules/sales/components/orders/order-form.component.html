@@ -74,13 +74,19 @@
                        placeholder="Chercher un client…"
                        autocomplete="off" />
               </div>
-              @if (clientDropdown && filteredClients.length > 0) {
+              @if (clientDropdown && !isReadOnly && (filteredClients.length > 0 || clientSearch.trim())) {
                 <div class="ac-dropdown">
                   @for (c of filteredClients; track c.id) {
                     <div class="ac-item" (mousedown)="selectClient(c)">
                       <span class="ac-avatar">{{ c.name.charAt(0) }}</span>
                       <span class="ac-name">{{ c.name }}</span>
                       @if (c.ref) { <span class="ac-code">{{ c.ref }}</span> }
+                    </div>
+                  }
+                  @if (clientSearch.trim()) {
+                    <div class="ac-item ac-create" (mousedown)="openCreateClient()">
+                      <span class="material-icons">person_add</span>
+                      <span class="ac-name">Créer "{{ clientSearch.trim() }}" comme nouveau client</span>
                     </div>
                   }
                 </div>
@@ -125,6 +131,20 @@
               </select>
             } @else {
               <div class="form-control form-readonly">{{ order.warehouseName || '—' }}</div>
+            }
+          </div>
+
+          <div class="form-group">
+            <label>Vendeur <span class="form-hint">(facultatif)</span></label>
+            @if (!isReadOnly) {
+              <select [(ngModel)]="order.sellerId" class="form-control">
+                <option [ngValue]="undefined">— Aucun —</option>
+                @for (s of sellers; track s.id) {
+                  <option [value]="s.id">{{ s.name }}</option>
+                }
+              </select>
+            } @else {
+              <div class="form-control form-readonly">{{ order.sellerName || '—' }}</div>
             }
           </div>
 
@@ -461,4 +481,42 @@
     [companyInfo]="printCompany"
     (closed)="closePrint()">
   </app-print-preview>
+}
+
+@if (showCreateClient) {
+  <div class="modal-overlay" (click)="closeCreateClient()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <span class="material-icons">person_add</span>
+        <h2>Nouveau client</h2>
+        <button class="btn-close" (click)="closeCreateClient()"><span class="material-icons">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="field-row">
+          <label>Nom <span class="required">*</span></label>
+          <input type="text" [(ngModel)]="newClient.name" placeholder="Nom du client" />
+        </div>
+        <div class="field-row">
+          <label>Téléphone</label>
+          <input type="text" [(ngModel)]="newClient.phone" placeholder="Téléphone" />
+        </div>
+        <div class="field-row">
+          <label>Email</label>
+          <input type="text" [(ngModel)]="newClient.email" placeholder="Email" />
+        </div>
+        <div class="field-row">
+          <label>Adresse</label>
+          <input type="text" [(ngModel)]="newClient.address" placeholder="Adresse" />
+        </div>
+        @if (createClientError) { <div class="modal-error">{{ createClientError }}</div> }
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeCreateClient()">Annuler</button>
+        <button class="btn-confirm" [disabled]="creatingClient" (click)="createClient()">
+          @if (creatingClient) { <span class="material-icons spin">sync</span> } @else { <span class="material-icons">check_circle</span> }
+          {{ creatingClient ? 'Création…' : 'Créer et sélectionner' }}
+        </button>
+      </div>
+    </div>
+  </div>
 }

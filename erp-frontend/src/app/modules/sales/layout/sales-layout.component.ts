@@ -68,6 +68,9 @@ export class SalesLayoutComponent implements OnInit {
       items.push({ id: 'clients', label: 'Clients', icon: 'people', children: clientChildren });
     }
 
+    if (this.can('VENDEURS', 'VIEW'))
+      items.push({ id: 'vendeurs', label: 'Vendeurs', icon: 'badge', route: '/sales/vendeurs' });
+
     if (this.can('PAIEMENTS', 'VIEW'))
       items.push({ id: 'payments', label: 'Paiements', icon: 'payments', route: '/sales/payments' });
 

@@ -184,7 +184,7 @@ function InvoiceListComponent_Conditional_32_Template(rf, ctx) {
     \u0275\u0275elementEnd()();
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Conditional_9_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Conditional_9_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "span", 42);
     \u0275\u0275text(1);
@@ -196,14 +196,14 @@ function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18
     \u0275\u0275textInterpolate(inv_r12.salesOrderName);
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Conditional_10_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Conditional_10_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "span", 43);
     \u0275\u0275text(1, "\u2014");
     \u0275\u0275elementEnd();
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Conditional_24_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Conditional_26_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 45);
     \u0275\u0275element(1, "div", 46);
@@ -221,11 +221,11 @@ function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18
     \u0275\u0275textInterpolate1("", ctx_r2.getProgressPct(inv_r12), "%");
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Template(rf, ctx) {
   if (rf & 1) {
     const _r11 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "tr", 40);
-    \u0275\u0275listener("click", function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Template_tr_click_0_listener() {
+    \u0275\u0275listener("click", function InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Template_tr_click_0_listener() {
       const inv_r12 = \u0275\u0275restoreView(_r11).$implicit;
       const ctx_r2 = \u0275\u0275nextContext(5);
       return \u0275\u0275resetView(ctx_r2.openInvoice(inv_r12));
@@ -241,29 +241,32 @@ function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18
     \u0275\u0275text(7);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(8, "td");
-    \u0275\u0275conditionalCreate(9, InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Conditional_9_Template, 2, 1, "span", 42)(10, InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Conditional_10_Template, 2, 0, "span", 43);
+    \u0275\u0275conditionalCreate(9, InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Conditional_9_Template, 2, 1, "span", 42)(10, InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Conditional_10_Template, 2, 0, "span", 43);
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(11, "td", 26);
+    \u0275\u0275elementStart(11, "td");
     \u0275\u0275text(12);
-    \u0275\u0275pipe(13, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(14, "td", 29);
-    \u0275\u0275text(15);
-    \u0275\u0275pipe(16, "number");
+    \u0275\u0275elementStart(13, "td", 26);
+    \u0275\u0275text(14);
+    \u0275\u0275pipe(15, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(17, "td", 44);
-    \u0275\u0275text(18);
-    \u0275\u0275pipe(19, "number");
+    \u0275\u0275elementStart(16, "td", 29);
+    \u0275\u0275text(17);
+    \u0275\u0275pipe(18, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(20, "td", 26);
-    \u0275\u0275text(21);
-    \u0275\u0275pipe(22, "number");
+    \u0275\u0275elementStart(19, "td", 44);
+    \u0275\u0275text(20);
+    \u0275\u0275pipe(21, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(23, "td");
-    \u0275\u0275conditionalCreate(24, InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Conditional_24_Template, 4, 3);
+    \u0275\u0275elementStart(22, "td", 26);
+    \u0275\u0275text(23);
+    \u0275\u0275pipe(24, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(25, "td")(26, "span");
-    \u0275\u0275text(27);
+    \u0275\u0275elementStart(25, "td");
+    \u0275\u0275conditionalCreate(26, InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Conditional_26_Template, 4, 3);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(27, "td")(28, "span");
+    \u0275\u0275text(29);
     \u0275\u0275elementEnd()()();
   }
   if (rf & 2) {
@@ -272,32 +275,34 @@ function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18
     \u0275\u0275advance(2);
     \u0275\u0275textInterpolate(inv_r12.name);
     \u0275\u0275advance(2);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(5, 14, inv_r12.date, "dd/MM/yyyy"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(5, 15, inv_r12.date, "dd/MM/yyyy"));
     \u0275\u0275advance(3);
     \u0275\u0275textInterpolate(inv_r12.partnerName);
     \u0275\u0275advance(2);
     \u0275\u0275conditional(inv_r12.salesOrderName ? 9 : 10);
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(13, 17, inv_r12.totalHT, "1.0-0"));
+    \u0275\u0275textInterpolate(inv_r12.sellerName || "\u2014");
+    \u0275\u0275advance(2);
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(15, 18, inv_r12.totalHT, "1.0-0"));
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(16, 20, inv_r12.totalTTC, "1.0-0"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(18, 21, inv_r12.totalTTC, "1.0-0"));
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(19, 23, inv_r12.montantPaye, "1.0-0"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(21, 24, inv_r12.montantPaye, "1.0-0"));
     \u0275\u0275advance(2);
     \u0275\u0275classProp("text-danger", (inv_r12.montantDu || 0) > 0);
     \u0275\u0275advance();
-    \u0275\u0275textInterpolate1(" ", \u0275\u0275pipeBind2(22, 26, inv_r12.montantDu, "1.0-0"), " ");
+    \u0275\u0275textInterpolate1(" ", \u0275\u0275pipeBind2(24, 27, inv_r12.montantDu, "1.0-0"), " ");
     \u0275\u0275advance(3);
-    \u0275\u0275conditional(inv_r12.state === "posted" || inv_r12.state === "paid" ? 24 : -1);
+    \u0275\u0275conditional(inv_r12.state === "posted" || inv_r12.state === "paid" ? 26 : -1);
     \u0275\u0275advance(2);
     \u0275\u0275classMap(ctx_r2.getStateBadge(inv_r12.state || ""));
     \u0275\u0275advance();
     \u0275\u0275textInterpolate(ctx_r2.getStateLabel(inv_r12.state || ""));
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275repeaterCreate(0, InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_For_1_Template, 28, 29, "tr", 39, _forTrack2);
+    \u0275\u0275repeaterCreate(0, InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_For_1_Template, 30, 30, "tr", 39, _forTrack2);
   }
   if (rf & 2) {
     const row_r10 = \u0275\u0275nextContext().$implicit;
@@ -305,11 +310,11 @@ function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18
     \u0275\u0275repeater(ctx_r2.getGroupItems(row_r10.key));
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_26_For_1_Template(rf, ctx) {
   if (rf & 1) {
     const _r9 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "tr", 32);
-    \u0275\u0275listener("click", function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Template_tr_click_0_listener() {
+    \u0275\u0275listener("click", function InvoiceListComponent_Conditional_33_Conditional_26_For_1_Template_tr_click_0_listener() {
       const row_r10 = \u0275\u0275restoreView(_r9).$implicit;
       const ctx_r2 = \u0275\u0275nextContext(3);
       return \u0275\u0275resetView(ctx_r2.toggleGroup(row_r10.key));
@@ -337,7 +342,7 @@ function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Template(rf, c
     \u0275\u0275elementEnd();
     \u0275\u0275element(16, "td")(17, "td");
     \u0275\u0275elementEnd();
-    \u0275\u0275conditionalCreate(18, InvoiceListComponent_Conditional_33_Conditional_24_For_1_Conditional_18_Template, 2, 0);
+    \u0275\u0275conditionalCreate(18, InvoiceListComponent_Conditional_33_Conditional_26_For_1_Conditional_18_Template, 2, 0);
   }
   if (rf & 2) {
     const row_r10 = ctx.$implicit;
@@ -362,16 +367,16 @@ function InvoiceListComponent_Conditional_33_Conditional_24_For_1_Template(rf, c
     \u0275\u0275conditional(ctx_r2.isExpanded(row_r10.key) ? 18 : -1);
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_24_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_26_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275repeaterCreate(0, InvoiceListComponent_Conditional_33_Conditional_24_For_1_Template, 19, 10, null, null, _forTrack1);
+    \u0275\u0275repeaterCreate(0, InvoiceListComponent_Conditional_33_Conditional_26_For_1_Template, 19, 10, null, null, _forTrack1);
   }
   if (rf & 2) {
     const ctx_r2 = \u0275\u0275nextContext(2);
     \u0275\u0275repeater(ctx_r2.groupedRows);
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Conditional_9_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_27_For_1_Conditional_9_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "span", 42);
     \u0275\u0275text(1);
@@ -383,14 +388,14 @@ function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Conditional_9_
     \u0275\u0275textInterpolate(inv_r14.salesOrderName);
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Conditional_10_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_27_For_1_Conditional_10_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "span", 43);
     \u0275\u0275text(1, "\u2014");
     \u0275\u0275elementEnd();
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Conditional_24_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_27_For_1_Conditional_26_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 45);
     \u0275\u0275element(1, "div", 46);
@@ -408,11 +413,11 @@ function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Conditional_24
     \u0275\u0275textInterpolate1("", ctx_r2.getProgressPct(inv_r14), "%");
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_27_For_1_Template(rf, ctx) {
   if (rf & 1) {
     const _r13 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "tr", 49);
-    \u0275\u0275listener("click", function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Template_tr_click_0_listener() {
+    \u0275\u0275listener("click", function InvoiceListComponent_Conditional_33_Conditional_27_For_1_Template_tr_click_0_listener() {
       const inv_r14 = \u0275\u0275restoreView(_r13).$implicit;
       const ctx_r2 = \u0275\u0275nextContext(3);
       return \u0275\u0275resetView(ctx_r2.openInvoice(inv_r14));
@@ -428,29 +433,32 @@ function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Template(rf, c
     \u0275\u0275text(7);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(8, "td");
-    \u0275\u0275conditionalCreate(9, InvoiceListComponent_Conditional_33_Conditional_25_For_1_Conditional_9_Template, 2, 1, "span", 42)(10, InvoiceListComponent_Conditional_33_Conditional_25_For_1_Conditional_10_Template, 2, 0, "span", 43);
+    \u0275\u0275conditionalCreate(9, InvoiceListComponent_Conditional_33_Conditional_27_For_1_Conditional_9_Template, 2, 1, "span", 42)(10, InvoiceListComponent_Conditional_33_Conditional_27_For_1_Conditional_10_Template, 2, 0, "span", 43);
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(11, "td", 26);
+    \u0275\u0275elementStart(11, "td");
     \u0275\u0275text(12);
-    \u0275\u0275pipe(13, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(14, "td", 29);
-    \u0275\u0275text(15);
-    \u0275\u0275pipe(16, "number");
+    \u0275\u0275elementStart(13, "td", 26);
+    \u0275\u0275text(14);
+    \u0275\u0275pipe(15, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(17, "td", 44);
-    \u0275\u0275text(18);
-    \u0275\u0275pipe(19, "number");
+    \u0275\u0275elementStart(16, "td", 29);
+    \u0275\u0275text(17);
+    \u0275\u0275pipe(18, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(20, "td", 26);
-    \u0275\u0275text(21);
-    \u0275\u0275pipe(22, "number");
+    \u0275\u0275elementStart(19, "td", 44);
+    \u0275\u0275text(20);
+    \u0275\u0275pipe(21, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(23, "td");
-    \u0275\u0275conditionalCreate(24, InvoiceListComponent_Conditional_33_Conditional_25_For_1_Conditional_24_Template, 4, 3);
+    \u0275\u0275elementStart(22, "td", 26);
+    \u0275\u0275text(23);
+    \u0275\u0275pipe(24, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(25, "td")(26, "span");
-    \u0275\u0275text(27);
+    \u0275\u0275elementStart(25, "td");
+    \u0275\u0275conditionalCreate(26, InvoiceListComponent_Conditional_33_Conditional_27_For_1_Conditional_26_Template, 4, 3);
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(27, "td")(28, "span");
+    \u0275\u0275text(29);
     \u0275\u0275elementEnd()()();
   }
   if (rf & 2) {
@@ -459,32 +467,34 @@ function InvoiceListComponent_Conditional_33_Conditional_25_For_1_Template(rf, c
     \u0275\u0275advance(2);
     \u0275\u0275textInterpolate(inv_r14.name);
     \u0275\u0275advance(2);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(5, 14, inv_r14.date, "dd/MM/yyyy"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(5, 15, inv_r14.date, "dd/MM/yyyy"));
     \u0275\u0275advance(3);
     \u0275\u0275textInterpolate(inv_r14.partnerName);
     \u0275\u0275advance(2);
     \u0275\u0275conditional(inv_r14.salesOrderName ? 9 : 10);
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(13, 17, inv_r14.totalHT, "1.0-0"));
+    \u0275\u0275textInterpolate(inv_r14.sellerName || "\u2014");
+    \u0275\u0275advance(2);
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(15, 18, inv_r14.totalHT, "1.0-0"));
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(16, 20, inv_r14.totalTTC, "1.0-0"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(18, 21, inv_r14.totalTTC, "1.0-0"));
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(19, 23, inv_r14.montantPaye, "1.0-0"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(21, 24, inv_r14.montantPaye, "1.0-0"));
     \u0275\u0275advance(2);
     \u0275\u0275classProp("text-danger", (inv_r14.montantDu || 0) > 0);
     \u0275\u0275advance();
-    \u0275\u0275textInterpolate1(" ", \u0275\u0275pipeBind2(22, 26, inv_r14.montantDu, "1.0-0"), " ");
+    \u0275\u0275textInterpolate1(" ", \u0275\u0275pipeBind2(24, 27, inv_r14.montantDu, "1.0-0"), " ");
     \u0275\u0275advance(3);
-    \u0275\u0275conditional(inv_r14.state === "posted" || inv_r14.state === "paid" ? 24 : -1);
+    \u0275\u0275conditional(inv_r14.state === "posted" || inv_r14.state === "paid" ? 26 : -1);
     \u0275\u0275advance(2);
     \u0275\u0275classMap(ctx_r2.getStateBadge(inv_r14.state || ""));
     \u0275\u0275advance();
     \u0275\u0275textInterpolate(ctx_r2.getStateLabel(inv_r14.state || ""));
   }
 }
-function InvoiceListComponent_Conditional_33_Conditional_25_Template(rf, ctx) {
+function InvoiceListComponent_Conditional_33_Conditional_27_Template(rf, ctx) {
   if (rf & 1) {
-    \u0275\u0275repeaterCreate(0, InvoiceListComponent_Conditional_33_Conditional_25_For_1_Template, 28, 29, "tr", 48, _forTrack2);
+    \u0275\u0275repeaterCreate(0, InvoiceListComponent_Conditional_33_Conditional_27_For_1_Template, 30, 30, "tr", 48, _forTrack2);
   }
   if (rf & 2) {
     const ctx_r2 = \u0275\u0275nextContext(2);
@@ -505,65 +515,68 @@ function InvoiceListComponent_Conditional_33_Template(rf, ctx) {
     \u0275\u0275elementStart(9, "th");
     \u0275\u0275text(10, "Bon de commande");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(11, "th", 26);
-    \u0275\u0275text(12, "Total HT");
+    \u0275\u0275elementStart(11, "th");
+    \u0275\u0275text(12, "Vendeur");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(13, "th", 26);
-    \u0275\u0275text(14, "Total TTC");
+    \u0275\u0275text(14, "Total HT");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(15, "th", 26);
-    \u0275\u0275text(16, "Pay\xE9");
+    \u0275\u0275text(16, "Total TTC");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(17, "th", 26);
-    \u0275\u0275text(18, "Reste d\xFB");
+    \u0275\u0275text(18, "Pay\xE9");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(19, "th");
-    \u0275\u0275text(20, "Paiement");
+    \u0275\u0275elementStart(19, "th", 26);
+    \u0275\u0275text(20, "Reste d\xFB");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(21, "th");
-    \u0275\u0275text(22, "Statut");
+    \u0275\u0275text(22, "Paiement");
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(23, "th");
+    \u0275\u0275text(24, "Statut");
     \u0275\u0275elementEnd()()();
-    \u0275\u0275elementStart(23, "tbody");
-    \u0275\u0275conditionalCreate(24, InvoiceListComponent_Conditional_33_Conditional_24_Template, 2, 0)(25, InvoiceListComponent_Conditional_33_Conditional_25_Template, 2, 0);
+    \u0275\u0275elementStart(25, "tbody");
+    \u0275\u0275conditionalCreate(26, InvoiceListComponent_Conditional_33_Conditional_26_Template, 2, 0)(27, InvoiceListComponent_Conditional_33_Conditional_27_Template, 2, 0);
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(26, "tfoot")(27, "tr", 27)(28, "td", 28);
-    \u0275\u0275text(29);
-    \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(30, "td", 29);
+    \u0275\u0275elementStart(28, "tfoot")(29, "tr", 27)(30, "td", 28);
     \u0275\u0275text(31);
-    \u0275\u0275pipe(32, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(33, "td", 29);
-    \u0275\u0275text(34);
-    \u0275\u0275pipe(35, "number");
+    \u0275\u0275elementStart(32, "td", 29);
+    \u0275\u0275text(33);
+    \u0275\u0275pipe(34, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(36, "td", 30);
-    \u0275\u0275text(37);
-    \u0275\u0275pipe(38, "number");
+    \u0275\u0275elementStart(35, "td", 29);
+    \u0275\u0275text(36);
+    \u0275\u0275pipe(37, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(39, "td", 29);
-    \u0275\u0275text(40);
-    \u0275\u0275pipe(41, "number");
+    \u0275\u0275elementStart(38, "td", 30);
+    \u0275\u0275text(39);
+    \u0275\u0275pipe(40, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275element(42, "td", 31);
+    \u0275\u0275elementStart(41, "td", 29);
+    \u0275\u0275text(42);
+    \u0275\u0275pipe(43, "number");
+    \u0275\u0275elementEnd();
+    \u0275\u0275element(44, "td", 31);
     \u0275\u0275elementEnd()()();
   }
   if (rf & 2) {
     const ctx_r2 = \u0275\u0275nextContext();
-    \u0275\u0275advance(24);
-    \u0275\u0275conditional(ctx_r2.groupBy ? 24 : 25);
+    \u0275\u0275advance(26);
+    \u0275\u0275conditional(ctx_r2.groupBy ? 26 : 27);
     \u0275\u0275advance(5);
     \u0275\u0275textInterpolate1("Totaux (", ctx_r2.filteredInvoices.length, ")");
     \u0275\u0275advance(2);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(32, 8, ctx_r2.totals.ht, "1.0-0"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(34, 8, ctx_r2.totals.ht, "1.0-0"));
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(35, 11, ctx_r2.totals.ttc, "1.0-0"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(37, 11, ctx_r2.totals.ttc, "1.0-0"));
     \u0275\u0275advance(3);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(38, 14, ctx_r2.totals.paye, "1.0-0"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(40, 14, ctx_r2.totals.paye, "1.0-0"));
     \u0275\u0275advance(2);
     \u0275\u0275classProp("text-danger", ctx_r2.totals.du > 0);
     \u0275\u0275advance();
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(41, 17, ctx_r2.totals.du, "1.0-0"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(43, 17, ctx_r2.totals.du, "1.0-0"));
   }
 }
 var InvoiceListComponent = class _InvoiceListComponent {
@@ -749,7 +762,7 @@ var InvoiceListComponent = class _InvoiceListComponent {
     };
   }
   static {
-    this.\u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _InvoiceListComponent, selectors: [["app-invoice-list"]], decls: 34, vars: 6, consts: [[1, "page-container"], [1, "page-header"], [1, "header-left"], [1, "page-title"], [1, "material-icons"], [1, "record-count"], [1, "filter-bar"], [1, "filter-btn", 3, "active"], [1, "filter-date-group"], ["type", "date", 1, "form-control", "form-control-sm", 3, "ngModelChange", "ngModel"], ["title", "Voir toutes les dates", 1, "filter-btn", 3, "click"], [1, "groupby-bar"], [1, "groupby-label"], [1, "groupby-btns"], [3, "active"], [1, "groupby-reset"], [1, "card"], [1, "loading-state"], [1, "empty-state"], [1, "data-table"], [1, "filter-btn", 3, "click"], [1, "form-control", "form-control-sm", 3, "ngModelChange", "ngModel"], [3, "ngValue"], [3, "click"], [1, "groupby-reset", 3, "click"], [1, "material-icons", "spin"], [1, "text-right"], [1, "totals-row"], ["colspan", "4", 1, "font-bold"], [1, "text-right", "font-bold"], [1, "text-right", "text-success", "font-bold"], ["colspan", "2"], [1, "group-header-row", 3, "click"], ["colspan", "4", 1, "group-header-cell"], [1, "material-icons", "expand-icon"], [1, "group-label"], [1, "badge"], [1, "text-right", "group-num"], [1, "text-right", "group-num", "text-success"], [1, "detail-row", "clickable-row"], [1, "detail-row", "clickable-row", 3, "click"], [1, "font-mono", "font-bold"], [1, "link-ref"], [1, "text-muted"], [1, "text-right", "text-success"], [1, "progress-bar"], [1, "progress-fill"], [1, "progress-pct"], [1, "clickable-row"], [1, "clickable-row", 3, "click"]], template: function InvoiceListComponent_Template(rf, ctx) {
+    this.\u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _InvoiceListComponent, selectors: [["app-invoice-list"]], decls: 34, vars: 6, consts: [[1, "page-container"], [1, "page-header"], [1, "header-left"], [1, "page-title"], [1, "material-icons"], [1, "record-count"], [1, "filter-bar"], [1, "filter-btn", 3, "active"], [1, "filter-date-group"], ["type", "date", 1, "form-control", "form-control-sm", 3, "ngModelChange", "ngModel"], ["title", "Voir toutes les dates", 1, "filter-btn", 3, "click"], [1, "groupby-bar"], [1, "groupby-label"], [1, "groupby-btns"], [3, "active"], [1, "groupby-reset"], [1, "card"], [1, "loading-state"], [1, "empty-state"], [1, "data-table"], [1, "filter-btn", 3, "click"], [1, "form-control", "form-control-sm", 3, "ngModelChange", "ngModel"], [3, "ngValue"], [3, "click"], [1, "groupby-reset", 3, "click"], [1, "material-icons", "spin"], [1, "text-right"], [1, "totals-row"], ["colspan", "4", 1, "font-bold"], [1, "text-right", "font-bold"], [1, "text-right", "text-success", "font-bold"], ["colspan", "2"], [1, "group-header-row", 3, "click"], ["colspan", "5", 1, "group-header-cell"], [1, "material-icons", "expand-icon"], [1, "group-label"], [1, "badge"], [1, "text-right", "group-num"], [1, "text-right", "group-num", "text-success"], [1, "detail-row", "clickable-row"], [1, "detail-row", "clickable-row", 3, "click"], [1, "font-mono", "font-bold"], [1, "link-ref"], [1, "text-muted"], [1, "text-right", "text-success"], [1, "progress-bar"], [1, "progress-fill"], [1, "progress-pct"], [1, "clickable-row"], [1, "clickable-row", 3, "click"]], template: function InvoiceListComponent_Template(rf, ctx) {
       if (rf & 1) {
         \u0275\u0275elementStart(0, "div", 0)(1, "div", 1)(2, "div", 2)(3, "h1", 3)(4, "span", 4);
         \u0275\u0275text(5, "description");
@@ -802,7 +815,7 @@ var InvoiceListComponent = class _InvoiceListComponent {
         \u0275\u0275conditionalCreate(29, InvoiceListComponent_Conditional_29_Template, 4, 0, "button", 15);
         \u0275\u0275elementEnd();
         \u0275\u0275elementStart(30, "div", 16);
-        \u0275\u0275conditionalCreate(31, InvoiceListComponent_Conditional_31_Template, 4, 0, "div", 17)(32, InvoiceListComponent_Conditional_32_Template, 5, 0, "div", 18)(33, InvoiceListComponent_Conditional_33_Template, 43, 20, "table", 19);
+        \u0275\u0275conditionalCreate(31, InvoiceListComponent_Conditional_31_Template, 4, 0, "div", 17)(32, InvoiceListComponent_Conditional_32_Template, 5, 0, "div", 18)(33, InvoiceListComponent_Conditional_33_Template, 45, 20, "table", 19);
         \u0275\u0275elementEnd()();
       }
       if (rf & 2) {
@@ -901,6 +914,7 @@ var InvoiceListComponent = class _InvoiceListComponent {
             <th>Date</th>
             <th>Client</th>
             <th>Bon de commande</th>
+            <th>Vendeur</th>
             <th class="text-right">Total HT</th>
             <th class="text-right">Total TTC</th>
             <th class="text-right">Pay\xE9</th>
@@ -913,7 +927,7 @@ var InvoiceListComponent = class _InvoiceListComponent {
           @if (groupBy) {
             @for (row of groupedRows; track row.key) {
               <tr class="group-header-row" (click)="toggleGroup(row.key)">
-                <td class="group-header-cell" colspan="4">
+                <td class="group-header-cell" colspan="5">
                   <span class="material-icons expand-icon">{{ isExpanded(row.key) ? 'expand_more' : 'chevron_right' }}</span>
                   <span class="group-label">{{ row.label }}</span>
                   <span class="badge">{{ row.count }}</span>
@@ -935,6 +949,7 @@ var InvoiceListComponent = class _InvoiceListComponent {
                         <span class="link-ref">{{ inv.salesOrderName }}</span>
                       } @else { <span class="text-muted">\u2014</span> }
                     </td>
+                    <td>{{ inv.sellerName || '\u2014' }}</td>
                     <td class="text-right">{{ inv.totalHT | number:'1.0-0' }}</td>
                     <td class="text-right font-bold">{{ inv.totalTTC | number:'1.0-0' }}</td>
                     <td class="text-right text-success">{{ inv.montantPaye | number:'1.0-0' }}</td>
@@ -965,6 +980,7 @@ var InvoiceListComponent = class _InvoiceListComponent {
                     <span class="link-ref">{{ inv.salesOrderName }}</span>
                   } @else { <span class="text-muted">\u2014</span> }
                 </td>
+                <td>{{ inv.sellerName || '\u2014' }}</td>
                 <td class="text-right">{{ inv.totalHT | number:'1.0-0' }}</td>
                 <td class="text-right font-bold">{{ inv.totalTTC | number:'1.0-0' }}</td>
                 <td class="text-right text-success">{{ inv.montantPaye | number:'1.0-0' }}</td>
@@ -1007,4 +1023,4 @@ var InvoiceListComponent = class _InvoiceListComponent {
 export {
   InvoiceListComponent
 };
-//# sourceMappingURL=chunk-QRYUOHH5.js.map
+//# sourceMappingURL=chunk-FH4WKDDQ.js.map

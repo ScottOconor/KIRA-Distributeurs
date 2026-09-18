@@ -7,7 +7,7 @@ import {
   OPTIONAL_ACTION_RESOURCES,
   RESOURCES,
   RESOURCE_LABELS
-} from "./chunk-VB5464P6.js";
+} from "./chunk-Y6UTENYI.js";
 import {
   CheckboxControlValueAccessor,
   DefaultValueAccessor,
@@ -797,4 +797,4 @@ var RolesComponent = class _RolesComponent {
 export {
   RolesComponent
 };
-//# sourceMappingURL=chunk-XCDONWTS.js.map
+//# sourceMappingURL=chunk-KIEJK6AB.js.map

@@ -587,7 +587,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_26_Template(rf, ctx) 
     \u0275\u0275textInterpolate(ctx_r0.invoice.salesOrderName);
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_27_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_32_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 35)(1, "div", 36);
     \u0275\u0275text(2, "Notes");
@@ -602,14 +602,14 @@ function InvoiceDetailComponent_Conditional_23_Conditional_27_Template(rf, ctx) 
     \u0275\u0275textInterpolate(ctx_r0.invoice.notes);
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_28_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_33_Template(rf, ctx) {
   if (rf & 1) {
     const _r17 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "div", 35)(1, "div", 36);
     \u0275\u0275text(2, "Facture d'origine");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(3, "div", 78);
-    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_28_Template_div_click_3_listener() {
+    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_33_Template_div_click_3_listener() {
       \u0275\u0275restoreView(_r17);
       const ctx_r0 = \u0275\u0275nextContext(2);
       return \u0275\u0275resetView(ctx_r0.goToOriginalInvoice(ctx_r0.invoice.originalInvoiceId));
@@ -623,7 +623,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_28_Template(rf, ctx) 
     \u0275\u0275textInterpolate1(" ", ctx_r0.invoice.originalInvoiceName, " ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_15_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_15_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0);
     \u0275\u0275pipe(1, "number");
@@ -633,12 +633,12 @@ function InvoiceDetailComponent_Conditional_23_For_63_Conditional_15_Template(rf
     \u0275\u0275textInterpolate1(" \u2013 ", \u0275\u0275pipeBind2(1, 1, line_r18.rabaisUnitaire, "1.0-0"), " ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_16_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_16_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0, " \u2014 ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_18_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_18_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0);
     \u0275\u0275pipe(1, "number");
@@ -648,12 +648,12 @@ function InvoiceDetailComponent_Conditional_23_For_63_Conditional_18_Template(rf
     \u0275\u0275textInterpolate1(" \u2013 ", \u0275\u0275pipeBind2(1, 1, line_r18.rabaisUnitaireTTC, "1.0-0"), " ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_19_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_19_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0, " \u2014 ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_21_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_21_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "span", 82);
     \u0275\u0275text(1);
@@ -668,7 +668,7 @@ function InvoiceDetailComponent_Conditional_23_For_63_Conditional_21_Template(rf
     \u0275\u0275textInterpolate1("TVA ", line_r18.tauxTVA || 0, "%");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_22_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_22_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "span", 82);
     \u0275\u0275text(1);
@@ -680,7 +680,7 @@ function InvoiceDetailComponent_Conditional_23_For_63_Conditional_22_Template(rf
     \u0275\u0275textInterpolate1("TVA ", line_r18.tauxTVA || 0, "%");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_30_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_30_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0);
     \u0275\u0275pipe(1, "number");
@@ -690,12 +690,12 @@ function InvoiceDetailComponent_Conditional_23_For_63_Conditional_30_Template(rf
     \u0275\u0275textInterpolate1(" \u2013 ", \u0275\u0275pipeBind2(1, 1, line_r18.totalRabaisLigne, "1.0-0"), " ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_31_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_31_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0, " \u2014 ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_33_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_33_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0);
     \u0275\u0275pipe(1, "number");
@@ -705,12 +705,12 @@ function InvoiceDetailComponent_Conditional_23_For_63_Conditional_33_Template(rf
     \u0275\u0275textInterpolate1(" \u2013 ", \u0275\u0275pipeBind2(1, 1, line_r18.totalRabaisLigneTTC, "1.0-0"), " ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Conditional_34_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Conditional_34_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0, " \u2014 ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_For_63_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_For_68_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "tr")(1, "td", 79);
     \u0275\u0275text(2);
@@ -731,13 +731,13 @@ function InvoiceDetailComponent_Conditional_23_For_63_Template(rf, ctx) {
     \u0275\u0275pipe(13, "number");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(14, "td", 80);
-    \u0275\u0275conditionalCreate(15, InvoiceDetailComponent_Conditional_23_For_63_Conditional_15_Template, 2, 4)(16, InvoiceDetailComponent_Conditional_23_For_63_Conditional_16_Template, 1, 0);
+    \u0275\u0275conditionalCreate(15, InvoiceDetailComponent_Conditional_23_For_68_Conditional_15_Template, 2, 4)(16, InvoiceDetailComponent_Conditional_23_For_68_Conditional_16_Template, 1, 0);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(17, "td", 81);
-    \u0275\u0275conditionalCreate(18, InvoiceDetailComponent_Conditional_23_For_63_Conditional_18_Template, 2, 4)(19, InvoiceDetailComponent_Conditional_23_For_63_Conditional_19_Template, 1, 0);
+    \u0275\u0275conditionalCreate(18, InvoiceDetailComponent_Conditional_23_For_68_Conditional_18_Template, 2, 4)(19, InvoiceDetailComponent_Conditional_23_For_68_Conditional_19_Template, 1, 0);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(20, "td", 45);
-    \u0275\u0275conditionalCreate(21, InvoiceDetailComponent_Conditional_23_For_63_Conditional_21_Template, 4, 1)(22, InvoiceDetailComponent_Conditional_23_For_63_Conditional_22_Template, 2, 1, "span", 82);
+    \u0275\u0275conditionalCreate(21, InvoiceDetailComponent_Conditional_23_For_68_Conditional_21_Template, 4, 1)(22, InvoiceDetailComponent_Conditional_23_For_68_Conditional_22_Template, 2, 1, "span", 82);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(23, "td", 45);
     \u0275\u0275text(24);
@@ -748,10 +748,10 @@ function InvoiceDetailComponent_Conditional_23_For_63_Template(rf, ctx) {
     \u0275\u0275pipe(28, "number");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(29, "td", 80);
-    \u0275\u0275conditionalCreate(30, InvoiceDetailComponent_Conditional_23_For_63_Conditional_30_Template, 2, 4)(31, InvoiceDetailComponent_Conditional_23_For_63_Conditional_31_Template, 1, 0);
+    \u0275\u0275conditionalCreate(30, InvoiceDetailComponent_Conditional_23_For_68_Conditional_30_Template, 2, 4)(31, InvoiceDetailComponent_Conditional_23_For_68_Conditional_31_Template, 1, 0);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(32, "td", 84);
-    \u0275\u0275conditionalCreate(33, InvoiceDetailComponent_Conditional_23_For_63_Conditional_33_Template, 2, 4)(34, InvoiceDetailComponent_Conditional_23_For_63_Conditional_34_Template, 1, 0);
+    \u0275\u0275conditionalCreate(33, InvoiceDetailComponent_Conditional_23_For_68_Conditional_33_Template, 2, 4)(34, InvoiceDetailComponent_Conditional_23_For_68_Conditional_34_Template, 1, 0);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(35, "td", 48);
     \u0275\u0275text(36);
@@ -788,7 +788,7 @@ function InvoiceDetailComponent_Conditional_23_For_63_Template(rf, ctx) {
     \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(37, 28, (line_r18.fraisEnlevement ?? 0) + (line_r18.fraisEnlevementTVA ?? 0), "1.0-0"));
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_64_Conditional_35_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_69_Conditional_35_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "th", 46);
     \u0275\u0275text(1, "Rabais HT");
@@ -798,7 +798,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_64_Conditional_35_Tem
     \u0275\u0275elementEnd();
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_64_Conditional_79_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_69_Conditional_79_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "td", 93);
     \u0275\u0275text(1);
@@ -817,7 +817,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_64_Conditional_79_Tem
     \u0275\u0275textInterpolate1("\u2013 ", \u0275\u0275pipeBind2(5, 5, ctx_r0.invoice.totalRabaisTTC ?? ctx_r0.invoice.totalRabais, "1.0-0"));
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_64_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_69_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 42)(1, "div", 86)(2, "span", 5);
     \u0275\u0275text(3, "summarize");
@@ -863,7 +863,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_64_Template(rf, ctx) 
     \u0275\u0275elementStart(33, "th", 83);
     \u0275\u0275text(34, "Total TTC");
     \u0275\u0275elementEnd();
-    \u0275\u0275conditionalCreate(35, InvoiceDetailComponent_Conditional_23_Conditional_64_Conditional_35_Template, 4, 0);
+    \u0275\u0275conditionalCreate(35, InvoiceDetailComponent_Conditional_23_Conditional_69_Conditional_35_Template, 4, 0);
     \u0275\u0275elementStart(36, "th", 91);
     \u0275\u0275text(37, "Net \xE0 payer");
     \u0275\u0275elementEnd()()();
@@ -919,7 +919,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_64_Template(rf, ctx) 
     \u0275\u0275text(77);
     \u0275\u0275pipe(78, "number");
     \u0275\u0275elementEnd();
-    \u0275\u0275conditionalCreate(79, InvoiceDetailComponent_Conditional_23_Conditional_64_Conditional_79_Template, 6, 8);
+    \u0275\u0275conditionalCreate(79, InvoiceDetailComponent_Conditional_23_Conditional_69_Conditional_79_Template, 6, 8);
     \u0275\u0275elementStart(80, "td", 91)(81, "strong");
     \u0275\u0275text(82);
     \u0275\u0275pipe(83, "number");
@@ -961,17 +961,17 @@ function InvoiceDetailComponent_Conditional_23_Conditional_64_Template(rf, ctx) 
     \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(83, 55, ctx_r0.invoice.netAPayer ?? 0, "1.0-0"));
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_65_Conditional_4_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_70_Conditional_4_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0, " Ristournes annul\xE9es par cet avoir ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_65_Conditional_5_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_70_Conditional_5_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0, " Ristournes applicables ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_65_For_23_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_70_For_23_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "tr")(1, "td");
     \u0275\u0275text(2);
@@ -1009,12 +1009,12 @@ function InvoiceDetailComponent_Conditional_23_Conditional_65_For_23_Template(rf
     \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(15, 15, r_r19.montantTotal, "1.0-0"));
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_65_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_70_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 42)(1, "div", 86)(2, "span", 5);
     \u0275\u0275text(3, "redeem");
     \u0275\u0275elementEnd();
-    \u0275\u0275conditionalCreate(4, InvoiceDetailComponent_Conditional_23_Conditional_65_Conditional_4_Template, 1, 0)(5, InvoiceDetailComponent_Conditional_23_Conditional_65_Conditional_5_Template, 1, 0);
+    \u0275\u0275conditionalCreate(4, InvoiceDetailComponent_Conditional_23_Conditional_70_Conditional_4_Template, 1, 0)(5, InvoiceDetailComponent_Conditional_23_Conditional_70_Conditional_5_Template, 1, 0);
     \u0275\u0275elementStart(6, "span", 94);
     \u0275\u0275text(7);
     \u0275\u0275elementEnd()();
@@ -1034,7 +1034,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_65_Template(rf, ctx) 
     \u0275\u0275text(20, "Total ristourne");
     \u0275\u0275elementEnd()()();
     \u0275\u0275elementStart(21, "tbody");
-    \u0275\u0275repeaterCreate(22, InvoiceDetailComponent_Conditional_23_Conditional_65_For_23_Template, 16, 18, "tr", 96, _forTrack1);
+    \u0275\u0275repeaterCreate(22, InvoiceDetailComponent_Conditional_23_Conditional_70_For_23_Template, 16, 18, "tr", 96, _forTrack1);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(24, "tfoot")(25, "tr", 92)(26, "td", 97)(27, "strong");
     \u0275\u0275text(28);
@@ -1060,11 +1060,11 @@ function InvoiceDetailComponent_Conditional_23_Conditional_65_Template(rf, ctx) 
     \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(32, 6, ctx_r0.invoice.totalRistourne ?? 0, "1.0-0"), " FCFA");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_72_Conditional_1_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_77_Conditional_1_Template(rf, ctx) {
   if (rf & 1) {
     const _r21 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "button", 101);
-    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_72_Conditional_1_Template_button_click_0_listener() {
+    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_77_Conditional_1_Template_button_click_0_listener() {
       \u0275\u0275restoreView(_r21);
       const ctx_r0 = \u0275\u0275nextContext(3);
       return \u0275\u0275resetView(ctx_r0.openCreditForm());
@@ -1082,13 +1082,13 @@ function InvoiceDetailComponent_Conditional_23_Conditional_72_Conditional_1_Temp
     \u0275\u0275textInterpolate1(" Cr\xE9dit (", \u0275\u0275pipeBind2(4, 1, ctx_r0.invoice.partnerCreditDisponible, "1.0-0"), ") ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_72_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_77_Template(rf, ctx) {
   if (rf & 1) {
     const _r20 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "div", 52);
-    \u0275\u0275conditionalCreate(1, InvoiceDetailComponent_Conditional_23_Conditional_72_Conditional_1_Template, 5, 4, "button", 99);
+    \u0275\u0275conditionalCreate(1, InvoiceDetailComponent_Conditional_23_Conditional_77_Conditional_1_Template, 5, 4, "button", 99);
     \u0275\u0275elementStart(2, "button", 100);
-    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_72_Template_button_click_2_listener() {
+    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_77_Template_button_click_2_listener() {
       \u0275\u0275restoreView(_r20);
       const ctx_r0 = \u0275\u0275nextContext(2);
       return \u0275\u0275resetView(ctx_r0.openPaymentForm());
@@ -1105,14 +1105,14 @@ function InvoiceDetailComponent_Conditional_23_Conditional_72_Template(rf, ctx) 
     \u0275\u0275conditional((ctx_r0.invoice.partnerCreditDisponible || 0) > 0 && (ctx_r0.invoice.montantDu || 0) > 0 ? 1 : -1);
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_73_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_78_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 53);
     \u0275\u0275text(1, "Aucun paiement enregistr\xE9");
     \u0275\u0275elementEnd();
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_7_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_7_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "span", 104)(1, "span", 71);
     \u0275\u0275text(2, "redeem");
@@ -1126,7 +1126,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional
     \u0275\u0275textInterpolate1(" ", p_r22.creditNoteName || "Avoir", " ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_8_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_8_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275text(0);
   }
@@ -1135,18 +1135,18 @@ function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional
     \u0275\u0275textInterpolate1(" ", p_r22.journalName || "\u2014", " ");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_14_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_14_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "span", 106);
     \u0275\u0275text(1, "Invers\xE9");
     \u0275\u0275elementEnd();
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_16_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_16_Template(rf, ctx) {
   if (rf & 1) {
     const _r23 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "button", 109);
-    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_16_Template_button_click_0_listener() {
+    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_16_Template_button_click_0_listener() {
       \u0275\u0275restoreView(_r23);
       const p_r22 = \u0275\u0275nextContext().$implicit;
       const ctx_r0 = \u0275\u0275nextContext(3);
@@ -1157,7 +1157,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional
     \u0275\u0275elementEnd()();
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "tr")(1, "td", 103);
     \u0275\u0275text(2);
@@ -1167,7 +1167,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Template(rf
     \u0275\u0275pipe(5, "date");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(6, "td");
-    \u0275\u0275conditionalCreate(7, InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_7_Template, 4, 1, "span", 104)(8, InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_8_Template, 1, 1);
+    \u0275\u0275conditionalCreate(7, InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_7_Template, 4, 1, "span", 104)(8, InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_8_Template, 1, 1);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(9, "td", 105);
     \u0275\u0275text(10);
@@ -1175,10 +1175,10 @@ function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Template(rf
     \u0275\u0275elementStart(11, "td", 83);
     \u0275\u0275text(12);
     \u0275\u0275pipe(13, "number");
-    \u0275\u0275conditionalCreate(14, InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_14_Template, 2, 0, "span", 106);
+    \u0275\u0275conditionalCreate(14, InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_14_Template, 2, 0, "span", 106);
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(15, "td", 107);
-    \u0275\u0275conditionalCreate(16, InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Conditional_16_Template, 3, 0, "button", 108);
+    \u0275\u0275conditionalCreate(16, InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Conditional_16_Template, 3, 0, "button", 108);
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
@@ -1202,7 +1202,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Template(rf
     \u0275\u0275conditional(p_r22.state !== "reversed" && p_r22.id && !p_r22.creditNoteId ? 16 : -1);
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_74_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_79_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "table", 54)(1, "thead")(2, "tr")(3, "th");
     \u0275\u0275text(4, "R\xE9f\xE9rence");
@@ -1222,7 +1222,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_74_Template(rf, ctx) 
     \u0275\u0275element(13, "th");
     \u0275\u0275elementEnd()();
     \u0275\u0275elementStart(14, "tbody");
-    \u0275\u0275repeaterCreate(15, InvoiceDetailComponent_Conditional_23_Conditional_74_For_16_Template, 17, 19, "tr", 102, _forTrack0);
+    \u0275\u0275repeaterCreate(15, InvoiceDetailComponent_Conditional_23_Conditional_79_For_16_Template, 17, 19, "tr", 102, _forTrack0);
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
@@ -1231,7 +1231,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_74_Template(rf, ctx) 
     \u0275\u0275repeater(ctx_r0.invoice.payments);
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_75_For_7_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_80_For_7_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "tr")(1, "td", 103);
     \u0275\u0275text(2);
@@ -1265,7 +1265,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_75_For_7_Template(rf,
     \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(12, 8, r_r24.amount, "1.0-0"));
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_75_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_80_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 110)(1, "span", 5);
     \u0275\u0275text(2, "link");
@@ -1273,7 +1273,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_75_Template(rf, ctx) 
     \u0275\u0275text(3, " Versements rattach\xE9s (lettrage) ");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(4, "table", 54)(5, "tbody");
-    \u0275\u0275repeaterCreate(6, InvoiceDetailComponent_Conditional_23_Conditional_75_For_7_Template, 13, 11, "tr", null, _forTrack0);
+    \u0275\u0275repeaterCreate(6, InvoiceDetailComponent_Conditional_23_Conditional_80_For_7_Template, 13, 11, "tr", null, _forTrack0);
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
@@ -1282,7 +1282,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_75_Template(rf, ctx) 
     \u0275\u0275repeater(ctx_r0.reconciliations);
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_90_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_95_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 58)(1, "span");
     \u0275\u0275text(2, "+ PSA (Pr\xE9compte)");
@@ -1298,7 +1298,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_90_Template(rf, ctx) 
     \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(5, 1, ctx_r0.invoice.totalPrecompte, "1.0-0"), " FCFA");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_97_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_102_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 112)(1, "span");
     \u0275\u0275text(2, "+ Frais d'enl\xE8vement HT");
@@ -1332,7 +1332,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_97_Template(rf, ctx) 
     \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(17, 9, ctx_r0.invoice.fraisEnlevementTTC, "1.0-0"), " FCFA");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_104_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_109_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 57)(1, "span");
     \u0275\u0275text(2, "+ Consigne");
@@ -1348,7 +1348,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_104_Template(rf, ctx)
     \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(5, 1, ctx_r0.consigneMontant, "1.0-0"), " FCFA");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_105_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_110_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 57)(1, "span");
     \u0275\u0275text(2, "\u2212 D\xE9consigne");
@@ -1364,7 +1364,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_105_Template(rf, ctx)
     \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(5, 1, ctx_r0.deconsigneMontant, "1.0-0"), " FCFA");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_106_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_111_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 113)(1, "span");
     \u0275\u0275text(2, "\u2212 Rabais HT accord\xE9s");
@@ -1389,7 +1389,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_106_Template(rf, ctx)
     \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(11, 5, ctx_r0.invoice.totalRabaisTTC ?? ctx_r0.invoice.totalRabais, "1.0-0"), " FCFA");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_125_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_130_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 63)(1, "div", 115);
     \u0275\u0275element(2, "div", 116);
@@ -1406,11 +1406,11 @@ function InvoiceDetailComponent_Conditional_23_Conditional_125_Template(rf, ctx)
     \u0275\u0275textInterpolate1("", ctx_r0.getProgressPct(), "% pay\xE9");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_6_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_6_Template(rf, ctx) {
   if (rf & 1) {
     const _r25 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "button", 123);
-    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_6_Template_button_click_0_listener() {
+    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_6_Template_button_click_0_listener() {
       \u0275\u0275restoreView(_r25);
       const ctx_r0 = \u0275\u0275nextContext(3);
       return \u0275\u0275resetView(ctx_r0.openReconcileModal());
@@ -1422,14 +1422,14 @@ function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_6_Tem
     \u0275\u0275elementEnd();
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_7_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_7_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 122);
     \u0275\u0275text(1, ' Aucun versement rattach\xE9 \u2014 utilisez "Rattacher un versement" pour lettrer cette facture \xE0 une \xE9criture de caisse ou banque existante. ');
     \u0275\u0275elementEnd();
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_For_16_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_8_For_16_Template(rf, ctx) {
   if (rf & 1) {
     const _r26 = \u0275\u0275getCurrentView();
     \u0275\u0275elementStart(0, "tr")(1, "td", 103);
@@ -1450,7 +1450,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_For
     \u0275\u0275pipe(12, "number");
     \u0275\u0275elementEnd();
     \u0275\u0275elementStart(13, "td")(14, "button", 125);
-    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_For_16_Template_button_click_14_listener() {
+    \u0275\u0275listener("click", function InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_8_For_16_Template_button_click_14_listener() {
       const r_r27 = \u0275\u0275restoreView(_r26).$implicit;
       const ctx_r0 = \u0275\u0275nextContext(4);
       return \u0275\u0275resetView(ctx_r0.unreconcile(r_r27.id));
@@ -1473,7 +1473,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_For
     \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(12, 8, r_r27.amount, "1.0-0"), " FCFA");
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_8_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "table", 54)(1, "thead")(2, "tr")(3, "th");
     \u0275\u0275text(4, "\xC9criture");
@@ -1493,7 +1493,7 @@ function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_Tem
     \u0275\u0275element(13, "th");
     \u0275\u0275elementEnd()();
     \u0275\u0275elementStart(14, "tbody");
-    \u0275\u0275repeaterCreate(15, InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_For_16_Template, 17, 11, "tr", null, _forTrack0);
+    \u0275\u0275repeaterCreate(15, InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_8_For_16_Template, 17, 11, "tr", null, _forTrack0);
     \u0275\u0275elementEnd()();
   }
   if (rf & 2) {
@@ -1502,16 +1502,16 @@ function InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_Tem
     \u0275\u0275repeater(ctx_r0.reconciliations);
   }
 }
-function InvoiceDetailComponent_Conditional_23_Conditional_126_Template(rf, ctx) {
+function InvoiceDetailComponent_Conditional_23_Conditional_131_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 42)(1, "div", 118)(2, "span", 119)(3, "span", 120);
     \u0275\u0275text(4, "link");
     \u0275\u0275elementEnd();
     \u0275\u0275text(5, " Rattachement de versements (Lettrage) ");
     \u0275\u0275elementEnd();
-    \u0275\u0275conditionalCreate(6, InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_6_Template, 4, 0, "button", 121);
+    \u0275\u0275conditionalCreate(6, InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_6_Template, 4, 0, "button", 121);
     \u0275\u0275elementEnd();
-    \u0275\u0275conditionalCreate(7, InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_7_Template, 2, 0, "div", 122)(8, InvoiceDetailComponent_Conditional_23_Conditional_126_Conditional_8_Template, 17, 0, "table", 54);
+    \u0275\u0275conditionalCreate(7, InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_7_Template, 2, 0, "div", 122)(8, InvoiceDetailComponent_Conditional_23_Conditional_131_Conditional_8_Template, 17, 0, "table", 54);
     \u0275\u0275elementEnd();
   }
   if (rf & 2) {
@@ -1554,122 +1554,128 @@ function InvoiceDetailComponent_Conditional_23_Template(rf, ctx) {
     \u0275\u0275elementEnd()();
     \u0275\u0275conditionalCreate(25, InvoiceDetailComponent_Conditional_23_Conditional_25_Template, 9, 3, "div", 40);
     \u0275\u0275conditionalCreate(26, InvoiceDetailComponent_Conditional_23_Conditional_26_Template, 5, 1, "div", 41);
-    \u0275\u0275conditionalCreate(27, InvoiceDetailComponent_Conditional_23_Conditional_27_Template, 5, 1, "div", 35);
-    \u0275\u0275conditionalCreate(28, InvoiceDetailComponent_Conditional_23_Conditional_28_Template, 5, 1, "div", 35);
+    \u0275\u0275elementStart(27, "div", 35)(28, "div", 36);
+    \u0275\u0275text(29, "Vendeur");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(29, "div", 42)(30, "div", 43);
-    \u0275\u0275text(31, "Lignes de facturation");
+    \u0275\u0275elementStart(30, "div", 39);
+    \u0275\u0275text(31);
+    \u0275\u0275elementEnd()();
+    \u0275\u0275conditionalCreate(32, InvoiceDetailComponent_Conditional_23_Conditional_32_Template, 5, 1, "div", 35);
+    \u0275\u0275conditionalCreate(33, InvoiceDetailComponent_Conditional_23_Conditional_33_Template, 5, 1, "div", 35);
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(32, "table", 44)(33, "thead")(34, "tr")(35, "th");
-    \u0275\u0275text(36, "Code");
+    \u0275\u0275elementStart(34, "div", 42)(35, "div", 43);
+    \u0275\u0275text(36, "Lignes de facturation");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(37, "th");
-    \u0275\u0275text(38, "D\xE9signation");
+    \u0275\u0275elementStart(37, "table", 44)(38, "thead")(39, "tr")(40, "th");
+    \u0275\u0275text(41, "Code");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(39, "th", 45);
-    \u0275\u0275text(40, "Qt\xE9");
+    \u0275\u0275elementStart(42, "th");
+    \u0275\u0275text(43, "D\xE9signation");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(41, "th", 45);
-    \u0275\u0275text(42, "Prix U. HT");
+    \u0275\u0275elementStart(44, "th", 45);
+    \u0275\u0275text(45, "Qt\xE9");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(43, "th", 45);
-    \u0275\u0275text(44, "Prix U. TTC");
+    \u0275\u0275elementStart(46, "th", 45);
+    \u0275\u0275text(47, "Prix U. HT");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(45, "th", 46);
-    \u0275\u0275text(46, "Rabais/u HT");
+    \u0275\u0275elementStart(48, "th", 45);
+    \u0275\u0275text(49, "Prix U. TTC");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(47, "th", 47);
-    \u0275\u0275text(48, "Rabais/u TTC");
+    \u0275\u0275elementStart(50, "th", 46);
+    \u0275\u0275text(51, "Rabais/u HT");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(49, "th", 45);
-    \u0275\u0275text(50, "Taxe(s)");
+    \u0275\u0275elementStart(52, "th", 47);
+    \u0275\u0275text(53, "Rabais/u TTC");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(51, "th", 45);
-    \u0275\u0275text(52, "Total HT");
+    \u0275\u0275elementStart(54, "th", 45);
+    \u0275\u0275text(55, "Taxe(s)");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(53, "th", 45);
-    \u0275\u0275text(54, "Total TTC");
+    \u0275\u0275elementStart(56, "th", 45);
+    \u0275\u0275text(57, "Total HT");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(55, "th", 46);
-    \u0275\u0275text(56, "Rabais HT");
+    \u0275\u0275elementStart(58, "th", 45);
+    \u0275\u0275text(59, "Total TTC");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(57, "th", 47);
-    \u0275\u0275text(58, "Rabais TTC");
+    \u0275\u0275elementStart(60, "th", 46);
+    \u0275\u0275text(61, "Rabais HT");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(59, "th", 48);
-    \u0275\u0275text(60, "Frais Enl\xE8v.");
+    \u0275\u0275elementStart(62, "th", 47);
+    \u0275\u0275text(63, "Rabais TTC");
+    \u0275\u0275elementEnd();
+    \u0275\u0275elementStart(64, "th", 48);
+    \u0275\u0275text(65, "Frais Enl\xE8v.");
     \u0275\u0275elementEnd()()();
-    \u0275\u0275elementStart(61, "tbody");
-    \u0275\u0275repeaterCreate(62, InvoiceDetailComponent_Conditional_23_For_63_Template, 38, 31, "tr", null, _forTrack0);
+    \u0275\u0275elementStart(66, "tbody");
+    \u0275\u0275repeaterCreate(67, InvoiceDetailComponent_Conditional_23_For_68_Template, 38, 31, "tr", null, _forTrack0);
     \u0275\u0275elementEnd()()();
-    \u0275\u0275conditionalCreate(64, InvoiceDetailComponent_Conditional_23_Conditional_64_Template, 84, 58, "div", 42);
-    \u0275\u0275conditionalCreate(65, InvoiceDetailComponent_Conditional_23_Conditional_65_Template, 33, 9, "div", 42);
-    \u0275\u0275elementStart(66, "div", 49)(67, "div", 50)(68, "div", 51)(69, "div", 43)(70, "span");
-    \u0275\u0275text(71, "Paiements");
+    \u0275\u0275conditionalCreate(69, InvoiceDetailComponent_Conditional_23_Conditional_69_Template, 84, 58, "div", 42);
+    \u0275\u0275conditionalCreate(70, InvoiceDetailComponent_Conditional_23_Conditional_70_Template, 33, 9, "div", 42);
+    \u0275\u0275elementStart(71, "div", 49)(72, "div", 50)(73, "div", 51)(74, "div", 43)(75, "span");
+    \u0275\u0275text(76, "Paiements");
     \u0275\u0275elementEnd();
-    \u0275\u0275conditionalCreate(72, InvoiceDetailComponent_Conditional_23_Conditional_72_Template, 6, 1, "div", 52);
+    \u0275\u0275conditionalCreate(77, InvoiceDetailComponent_Conditional_23_Conditional_77_Template, 6, 1, "div", 52);
     \u0275\u0275elementEnd();
-    \u0275\u0275conditionalCreate(73, InvoiceDetailComponent_Conditional_23_Conditional_73_Template, 2, 0, "div", 53)(74, InvoiceDetailComponent_Conditional_23_Conditional_74_Template, 17, 0, "table", 54);
-    \u0275\u0275conditionalCreate(75, InvoiceDetailComponent_Conditional_23_Conditional_75_Template, 8, 0);
+    \u0275\u0275conditionalCreate(78, InvoiceDetailComponent_Conditional_23_Conditional_78_Template, 2, 0, "div", 53)(79, InvoiceDetailComponent_Conditional_23_Conditional_79_Template, 17, 0, "table", 54);
+    \u0275\u0275conditionalCreate(80, InvoiceDetailComponent_Conditional_23_Conditional_80_Template, 8, 0);
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(76, "div", 55)(77, "div", 56)(78, "div", 57)(79, "span");
-    \u0275\u0275text(80, "Montant HT");
+    \u0275\u0275elementStart(81, "div", 55)(82, "div", 56)(83, "div", 57)(84, "span");
+    \u0275\u0275text(85, "Montant HT");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(81, "span");
-    \u0275\u0275text(82);
-    \u0275\u0275pipe(83, "number");
+    \u0275\u0275elementStart(86, "span");
+    \u0275\u0275text(87);
+    \u0275\u0275pipe(88, "number");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(84, "div", 57)(85, "span");
-    \u0275\u0275text(86, "+ TVA");
+    \u0275\u0275elementStart(89, "div", 57)(90, "span");
+    \u0275\u0275text(91, "+ TVA");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(87, "span");
-    \u0275\u0275text(88);
-    \u0275\u0275pipe(89, "number");
+    \u0275\u0275elementStart(92, "span");
+    \u0275\u0275text(93);
+    \u0275\u0275pipe(94, "number");
     \u0275\u0275elementEnd()();
-    \u0275\u0275conditionalCreate(90, InvoiceDetailComponent_Conditional_23_Conditional_90_Template, 6, 4, "div", 58);
-    \u0275\u0275elementStart(91, "div", 59)(92, "span");
-    \u0275\u0275text(93, "= Total Liquide Nu");
+    \u0275\u0275conditionalCreate(95, InvoiceDetailComponent_Conditional_23_Conditional_95_Template, 6, 4, "div", 58);
+    \u0275\u0275elementStart(96, "div", 59)(97, "span");
+    \u0275\u0275text(98, "= Total Liquide Nu");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(94, "span");
-    \u0275\u0275text(95);
-    \u0275\u0275pipe(96, "number");
+    \u0275\u0275elementStart(99, "span");
+    \u0275\u0275text(100);
+    \u0275\u0275pipe(101, "number");
     \u0275\u0275elementEnd()();
-    \u0275\u0275conditionalCreate(97, InvoiceDetailComponent_Conditional_23_Conditional_97_Template, 18, 12);
-    \u0275\u0275elementStart(98, "div", 60)(99, "span");
-    \u0275\u0275text(100, "= Total TTC");
+    \u0275\u0275conditionalCreate(102, InvoiceDetailComponent_Conditional_23_Conditional_102_Template, 18, 12);
+    \u0275\u0275elementStart(103, "div", 60)(104, "span");
+    \u0275\u0275text(105, "= Total TTC");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(101, "span");
-    \u0275\u0275text(102);
-    \u0275\u0275pipe(103, "number");
+    \u0275\u0275elementStart(106, "span");
+    \u0275\u0275text(107);
+    \u0275\u0275pipe(108, "number");
     \u0275\u0275elementEnd()();
-    \u0275\u0275conditionalCreate(104, InvoiceDetailComponent_Conditional_23_Conditional_104_Template, 6, 4, "div", 57);
-    \u0275\u0275conditionalCreate(105, InvoiceDetailComponent_Conditional_23_Conditional_105_Template, 6, 4, "div", 57);
-    \u0275\u0275conditionalCreate(106, InvoiceDetailComponent_Conditional_23_Conditional_106_Template, 12, 8);
-    \u0275\u0275elementStart(107, "div", 61)(108, "span");
-    \u0275\u0275text(109, "= Net \xE0 payer");
+    \u0275\u0275conditionalCreate(109, InvoiceDetailComponent_Conditional_23_Conditional_109_Template, 6, 4, "div", 57);
+    \u0275\u0275conditionalCreate(110, InvoiceDetailComponent_Conditional_23_Conditional_110_Template, 6, 4, "div", 57);
+    \u0275\u0275conditionalCreate(111, InvoiceDetailComponent_Conditional_23_Conditional_111_Template, 12, 8);
+    \u0275\u0275elementStart(112, "div", 61)(113, "span");
+    \u0275\u0275text(114, "= Net \xE0 payer");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(110, "span");
-    \u0275\u0275text(111);
-    \u0275\u0275pipe(112, "number");
+    \u0275\u0275elementStart(115, "span");
+    \u0275\u0275text(116);
+    \u0275\u0275pipe(117, "number");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(113, "div", 62)(114, "span");
-    \u0275\u0275text(115, "Montant pay\xE9");
+    \u0275\u0275elementStart(118, "div", 62)(119, "span");
+    \u0275\u0275text(120, "Montant pay\xE9");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(116, "span");
-    \u0275\u0275text(117);
-    \u0275\u0275pipe(118, "number");
+    \u0275\u0275elementStart(121, "span");
+    \u0275\u0275text(122);
+    \u0275\u0275pipe(123, "number");
     \u0275\u0275elementEnd()();
-    \u0275\u0275elementStart(119, "div", 57)(120, "span");
-    \u0275\u0275text(121, "Reste d\xFB");
+    \u0275\u0275elementStart(124, "div", 57)(125, "span");
+    \u0275\u0275text(126, "Reste d\xFB");
     \u0275\u0275elementEnd();
-    \u0275\u0275elementStart(122, "span");
-    \u0275\u0275text(123);
-    \u0275\u0275pipe(124, "number");
+    \u0275\u0275elementStart(127, "span");
+    \u0275\u0275text(128);
+    \u0275\u0275pipe(129, "number");
     \u0275\u0275elementEnd()();
-    \u0275\u0275conditionalCreate(125, InvoiceDetailComponent_Conditional_23_Conditional_125_Template, 5, 3, "div", 63);
+    \u0275\u0275conditionalCreate(130, InvoiceDetailComponent_Conditional_23_Conditional_130_Template, 5, 3, "div", 63);
     \u0275\u0275elementEnd()()();
-    \u0275\u0275conditionalCreate(126, InvoiceDetailComponent_Conditional_23_Conditional_126_Template, 9, 2, "div", 42);
-    \u0275\u0275element(127, "app-audit-footer", 64)(128, "app-audit-trail", 65);
+    \u0275\u0275conditionalCreate(131, InvoiceDetailComponent_Conditional_23_Conditional_131_Template, 9, 2, "div", 42);
+    \u0275\u0275element(132, "app-audit-footer", 64)(133, "app-audit-trail", 65);
   }
   if (rf & 2) {
     const ctx_r0 = \u0275\u0275nextContext();
@@ -1681,59 +1687,61 @@ function InvoiceDetailComponent_Conditional_23_Template(rf, ctx) {
     \u0275\u0275advance(5);
     \u0275\u0275textInterpolate(ctx_r0.invoice.journalName);
     \u0275\u0275advance(5);
-    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(18, 36, ctx_r0.invoice.date, "dd/MM/yyyy"));
+    \u0275\u0275textInterpolate(\u0275\u0275pipeBind2(18, 37, ctx_r0.invoice.date, "dd/MM/yyyy"));
     \u0275\u0275advance(6);
-    \u0275\u0275textInterpolate(ctx_r0.invoice.dateEcheance ? \u0275\u0275pipeBind2(24, 39, ctx_r0.invoice.dateEcheance, "dd/MM/yyyy") : "\u2014");
+    \u0275\u0275textInterpolate(ctx_r0.invoice.dateEcheance ? \u0275\u0275pipeBind2(24, 40, ctx_r0.invoice.dateEcheance, "dd/MM/yyyy") : "\u2014");
     \u0275\u0275advance(2);
     \u0275\u0275conditional(ctx_r0.isInvoice ? 25 : -1);
     \u0275\u0275advance();
     \u0275\u0275conditional(ctx_r0.invoice.salesOrderName ? 26 : -1);
+    \u0275\u0275advance(5);
+    \u0275\u0275textInterpolate(ctx_r0.invoice.sellerName || "\u2014");
     \u0275\u0275advance();
-    \u0275\u0275conditional(ctx_r0.invoice.notes ? 27 : -1);
+    \u0275\u0275conditional(ctx_r0.invoice.notes ? 32 : -1);
     \u0275\u0275advance();
-    \u0275\u0275conditional(ctx_r0.invoice.originalInvoiceName ? 28 : -1);
+    \u0275\u0275conditional(ctx_r0.invoice.originalInvoiceName ? 33 : -1);
     \u0275\u0275advance(34);
     \u0275\u0275repeater(ctx_r0.invoice.lines);
     \u0275\u0275advance(2);
-    \u0275\u0275conditional(ctx_r0.invoice.lines && ctx_r0.invoice.lines.length > 0 ? 64 : -1);
+    \u0275\u0275conditional(ctx_r0.invoice.lines && ctx_r0.invoice.lines.length > 0 ? 69 : -1);
     \u0275\u0275advance();
-    \u0275\u0275conditional(ctx_r0.invoice.ristourneDetails && ctx_r0.invoice.ristourneDetails.length > 0 ? 65 : -1);
+    \u0275\u0275conditional(ctx_r0.invoice.ristourneDetails && ctx_r0.invoice.ristourneDetails.length > 0 ? 70 : -1);
     \u0275\u0275advance(7);
-    \u0275\u0275conditional(ctx_r0.invoice.state === "posted" ? 72 : -1);
+    \u0275\u0275conditional(ctx_r0.invoice.state === "posted" ? 77 : -1);
     \u0275\u0275advance();
-    \u0275\u0275conditional((!ctx_r0.invoice.payments || ctx_r0.invoice.payments.length === 0) && (!ctx_r0.reconciliations || ctx_r0.reconciliations.length === 0) ? 73 : 74);
+    \u0275\u0275conditional((!ctx_r0.invoice.payments || ctx_r0.invoice.payments.length === 0) && (!ctx_r0.reconciliations || ctx_r0.reconciliations.length === 0) ? 78 : 79);
     \u0275\u0275advance(2);
-    \u0275\u0275conditional(ctx_r0.reconciliations && ctx_r0.reconciliations.length > 0 ? 75 : -1);
+    \u0275\u0275conditional(ctx_r0.reconciliations && ctx_r0.reconciliations.length > 0 ? 80 : -1);
     \u0275\u0275advance(7);
-    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(83, 42, ctx_r0.invoice.totalHT ?? 0, "1.2-2"), " FCFA");
+    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(88, 43, ctx_r0.invoice.totalHT ?? 0, "1.2-2"), " FCFA");
     \u0275\u0275advance(6);
-    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(89, 45, ctx_r0.invoice.totalTVA ?? 0, "1.0-0"), " FCFA");
+    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(94, 46, ctx_r0.invoice.totalTVA ?? 0, "1.0-0"), " FCFA");
     \u0275\u0275advance(2);
-    \u0275\u0275conditional((ctx_r0.invoice.totalPrecompte ?? 0) > 0 ? 90 : -1);
+    \u0275\u0275conditional((ctx_r0.invoice.totalPrecompte ?? 0) > 0 ? 95 : -1);
     \u0275\u0275advance(5);
-    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(96, 48, ctx_r0.invoice.totalLiquideNu ?? 0, "1.0-0"), " FCFA");
+    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(101, 49, ctx_r0.invoice.totalLiquideNu ?? 0, "1.0-0"), " FCFA");
     \u0275\u0275advance(2);
-    \u0275\u0275conditional((ctx_r0.invoice.fraisEnlevementTTC ?? 0) > 0 ? 97 : -1);
+    \u0275\u0275conditional((ctx_r0.invoice.fraisEnlevementTTC ?? 0) > 0 ? 102 : -1);
     \u0275\u0275advance(5);
-    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(103, 51, ctx_r0.invoice.totalTTC ?? 0, "1.0-0"), " FCFA");
+    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(108, 52, ctx_r0.invoice.totalTTC ?? 0, "1.0-0"), " FCFA");
     \u0275\u0275advance(2);
-    \u0275\u0275conditional(ctx_r0.consigneMontant > 0 ? 104 : -1);
+    \u0275\u0275conditional(ctx_r0.consigneMontant > 0 ? 109 : -1);
     \u0275\u0275advance();
-    \u0275\u0275conditional(ctx_r0.deconsigneMontant > 0 ? 105 : -1);
+    \u0275\u0275conditional(ctx_r0.deconsigneMontant > 0 ? 110 : -1);
     \u0275\u0275advance();
-    \u0275\u0275conditional((ctx_r0.invoice.totalRabais ?? 0) > 0 ? 106 : -1);
+    \u0275\u0275conditional((ctx_r0.invoice.totalRabais ?? 0) > 0 ? 111 : -1);
     \u0275\u0275advance(5);
-    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(112, 54, ctx_r0.invoice.netAPayer ?? 0, "1.0-0"), " FCFA");
+    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(117, 55, ctx_r0.invoice.netAPayer ?? 0, "1.0-0"), " FCFA");
     \u0275\u0275advance(6);
-    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(118, 57, ctx_r0.invoice.montantPaye, "1.0-0"), " FCFA");
+    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(123, 58, ctx_r0.invoice.montantPaye, "1.0-0"), " FCFA");
     \u0275\u0275advance(2);
     \u0275\u0275classProp("total-due", (ctx_r0.invoice.montantDu || 0) > 0);
     \u0275\u0275advance(4);
-    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(124, 60, ctx_r0.invoice.montantDu, "1.0-0"), " FCFA");
+    \u0275\u0275textInterpolate1("", \u0275\u0275pipeBind2(129, 61, ctx_r0.invoice.montantDu, "1.0-0"), " FCFA");
     \u0275\u0275advance(2);
-    \u0275\u0275conditional(ctx_r0.invoice.state === "posted" || ctx_r0.invoice.state === "paid" ? 125 : -1);
+    \u0275\u0275conditional(ctx_r0.invoice.state === "posted" || ctx_r0.invoice.state === "paid" ? 130 : -1);
     \u0275\u0275advance();
-    \u0275\u0275conditional(ctx_r0.isInvoice && ctx_r0.invoice.state !== "draft" && ctx_r0.invoice.state !== "cancelled" ? 126 : -1);
+    \u0275\u0275conditional(ctx_r0.isInvoice && ctx_r0.invoice.state !== "draft" && ctx_r0.invoice.state !== "cancelled" ? 131 : -1);
     \u0275\u0275advance();
     \u0275\u0275property("createdBy", ctx_r0.invoice.createdBy)("createdAt", ctx_r0.invoice.createdAt)("updatedBy", ctx_r0.invoice.updatedBy)("updatedAt", ctx_r0.invoice.updatedAt);
     \u0275\u0275advance();
@@ -3102,7 +3110,7 @@ var InvoiceDetailComponent = class _InvoiceDetailComponent {
         \u0275\u0275elementEnd()();
         \u0275\u0275conditionalCreate(20, InvoiceDetailComponent_Conditional_20_Template, 4, 1, "div", 15);
         \u0275\u0275conditionalCreate(21, InvoiceDetailComponent_Conditional_21_Template, 4, 1, "div", 16);
-        \u0275\u0275conditionalCreate(22, InvoiceDetailComponent_Conditional_22_Template, 4, 0, "div", 17)(23, InvoiceDetailComponent_Conditional_23_Template, 129, 63);
+        \u0275\u0275conditionalCreate(22, InvoiceDetailComponent_Conditional_22_Template, 4, 0, "div", 17)(23, InvoiceDetailComponent_Conditional_23_Template, 134, 64);
         \u0275\u0275elementEnd();
         \u0275\u0275conditionalCreate(24, InvoiceDetailComponent_Conditional_24_Template, 38, 11, "div", 18);
         \u0275\u0275conditionalCreate(25, InvoiceDetailComponent_Conditional_25_Template, 61, 16, "div", 19);
@@ -3351,6 +3359,10 @@ var InvoiceDetailComponent = class _InvoiceDetailComponent {
           <div class="info-value link">{{ invoice.salesOrderName }}</div>
         </div>
       }
+      <div class="info-card">
+        <div class="info-label">Vendeur</div>
+        <div class="info-value">{{ invoice.sellerName || '\u2014' }}</div>
+      </div>
       @if (invoice.notes) {
         <div class="info-card">
           <div class="info-label">Notes</div>
@@ -4126,4 +4138,4 @@ var InvoiceDetailComponent = class _InvoiceDetailComponent {
 export {
   InvoiceDetailComponent
 };
-//# sourceMappingURL=chunk-LIFFCK7T.js.map
+//# sourceMappingURL=chunk-TE7QXN3Y.js.map
