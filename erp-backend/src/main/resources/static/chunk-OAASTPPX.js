@@ -292,7 +292,7 @@ var syncRoutes = [
       { path: "", redirectTo: "hub", pathMatch: "full" },
       {
         path: "hub",
-        loadComponent: () => import("./chunk-3FEABOBX.js").then((m) => m.SyncDashboardComponent)
+        loadComponent: () => import("./chunk-OEKPIQKF.js").then((m) => m.SyncDashboardComponent)
       }
     ]
   }
@@ -300,4 +300,4 @@ var syncRoutes = [
 export {
   syncRoutes
 };
-//# sourceMappingURL=chunk-EEEHO2WJ.js.map
+//# sourceMappingURL=chunk-OAASTPPX.js.map
