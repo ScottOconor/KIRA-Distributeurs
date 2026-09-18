@@ -4,7 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { AccountingService } from '../../../accounting/services/accounting.service';
+import { SalesService, Seller } from '../../../sales/services/sales.service';
 import { CaisseService, CaisseDTO } from '../../services/caisse.service';
+import { formatFCFA } from '../../../../core/utils/currency-format.util';
 
 @Component({
   selector: 'app-caisse-list',
@@ -16,6 +18,7 @@ import { CaisseService, CaisseDTO } from '../../services/caisse.service';
 export class CaisseListComponent implements OnInit {
   caisses: CaisseDTO[] = [];
   journals: any[] = [];
+  sellers: Seller[] = [];
   loading = true;
   error = '';
   companyId = 0;
@@ -29,6 +32,7 @@ export class CaisseListComponent implements OnInit {
   constructor(
     private caisseService: CaisseService,
     private accountingService: AccountingService,
+    private salesService: SalesService,
     private authService: AuthService,
     public router: Router
   ) {}
@@ -38,6 +42,9 @@ export class CaisseListComponent implements OnInit {
     this.form.companyId = this.companyId;
     this.load();
     this.loadJournals();
+    this.salesService.getSellers(this.companyId).subscribe({
+      next: data => this.sellers = data
+    });
   }
 
   load(): void {
@@ -107,7 +114,6 @@ export class CaisseListComponent implements OnInit {
   }
 
   formatAmount(v: number | undefined | null): string {
-    if (v == null) return '0 FCFA';
-    return new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(v) + ' FCFA';
+    return formatFCFA(v);
   }
 }
