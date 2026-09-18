@@ -4,8 +4,8 @@
 
   <div class="page-header">
     <div class="header-left">
-      <h1 class="page-title"><span class="material-icons">category</span> Articles</h1>
-      <span class="badge-count">{{ filtered.length }} article(s)</span>
+      <h1 class="page-title"><span class="material-icons">{{ serviceMode ? 'design_services' : 'category' }}</span> {{ serviceMode ? 'Services' : 'Articles' }}</h1>
+      <span class="badge-count">{{ filtered.length }} {{ serviceMode ? 'service(s)' : 'article(s)' }}</span>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       @if (canImport) {
@@ -18,7 +18,7 @@
       }
       @if (canCreate) {
         <button class="btn-primary" (click)="openCreate()">
-          <span class="material-icons">add</span> Nouvel article
+          <span class="material-icons">add</span> {{ serviceMode ? 'Nouveau service' : 'Nouvel article' }}
         </button>
       }
     </div>
@@ -28,7 +28,7 @@
 
   <div class="toolbar">
     <input class="search-input" placeholder="Rechercher par nom, référence..." [(ngModel)]="search" (ngModelChange)="applyFilter()" />
-    @if (warehouses.length > 1) {
+    @if (!serviceMode && warehouses.length > 1) {
       <select class="wh-select" [(ngModel)]="selectedWarehouseId" (ngModelChange)="onWarehouseChange()">
         <option value="">Tous les entrepôts</option>
         @for (wh of warehouses; track wh.id) {
@@ -36,21 +36,23 @@
         }
       </select>
     }
-    <div class="filter-tabs">
-      @for (tab of [
-        { k: 'autres',     label: 'Tous',        icon: 'apps'        },
-        { k: 'articles',   label: 'Articles',     icon: 'local_bar'   },
-        { k: 'emballages', label: 'Emballages',   icon: 'inventory_2' },
-        { k: 'bouteilles', label: 'Bouteilles',   icon: 'liquor'      }
-      ]; track tab.k) {
-        <button class="filter-btn" [class.active]="filterCat === tab.k"
-                (click)="filterCat = tab.k; applyFilter()">
-          <span class="material-icons">{{ tab.icon }}</span>
-          {{ tab.label }}
-          <span class="filter-count">{{ catCounts[tab.k] }}</span>
-        </button>
-      }
-    </div>
+    @if (!serviceMode) {
+      <div class="filter-tabs">
+        @for (tab of [
+          { k: 'autres',     label: 'Tous',        icon: 'apps'        },
+          { k: 'articles',   label: 'Articles',     icon: 'local_bar'   },
+          { k: 'emballages', label: 'Emballages',   icon: 'inventory_2' },
+          { k: 'bouteilles', label: 'Bouteilles',   icon: 'liquor'      }
+        ]; track tab.k) {
+          <button class="filter-btn" [class.active]="filterCat === tab.k"
+                  (click)="filterCat = tab.k; applyFilter()">
+            <span class="material-icons">{{ tab.icon }}</span>
+            {{ tab.label }}
+            <span class="filter-count">{{ catCounts[tab.k] }}</span>
+          </button>
+        }
+      </div>
+    }
   </div>
 
   <div class="groupby-bar">
@@ -73,7 +75,7 @@
     @if (loading) {
       <div class="empty"><span class="material-icons spin">refresh</span><p>Chargement...</p></div>
     } @else if (filtered.length === 0) {
-      <div class="empty"><span class="material-icons">category</span><p>Aucun article trouvé</p></div>
+      <div class="empty"><span class="material-icons">category</span><p>{{ serviceMode ? 'Aucun service trouvé' : 'Aucun article trouvé' }}</p></div>
     } @else {
       <table class="data-table">
         <thead>
@@ -198,7 +200,7 @@
         </div>
       }
       <div class="modal-header">
-        <h2><span class="material-icons" style="vertical-align:middle;color:#017E84">upload_file</span> Aperçu import articles ({{ importRows.length }} ligne(s))</h2>
+        <h2><span class="material-icons" style="vertical-align:middle;color:#017E84">upload_file</span> Aperçu import {{ serviceMode ? 'services' : 'articles' }} ({{ importRows.length }} ligne(s))</h2>
         <button class="btn-close" (click)="closeImportModal()"><span class="material-icons">close</span></button>
       </div>
       <div style="overflow-x:auto;max-height:50vh">
@@ -222,7 +224,7 @@
       <div class="modal-footer">
         <button class="btn-secondary" (click)="closeImportModal()">Annuler</button>
         <button class="btn-primary" (click)="confirmImport()">
-          <span class="material-icons">check_circle</span> Confirmer l'import ({{ importRows.length }} articles)
+          <span class="material-icons">check_circle</span> Confirmer l'import ({{ importRows.length }} {{ serviceMode ? 'services' : 'articles' }})
         </button>
       </div>
     </div>
@@ -234,7 +236,7 @@
   <div class="modal-overlay" (click)="closeModal()">
     <div class="modal" (click)="$event.stopPropagation()">
       <div class="modal-header">
-        <h2>{{ editingProduct ? 'Modifier' : 'Nouvel article' }}</h2>
+        <h2>{{ editingProduct ? (serviceMode ? 'Modifier le service' : 'Modifier l\'article') : (serviceMode ? 'Nouveau service' : 'Nouvel article') }}</h2>
         <button class="btn-close" (click)="closeModal()"><span class="material-icons">close</span></button>
       </div>
       <div class="modal-body">
@@ -242,11 +244,11 @@
         <div class="form-row">
           <div class="form-group">
             <label>Référence (SKU)</label>
-            <input type="text" [(ngModel)]="form.defaultCode" class="form-control" placeholder="REF-001" />
+            <input type="text" [(ngModel)]="form.defaultCode" class="form-control" [placeholder]="serviceMode ? 'SRV-001' : 'REF-001'" />
           </div>
           <div class="form-group required-field">
             <label>Nom <span class="req">*</span></label>
-            <input type="text" [(ngModel)]="form.name" class="form-control" placeholder="Nom de l'article" />
+            <input type="text" [(ngModel)]="form.name" class="form-control" [placeholder]="serviceMode ? 'Nom du service' : 'Nom de l\'article'" />
           </div>
         </div>
         <div class="form-row">
@@ -257,14 +259,16 @@
               @for (c of categories; track c.id) { <option [value]="c.id">{{ c.name }}</option> }
             </select>
           </div>
-          <div class="form-group">
-            <label>Type</label>
-            <select [(ngModel)]="form.type" class="form-control">
-              <option value="product">Stockable</option>
-              <option value="service">Service</option>
-              <option value="consu">Consommable</option>
-            </select>
-          </div>
+          @if (!serviceMode) {
+            <div class="form-group">
+              <label>Type</label>
+              <select [(ngModel)]="form.type" class="form-control">
+                <option value="product">Stockable</option>
+                <option value="service">Service</option>
+                <option value="consu">Consommable</option>
+              </select>
+            </div>
+          }
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -278,7 +282,7 @@
             }
           </div>
           <div class="form-group">
-            <label>Prix de revient (CMUP)</label>
+            <label>{{ serviceMode ? 'Coût (prestataire externe, si applicable)' : 'Prix de revient (CMUP)' }}</label>
             <input type="number" [(ngModel)]="form.standardPrice" class="form-control" min="0" />
           </div>
         </div>

@@ -321,6 +321,7 @@ var StockLayoutComponent = class _StockLayoutComponent {
     const configChildren = [];
     if (this.can("PRODUITS")) {
       configChildren.push({ label: "Articles", icon: "category", route: "/stock/products" });
+      configChildren.push({ label: "Services", icon: "design_services", route: "/stock/services" });
       configChildren.push({ label: "Cat\xE9gories d'articles", icon: "folder", route: "/stock/categories" });
       configChildren.push({ label: "Unit\xE9s de mesure", icon: "straighten", route: "/stock/units-of-measure" });
     }
@@ -574,7 +575,8 @@ var stockRoutes = [
       { path: "receptions/new", loadComponent: () => import("./chunk-PHMXLWOU.js").then((m) => m.ReceptionDetailComponent) },
       { path: "receptions/bordereau/:id", loadComponent: () => import("./chunk-35GA3H3Y.js").then((m) => m.BordereauComponent) },
       { path: "receptions/:id", loadComponent: () => import("./chunk-PHMXLWOU.js").then((m) => m.ReceptionDetailComponent) },
-      { path: "products", loadComponent: () => import("./chunk-GJHUVSIU.js").then((m) => m.ProductListComponent) },
+      { path: "products", loadComponent: () => import("./chunk-3W6O6DKD.js").then((m) => m.ProductListComponent) },
+      { path: "services", loadComponent: () => import("./chunk-3W6O6DKD.js").then((m) => m.ProductListComponent), data: { serviceMode: true } },
       { path: "warehouses", loadComponent: () => import("./chunk-IUU426G6.js").then((m) => m.WarehouseListComponent) },
       { path: "adjustments", loadComponent: () => import("./chunk-TH2CNNFR.js").then((m) => m.AdjustmentListComponent) },
       { path: "casses", loadComponent: () => import("./chunk-DJ6TRQDB.js").then((m) => m.CasseListComponent) },
@@ -599,4 +601,4 @@ var stockRoutes = [
 export {
   stockRoutes
 };
-//# sourceMappingURL=chunk-ZI5M7IAW.js.map
+//# sourceMappingURL=chunk-5KKCFOK3.js.map

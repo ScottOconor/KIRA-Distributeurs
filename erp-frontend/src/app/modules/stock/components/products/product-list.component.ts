@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { StockService, Product, ProductCategory, UnitOfMeasure, Warehouse, StockAdjustmentRequest } from '../../services/stock.service';
 import { SalesService, SalesClient, PrixClientArticle } from '../../../sales/services/sales.service';
 import { PurchaseService, PrixFournisseurArticle } from '../../../purchases/services/purchase.service';
@@ -11,6 +12,8 @@ import { downloadExcelTemplate, parseExcelFile } from '../../../../core/utils/ex
 
 const PRODUCT_HEADERS = ['Nom', 'Référence interne', 'Prix de vente', 'Coût', 'Catégorie d\'article', 'Quantité en stock', 'Unité de mesure', 'Exempté TVA vente', 'Exempté TVA achat'];
 const PRODUCT_SAMPLE  = ['Bière Castel 65cl', 'CAS65', '700', '500', 'Bières', '1000', 'Caisse', 'Non', 'Non'];
+const SERVICE_HEADERS = ['Nom', 'Référence interne', 'Prix de vente', 'Coût', 'Catégorie', 'Unité de mesure', 'Exempté TVA vente', 'Exempté TVA achat'];
+const SERVICE_SAMPLE  = ['Installation', 'SRV-INST', '15000', '0', 'Prestations', 'Forfait', 'Non', 'Non'];
 
 @Component({
   selector: 'app-product-list',
@@ -36,6 +39,8 @@ export class ProductListComponent implements OnInit {
   saving = false;
   errorMsg = '';
   successMsg = '';
+
+  serviceMode = false;
 
   search = '';
   filterType = 'all';   // legacy (non utilisé en affichage)
@@ -89,10 +94,12 @@ export class ProductListComponent implements OnInit {
     private salesService: SalesService,
     private purchaseService: PurchaseService,
     private accountingService: AccountingService,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.serviceMode = this.route.snapshot.data['serviceMode'] === true;
     this.companyId = this.authService.getCompanyId();
     this.canCreate = this.authService.hasPermission('STOCK', 'PRODUITS', 'CREATE');
     this.canEdit   = this.authService.hasPermission('STOCK', 'PRODUITS', 'EDIT');
@@ -143,6 +150,9 @@ export class ProductListComponent implements OnInit {
 
   applyFilter(): void {
     let list = [...this.products];
+    if (this.serviceMode) {
+      list = list.filter(p => p.type === 'service');
+    }
     if (this.search) {
       const q = this.search.toLowerCase();
       list = list.filter(p =>
@@ -157,8 +167,9 @@ export class ProductListComponent implements OnInit {
   }
 
   get catCounts(): Record<string, number> {
-    const counts: Record<string, number> = { autres: this.products.length, articles: 0, emballages: 0, bouteilles: 0 };
-    this.products.forEach(p => {
+    const source = this.serviceMode ? this.products.filter(p => p.type === 'service') : this.products;
+    const counts: Record<string, number> = { autres: source.length, articles: 0, emballages: 0, bouteilles: 0 };
+    source.forEach(p => {
       const g = this.catGroup(p);
       if (g !== 'autres') counts[g]++;
     });
@@ -381,7 +392,10 @@ export class ProductListComponent implements OnInit {
   }
 
   private emptyForm(): Partial<Product> {
-    return { type: 'product', active: true, uomName: 'Unité', standardPrice: 0, salePrice: 0, exemptTva: false, exemptTvaAchat: false };
+    return {
+      type: this.serviceMode ? 'service' : 'product',
+      active: true, uomName: 'Unité', standardPrice: 0, salePrice: 0, exemptTva: false, exemptTvaAchat: false
+    };
   }
 
   get typeLabels(): Record<string, string> {
@@ -391,7 +405,11 @@ export class ProductListComponent implements OnInit {
   // === Import Excel ===
 
   downloadTemplate(): void {
-    downloadExcelTemplate(PRODUCT_HEADERS, PRODUCT_SAMPLE, 'modele_articles.xlsx');
+    if (this.serviceMode) {
+      downloadExcelTemplate(SERVICE_HEADERS, SERVICE_SAMPLE, 'modele_services.xlsx');
+    } else {
+      downloadExcelTemplate(PRODUCT_HEADERS, PRODUCT_SAMPLE, 'modele_articles.xlsx');
+    }
   }
 
   triggerImport(): void {
@@ -446,12 +464,12 @@ export class ProductListComponent implements OnInit {
     for (const row of this.importRows) {
       const name = String(row['Nom'] || row['Nom*'] || '').trim();
       if (!name) continue;
-      const qty = parseFloat(row['Quantité en stock'] || '0') || 0;
+      const qty = this.serviceMode ? 0 : (parseFloat(row['Quantité en stock'] || '0') || 0);
       const uomName = String(row['Unité de mesure'] || row['Unité'] || 'Unité').trim();
       const dto: Product = {
         name,
         defaultCode: String(row['Référence interne'] || row['Code (Référence)'] || '').trim() || undefined,
-        type: 'product',
+        type: this.serviceMode ? 'service' : 'product',
         categoryId: this.getCategoryId(String(row['Catégorie d\'article'] || row['Catégorie'] || '')),
         standardPrice: parseFloat(row['Coût'] || row['Prix Achat (FCFA)']) || 0,
         salePrice: parseFloat(row['Prix de vente'] || row['Prix Vente (FCFA)']) || 0,

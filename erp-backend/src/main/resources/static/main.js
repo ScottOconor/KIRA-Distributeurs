@@ -4558,7 +4558,7 @@ var routes = [
   },
   {
     path: "stock",
-    loadChildren: () => import("./chunk-ZI5M7IAW.js").then((m) => m.stockRoutes),
+    loadChildren: () => import("./chunk-5KKCFOK3.js").then((m) => m.stockRoutes),
     canActivate: [licenseGuard, authGuard, permissionGuard, moduleInstalledGuard],
     data: { permModule: "STOCK" }
   },
