@@ -20,7 +20,7 @@ export class StatsVentesComponent implements OnInit {
   // ── Filtres ───────────────────────────────────────────────────────────────
   dateFrom = '';
   dateTo   = '';
-  groupBy  = 'client';   // client | category | product | vendeur | warehouse
+  groupBy  = 'client';   // client | category | product | vendeur | warehouse | invoice
 
   selectedPartnerId:   number | null = null;
   selectedCategoryId:  number | null = null;
@@ -51,6 +51,7 @@ export class StatsVentesComponent implements OnInit {
     product:   'Produit',
     vendeur:   'Vendeur',
     warehouse: 'Entrepôt',
+    invoice: 'Facture',
   };
 
   get companyId(): number { return this.authService.getCompanyId(); }

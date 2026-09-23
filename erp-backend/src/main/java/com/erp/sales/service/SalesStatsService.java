@@ -400,6 +400,8 @@ public class SalesStatsService {
             case "warehouse":
                 Long wid = line.getInvoice().getWarehouseId();
                 return wid != null ? warehouseNames.getOrDefault(wid, "Entrepôt #" + wid) : "Sans entrepôt";
+            case "invoice":
+                return line.getInvoice().getName() != null ? line.getInvoice().getName() : "Sans numéro";
             default: // "client"
                 return line.getInvoice().getPartner() != null
                     ? line.getInvoice().getPartner().getName() : "Inconnu";

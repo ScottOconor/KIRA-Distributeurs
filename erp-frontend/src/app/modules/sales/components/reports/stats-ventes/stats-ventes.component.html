@@ -32,7 +32,8 @@
           {k:'category',  label:'Par catégorie', icon:'category'},
           {k:'product',   label:'Par produit',   icon:'inventory_2'},
           {k:'vendeur',   label:'Par vendeur',   icon:'badge'},
-          {k:'warehouse', label:'Par entrepôt',  icon:'warehouse'}
+          {k:'warehouse', label:'Par entrepôt',  icon:'warehouse'},
+          {k:'invoice',   label:'Par facture',   icon:'receipt_long'}
         ]; track opt.k) {
           <button class="group-chip" [class.active]="groupBy === opt.k" (click)="groupBy = opt.k">
             <span class="material-icons">{{ opt.icon }}</span> {{ opt.label }}
