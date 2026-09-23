@@ -105,7 +105,7 @@
               </tr>
               @if (isExpanded(row.key)) {
                 @for (p of getGroupItems(row.key); track p.id) {
-                  <tr class="detail-row">
+                  <tr class="detail-row" [class.row-out-of-stock]="p.type === 'product' && (p.qtyAvailable || 0) <= 0">
                     <td class="font-mono text-muted">{{ p.defaultCode || '—' }}</td>
                     <td class="font-bold">{{ p.name }}</td>
                     <td class="text-muted">{{ p.categoryName || '—' }}</td>
@@ -145,7 +145,7 @@
             }
           } @else {
             @for (p of filtered; track p.id) {
-              <tr>
+              <tr [class.row-out-of-stock]="p.type === 'product' && (p.qtyAvailable || 0) <= 0">
                 <td class="font-mono text-muted">{{ p.defaultCode || '—' }}</td>
                 <td class="font-bold">{{ p.name }}</td>
                 <td class="text-muted">{{ p.categoryName || '—' }}</td>

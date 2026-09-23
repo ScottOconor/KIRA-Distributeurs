@@ -69,6 +69,10 @@
 .qty-ok { color: #198754; font-weight: 600; }
 .qty-zero { color: var(--danger); font-weight: 600; }
 .qty-reserved { color: #e07a00; font-weight: 600; }
+tr.row-out-of-stock {
+  opacity: 0.55; filter: grayscale(0.5);
+  &:hover { opacity: 0.75; }
+}
 .btn-icon { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 4px;
   .material-icons { font-size: 18px; }
   &:hover { color: var(--primary); background: #e8f0fb; }
