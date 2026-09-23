@@ -115,13 +115,18 @@
                      placeholder="Chercher un fournisseur…"
                      autocomplete="off" />
             </div>
-            @if (supplierDropdown && filteredSuppliers.length > 0) {
+            @if (supplierDropdown && (filteredSuppliers.length > 0 || supplierSearch.trim())) {
               <div class="ac-dropdown">
                 @for (s of filteredSuppliers; track s.id) {
                   <div class="ac-item" (mousedown)="selectSupplier(s)">
                     <span class="ac-avatar">{{ s.name.charAt(0) }}</span>
                     <span class="ac-name">{{ s.name }}</span>
                     @if (s.ref) { <span class="ac-code">{{ s.ref }}</span> }
+                  </div>
+                }
+                @if (supplierSearch.trim() && !isReadOnly) {
+                  <div class="ac-item ac-create" (mousedown)="openCreateSupplier()">
+                    <span class="material-icons">add_business</span> Créer "{{ supplierSearch.trim() }}" comme nouveau fournisseur
                   </div>
                 }
               </div>
@@ -318,4 +323,42 @@
     [companyInfo]="printCompany"
     (closed)="closePrint()">
   </app-print-preview>
+}
+
+<!-- ═══ Créer un fournisseur ═══ -->
+@if (showCreateSupplier) {
+  <div class="modal-overlay" (click)="closeCreateSupplier()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2><span class="material-icons">add_business</span> Nouveau fournisseur</h2>
+        <button class="btn-close" (click)="closeCreateSupplier()"><span class="material-icons">close</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="field-row">
+          <label>Nom <span class="req">*</span></label>
+          <input type="text" [(ngModel)]="newSupplier.name" placeholder="Nom du fournisseur" />
+        </div>
+        <div class="field-row">
+          <label>Téléphone</label>
+          <input type="text" [(ngModel)]="newSupplier.phone" placeholder="Téléphone" />
+        </div>
+        <div class="field-row">
+          <label>Email</label>
+          <input type="text" [(ngModel)]="newSupplier.email" placeholder="Email" />
+        </div>
+        <div class="field-row">
+          <label>Adresse</label>
+          <input type="text" [(ngModel)]="newSupplier.address" placeholder="Adresse" />
+        </div>
+        @if (createSupplierError) { <div class="checkout-error">{{ createSupplierError }}</div> }
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeCreateSupplier()">Annuler</button>
+        <button class="btn-confirm" [disabled]="creatingSupplier" (click)="createSupplier()">
+          @if (creatingSupplier) { <span class="material-icons spin">sync</span> } @else { <span class="material-icons">check_circle</span> }
+          {{ creatingSupplier ? 'Création…' : 'Créer et sélectionner' }}
+        </button>
+      </div>
+    </div>
+  </div>
 }

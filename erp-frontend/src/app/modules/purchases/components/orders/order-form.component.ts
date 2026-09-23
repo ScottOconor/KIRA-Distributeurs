@@ -77,6 +77,47 @@ export class OrderFormComponent implements OnInit {
   }
   onSupplierBlur(): void { setTimeout(() => this.supplierDropdown = false, 200); }
 
+  // ─── Création fournisseur à la volée ────────────────────────────────
+  showCreateSupplier = false;
+  creatingSupplier = false;
+  createSupplierError = '';
+  newSupplier: { name?: string; phone?: string; email?: string; address?: string } = {};
+
+  openCreateSupplier(): void {
+    this.newSupplier = { name: this.supplierSearch.trim() };
+    this.createSupplierError = '';
+    this.showCreateSupplier = true;
+    this.supplierDropdown = false;
+  }
+
+  closeCreateSupplier(): void { this.showCreateSupplier = false; }
+
+  createSupplier(): void {
+    if (!this.newSupplier.name?.trim()) { this.createSupplierError = 'Nom obligatoire.'; return; }
+    this.creatingSupplier = true;
+    this.createSupplierError = '';
+    const dto: any = {
+      name: this.newSupplier.name.trim(),
+      type: 'supplier',
+      phone: this.newSupplier.phone,
+      email: this.newSupplier.email,
+      address: this.newSupplier.address,
+      companyId: this.order.companyId
+    };
+    this.accountingService.createPartner(dto).subscribe({
+      next: (created: any) => {
+        this.creatingSupplier = false;
+        this.showCreateSupplier = false;
+        this.suppliers.push(created);
+        this.selectSupplier(created);
+      },
+      error: (e) => {
+        this.creatingSupplier = false;
+        this.createSupplierError = e.error?.message || 'Erreur lors de la création du fournisseur.';
+      }
+    });
+  }
+
   @HostListener('window:scroll', [])
   @HostListener('window:resize', [])
   onWindowChange(): void { this.activeSuggestionIdx = null; }

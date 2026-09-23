@@ -286,6 +286,7 @@ td .form-control {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+.material-icons.spin { animation: spin 1s linear infinite; }
 
 // ── Autocomplete fournisseur ──────────────────────────────────────────────────
 .ac-wrap { position: relative; }
@@ -334,5 +335,47 @@ td .form-control {
   font-size: 11px; font-family: "Roboto Mono", monospace;
   color: var(--text-muted); background: var(--bg-elevated);
   padding: 2px 7px; border-radius: 4px; flex-shrink: 0;
+}
+.ac-item.ac-create {
+  display: flex; align-items: center; gap: 6px; color: $accent; font-weight: 600;
+  border-top: 1px solid var(--border);
+  .material-icons { font-size: 16px; }
+}
+
+/* Modal création rapide fournisseur */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-box {
+  background: var(--bg-surface); border-radius: 12px; width: 100%; max-width: 480px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 22px; border-bottom: 1px solid var(--border);
+  h2 { font-size: 16px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px; }
+  .btn-close { background: none; border: none; cursor: pointer; .material-icons { font-size: 20px; color: var(--text-muted); } }
+}
+.modal-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 8px; padding: 14px 22px; border-top: 1px solid var(--border); }
+.field-row {
+  display: flex; flex-direction: column; gap: 5px;
+  label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+  .req { color: var(--danger); }
+  input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
+}
+.checkout-error { color: var(--danger); font-size: 13px; background: var(--danger-bg); padding: 8px 12px; border-radius: 6px; }
+.btn-cancel {
+  background: none; border: 1px solid var(--border); color: var(--text-secondary);
+  padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px;
+}
+.btn-confirm {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $accent; color: #fff; border: none; padding: 8px 16px; border-radius: 6px;
+  cursor: pointer; font-size: 14px; font-weight: 600;
+  .material-icons { font-size: 17px; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
