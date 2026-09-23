@@ -212,11 +212,17 @@ public class StockReportService {
                     StockDetailedMoveDTO md = new StockDetailedMoveDTO();
                     md.setDate(m.getPicking().getDateDone() != null
                             ? m.getPicking().getDateDone().format(DT_FMT) : "");
-                    // L'origine référence le document métier reconnu par l'utilisateur (le transfert
-                    // d'origine pour une réception inter-dépôts, le bon de réception d'achat pour le
-                    // transfert Dépôt Achat → Magasin) — à privilégier sur le nom auto-généré du picking
-                    // technique (REC-INT/xxxx, INT/xxxx) qui l'a effectivement appliqué au stock.
-                    md.setRef(m.getPicking().getOrigin() != null ? m.getPicking().getOrigin()
+                    // L'origine référence le document métier reconnu par l'utilisateur (le bon de
+                    // réception d'achat, la facture de vente…) — à privilégier sur le nom auto-généré
+                    // du picking technique (REC-INT/xxxx, INT/xxxx) qui l'a effectivement appliqué au
+                    // stock. Exception : côté ENTRÉE (isIn) d'une réception de transfert inter-dépôts,
+                    // l'origin stocke à dessein le nom du transfert SOURCE (ex : MP/OUT/00001) comme
+                    // simple trace — la référence à afficher ici doit rester celle du document qui a
+                    // effectivement mouvementé CET emplacement, à savoir le nom propre de la réception
+                    // (ex : DA/IN/00001), sinon les deux emplacements affichent la même référence.
+                    boolean useOwnName = isIn && m.getPicking().isTransferReception();
+                    String origin = m.getPicking().getOrigin();
+                    md.setRef(!useOwnName && origin != null && !origin.isBlank() ? origin
                             : (m.getPicking().getName() != null ? m.getPicking().getName() : ""));
                     md.setPartner(m.getPicking().getPartnerName() != null ? m.getPicking().getPartnerName() : "");
                     md.setQtyIn(qtyIn.compareTo(ZERO) > 0 ? qtyIn : null);

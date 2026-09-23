@@ -2065,9 +2065,10 @@ public class StockService {
             move.setState("done");
         }
 
-        // Écriture comptable
-        Long accountMoveId = createStockAccountingEntry(reception);
-        reception.setAccountMoveId(accountMoveId);
+        // Pas d'écriture comptable : un transfert inter-dépôts déplace un stock qui reste la
+        // propriété de la même société, sans effet sur sa valeur comptable globale (l'écriture
+        // Dr 603100/Cr 311xxx + Dr 311xxx/Cr 603100 générée ici se serait annulée intégralement,
+        // ajoutant une pièce STK-xxxx sans utilité et alourdissant le journal de stock pour rien).
         reception.setState("done");
         // Date effective = date planifiée du transfert d'origine (respecte l'antidatage) ou maintenant par défaut
         LocalDateTime effectiveDate = reception.getScheduledDate() != null
