@@ -96,7 +96,7 @@
                 @if (isExpanded(row.key)) {
                   @for (p of getGroupItems(row.key); track p.id) {
                     <tr class="detail-row clickable" (click)="router.navigate(['/stock/transferts', p.id])">
-                      <td class="font-mono font-bold text-purple">{{ p.name }}</td>
+                      <td class="font-mono font-bold text-purple">{{ transferRef(p) }}</td>
                       <td class="text-muted small">{{ p.sourceWarehouseName || p.locationName }}</td>
                       <td class="text-muted small">{{ p.destWarehouseName || p.locationDestName }}</td>
                       <td class="text-muted">{{ p.origin || '—' }}</td>
@@ -112,7 +112,7 @@
             } @else {
               @for (p of transferts; track p.id) {
                 <tr (click)="router.navigate(['/stock/transferts', p.id])" class="clickable">
-                  <td class="font-mono font-bold text-purple">{{ p.name }}</td>
+                  <td class="font-mono font-bold text-purple">{{ transferRef(p) }}</td>
                   <td class="text-muted small">{{ p.sourceWarehouseName || p.locationName }}</td>
                   <td class="text-muted small">{{ p.destWarehouseName || p.locationDestName }}</td>
                   <td class="text-muted">{{ p.origin || '—' }}</td>

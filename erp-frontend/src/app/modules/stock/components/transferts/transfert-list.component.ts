@@ -94,6 +94,13 @@ export class TransfertListComponent implements OnInit {
     } as Record<string, string>)[s] || s;
   }
 
+  /** Référence affichée : pour un transfert inter-dépôts, combine la sortie et l'entrée
+   *  (ex: "MP/OUT/00001 → DA/IN/00001") pour montrer en un coup d'œil que c'est une seule
+   *  opération avec ses deux volets techniques ; sinon, juste le nom du picking. */
+  transferRef(p: StockPicking): string {
+    return p.linkedPickingName ? `${p.name} → ${p.linkedPickingName}` : (p.name || '—');
+  }
+
   // ── Group By ─────────────────────────────────────────────────────────────────
   groupBy = '';
   expandedGroups = new Set<string>();
