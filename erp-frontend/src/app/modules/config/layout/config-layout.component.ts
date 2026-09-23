@@ -17,6 +17,12 @@ export class ConfigLayoutComponent {
   constructor(public authService: AuthService, public router: Router, public themeService: ThemeService) {}
 
   get navItems() {
+    const changePwdItem = { label: 'Changer mot de passe', icon: 'lock_reset', route: '/config/change-password' };
+    // Mot de passe à changer obligatoirement : n'afficher que cette entrée tant que ce n'est pas fait,
+    // pour ne pas laisser un lien vers un autre écran (même s'il sera de toute façon bloqué par le guard).
+    if (this.authService.getSession()?.mustChangePassword) {
+      return [changePwdItem];
+    }
     const items: { label: string; icon: string; route: string; adminOnly?: boolean; visible?: boolean }[] = [
       { label: 'Mon entreprise',        icon: 'business',             route: '/config/company',         adminOnly: true },
       { label: 'Agences distantes',    icon: 'share',                route: '/config/remote-agencies', adminOnly: true },
@@ -24,7 +30,7 @@ export class ConfigLayoutComponent {
       { label: 'Rôles',                icon: 'admin_panel_settings', route: '/config/roles',           adminOnly: true },
       { label: 'Clôture d\'exercice',  icon: 'lock_clock',           route: '/config/fiscal-closure',
         visible: this.authService.hasPermission('COMPTABILITE', 'ECRITURES', 'VIEW') },
-      { label: 'Changer mot de passe', icon: 'lock_reset',           route: '/config/change-password' },
+      changePwdItem,
       { label: 'Supervision',          icon: 'manage_search',        route: '/config/supervision',     adminOnly: true },
       { label: 'Sauvegarde & Restore', icon: 'backup',               route: '/config/backup',          adminOnly: true },
       { label: 'Exportation',          icon: 'file_download',        route: '/config/export',          adminOnly: true },
