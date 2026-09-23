@@ -16,7 +16,12 @@ public interface StockPickingRepository extends JpaRepository<StockPicking, Long
     /** Pickings d'une société pour une origine (nom du document source) donnée. */
     List<StockPicking> findByCompanyIdAndOrigin(Long companyId, String origin);
 
-    @Query("SELECT p FROM StockPicking p WHERE p.companyId = :cid AND p.pickingTypeCode = :code ORDER BY p.createdAt DESC")
+    // Exclut les réceptions de transfert inter-dépôts (transferReception=true) : elles sont le
+    // second volet technique d'une même opération déjà représentée par le picking de transfert
+    // (l'autre volet) et ont leur propre liste dédiée (/transferts/receptions) — les inclure ici
+    // ferait apparaître une même opération de transfert comme deux lignes distinctes.
+    @Query("SELECT p FROM StockPicking p WHERE p.companyId = :cid AND p.pickingTypeCode = :code "
+            + "AND (p.transferReception = false OR p.transferReception IS NULL) ORDER BY p.createdAt DESC")
     List<StockPicking> findByCompanyAndType(@Param("cid") Long companyId, @Param("code") String code);
 
     @Query("SELECT p FROM StockPicking p WHERE p.companyId = :cid AND p.pickingTypeCode = :code AND p.state = :state ORDER BY p.createdAt DESC")
