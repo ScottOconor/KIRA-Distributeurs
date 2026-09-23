@@ -7,7 +7,7 @@ import { SalesService, InvoicePayment, SalesInvoice } from '../../services/sales
 import { AuthService } from '../../../../core/auth/auth.service';
 import { environment } from '../../../../../environments/environment';
 
-interface Journal { id: number; name: string; code: string; type: string; }
+interface Journal { id: number; name: string; code: string; type: string; paymentMethod?: string; }
 interface ClientOption { id: number; name: string; invoiceCount: number; }
 
 @Component({

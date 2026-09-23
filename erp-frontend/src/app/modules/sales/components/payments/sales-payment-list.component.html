@@ -286,7 +286,7 @@
               <select class="form-control" [(ngModel)]="payForm.journalId">
                 <option [ngValue]="0" disabled>-- Choisir --</option>
                 @for (j of journals; track j.id) {
-                  <option [ngValue]="j.id">{{ j.name }}</option>
+                  <option [ngValue]="j.id">{{ j.paymentMethod || j.name }}</option>
                 }
               </select>
             </div>

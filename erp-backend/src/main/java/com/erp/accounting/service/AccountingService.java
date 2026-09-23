@@ -162,6 +162,7 @@ public class AccountingService {
                 .code(dto.getCode())
                 .name(dto.getName())
                 .type(dto.getType())
+                .paymentMethod(dto.getPaymentMethod())
                 .defaultDebitAccount(debitAccount)
                 .defaultCreditAccount(creditAccount)
                 .company(company)
@@ -179,6 +180,7 @@ public class AccountingService {
         journal.setCode(dto.getCode());
         journal.setName(dto.getName());
         journal.setType(dto.getType());
+        journal.setPaymentMethod(dto.getPaymentMethod());
         journal.setActive(dto.isActive());
 
         if (dto.getDefaultDebitAccountId() != null) {
@@ -1100,6 +1102,7 @@ public class AccountingService {
                 .code(journal.getCode())
                 .name(journal.getName())
                 .type(journal.getType())
+                .paymentMethod(journal.getPaymentMethod())
                 .defaultDebitAccountId(journal.getDefaultDebitAccount() != null
                         ? journal.getDefaultDebitAccount().getId() : null)
                 .defaultDebitAccountCode(journal.getDefaultDebitAccount() != null

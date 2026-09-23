@@ -48,6 +48,7 @@
             <th>Code</th>
             <th>Nom</th>
             <th>Type</th>
+            <th>Moyen de paiement</th>
             <th>Compte débit défaut</th>
             <th>Compte crédit défaut</th>
             <th class="text-center">Actif</th>
@@ -65,6 +66,7 @@
               <td>
                 <span [class]="getTypeBadgeClass(journal.type)">{{ getTypeLabel(journal.type) }}</span>
               </td>
+              <td class="text-muted fs-sm">{{ journal.paymentMethod || '—' }}</td>
               <td class="text-muted fs-sm">{{ getAccountName(journal.defaultDebitAccountId) }}</td>
               <td class="text-muted fs-sm">{{ getAccountName(journal.defaultCreditAccountId) }}</td>
               <td class="text-center">
@@ -226,6 +228,17 @@
               <span class="invalid-feedback">Le nom est requis</span>
             }
           </div>
+          @if (journalForm.get('type')?.value === 'cash' || journalForm.get('type')?.value === 'bank') {
+            <div class="form-group">
+              <label>Moyen de paiement</label>
+              <input formControlName="paymentMethod" class="form-control" list="payment-method-suggestions"
+                placeholder="Ex: Espèces, Carte bancaire, Mobile Money, Chèque…">
+              <datalist id="payment-method-suggestions">
+                @for (m of paymentMethodSuggestions; track m) { <option [value]="m"></option> }
+              </datalist>
+              <small class="form-hint">Proposé lors du paiement d'une facture (point de vente notamment) à la place du nom technique du journal.</small>
+            </div>
+          }
           <div class="form-row cols-2">
             <div class="form-group">
               <label>Compte débit par défaut</label>

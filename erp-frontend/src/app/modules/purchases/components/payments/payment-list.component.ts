@@ -7,7 +7,7 @@ import { PurchaseService, PurchaseInvoicePayment, PurchaseInvoice } from '../../
 import { AuthService } from '../../../../core/auth/auth.service';
 import { environment } from '../../../../../environments/environment';
 
-interface Journal { id: number; name: string; code: string; type: string; }
+interface Journal { id: number; name: string; code: string; type: string; paymentMethod?: string; }
 interface SupplierOption { id: number; name: string; invoiceCount: number; }
 
 @Component({

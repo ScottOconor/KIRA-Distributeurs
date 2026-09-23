@@ -27,6 +27,14 @@ public class AccountJournal {
      */
     private String type;
 
+    /**
+     * Moyen de paiement rattaché à ce journal (ex : Espèces, Carte bancaire, Mobile Money,
+     * Chèque, Virement) — utilisé pour le proposer lors du paiement d'une facture (point de
+     * vente notamment) sans exposer le nom technique du journal comptable. Pertinent surtout
+     * pour les journaux de liquidité (cash/bank).
+     */
+    private String paymentMethod;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "default_debit_account_id")
     private AccountAccount defaultDebitAccount;

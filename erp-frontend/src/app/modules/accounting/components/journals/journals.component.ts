@@ -39,6 +39,8 @@ export class JournalsComponent implements OnInit {
     { value: 'general', label: 'Opérations diverses', icon: 'sync_alt' }
   ];
 
+  paymentMethodSuggestions = ['Espèces', 'Carte bancaire', 'Mobile Money', 'Chèque', 'Virement'];
+
   constructor(
     private accountingService: AccountingService,
     private authService: AuthService,
@@ -56,6 +58,7 @@ export class JournalsComponent implements OnInit {
       code: ['', [Validators.required, Validators.maxLength(10)]],
       name: ['', Validators.required],
       type: ['general', Validators.required],
+      paymentMethod: [''],
       defaultDebitAccountId: [null],
       defaultCreditAccountId: [null],
       active: [true],
@@ -82,6 +85,7 @@ export class JournalsComponent implements OnInit {
       code: '',
       name: '',
       type: 'general',
+      paymentMethod: '',
       defaultDebitAccountId: null,
       defaultCreditAccountId: null,
       active: true,

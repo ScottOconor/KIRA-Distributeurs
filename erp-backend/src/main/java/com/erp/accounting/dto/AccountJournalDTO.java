@@ -11,6 +11,7 @@ public class AccountJournalDTO {
     private String code;
     private String name;
     private String type;
+    private String paymentMethod;
     private Long defaultDebitAccountId;
     private String defaultDebitAccountCode;
     private Long defaultCreditAccountId;

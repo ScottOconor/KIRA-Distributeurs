@@ -14,6 +14,7 @@ export interface AccountJournal {
   code: string;
   name: string;
   type: string; // sale/purchase/cash/bank/general
+  paymentMethod?: string; // ex : Espèces, Carte bancaire, Mobile Money, Chèque, Virement
   defaultDebitAccountId?: number;
   defaultDebitAccountCode?: string;
   defaultDebitAccountName?: string;
