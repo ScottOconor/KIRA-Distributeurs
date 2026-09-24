@@ -1,0 +1,100 @@
+// Shared visual language for sales, purchase and credit-note workflows.
+:host { display: block; }
+
+.so-page, .pur-form-page, .page-container {
+  max-width: 1440px;
+  padding: clamp(16px, 2.2vw, 30px);
+}
+
+.so-header, .form-header, .page-header {
+  gap: 14px;
+  margin-bottom: 22px;
+  h1, .page-title { letter-spacing: -0.025em; }
+}
+
+.so-meta, .so-lines, .meta-section, .lines-section, .card {
+  border: 1px solid var(--border-light, var(--border));
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, .045);
+}
+
+.so-meta, .meta-section { padding: clamp(16px, 2vw, 24px); }
+.so-body, .form-body { gap: 18px; }
+
+.lines-header {
+  min-height: 56px;
+  padding: 14px 20px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-light, var(--border));
+}
+
+.form-group label { font-weight: 600; letter-spacing: .005em; }
+.form-control, .input-cell, .inp {
+  min-height: 38px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+  &:focus {
+    border-color: #0f8589;
+    box-shadow: 0 0 0 3px rgba(15, 133, 137, .12);
+    outline: none;
+  }
+  &:disabled { opacity: .72; }
+}
+.input-cell { background: transparent; border-color: transparent; }
+.input-cell:focus { background: var(--bg-surface); }
+
+.btn-save, .btn-confirm, .btn-add-line, .btn-new, .btn-add-line-empty,
+.btn-primary, .btn-create, .btn-filter-active {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform .14s ease, box-shadow .14s ease, filter .14s ease;
+  &:hover:not(:disabled) { filter: brightness(.97); box-shadow: 0 3px 9px rgba(15, 23, 42, .12); }
+  &:active:not(:disabled) { transform: translateY(1px); }
+}
+
+.lines-table, .data-table {
+  th {
+    padding-top: 11px;
+    padding-bottom: 11px;
+    background: var(--bg-elevated, var(--bg-hover));
+    color: var(--text-secondary);
+    letter-spacing: .055em;
+  }
+  tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--bg-surface) 94%, var(--bg-hover)); }
+  tbody tr:hover td { background: var(--bg-hover); }
+}
+
+.totals-section, .total-badge {
+  border-radius: 12px;
+}
+
+.modal-overlay { backdrop-filter: blur(3px); }
+.modal-box {
+  border: 1px solid var(--border-light, var(--border));
+  border-radius: 16px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, .24);
+}
+.modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--bg-surface);
+  padding: 16px 22px;
+}
+.modal-body { padding: 20px 22px; }
+
+.filter-bar { align-items: center; flex-wrap: wrap; gap: 9px; }
+.filter-btn { min-height: 34px; font-weight: 500; }
+.empty-state { padding: 52px 20px; }
+
+@media (max-width: 760px) {
+  .so-page, .pur-form-page, .page-container { padding: 14px; }
+  .so-header, .form-header, .page-header { align-items: flex-start; }
+  .header-actions, .header-right { width: 100%; }
+  .meta-grid, .modal-grid { grid-template-columns: 1fr !important; }
+  .modal-overlay { padding: 10px; align-items: flex-end; }
+  .modal-box { max-height: 94vh; border-radius: 16px 16px 10px 10px; }
+  .lines-table, .data-table { min-width: 760px; }
+}
