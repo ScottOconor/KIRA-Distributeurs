@@ -1,4 +1,4 @@
-@use '../../../../shared/styles/transaction-ui';
+@use '../../../../shared/styles/transaction-ui' as transaction-ui;
 
 .page-container { padding: 24px; max-width: 1400px; margin: 0 auto; }
 
@@ -68,3 +68,5 @@
   .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
 }
 .progress-pct { font-size: 11px; color: var(--text-muted); }
+
+@include transaction-ui.apply;

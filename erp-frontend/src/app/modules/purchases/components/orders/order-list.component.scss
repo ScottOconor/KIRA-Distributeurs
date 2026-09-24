@@ -1,3 +1,5 @@
+@use '../../../../shared/styles/transaction-ui' as transaction-ui;
+
 $accent: #00A09D;
 
 .pur-list-page { padding: 24px; max-width: 1400px; margin: 0 auto; }
@@ -82,3 +84,5 @@ $accent: #00A09D;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+@include transaction-ui.apply;

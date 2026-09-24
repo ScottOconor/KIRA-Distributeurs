@@ -1,4 +1,4 @@
-@use '../../../../shared/styles/transaction-ui';
+@use '../../../../shared/styles/transaction-ui' as transaction-ui;
 
 $accent: #017E84;
 
@@ -483,3 +483,4 @@ $accent: #017E84;
 .modal-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
 .btn-cancel { padding: 8px 18px; border-radius: 8px; background: var(--bg-page); border: 1px solid var(--border); color: var(--text-muted); font-size: 13px; cursor: pointer; }
 
+@include transaction-ui.apply;

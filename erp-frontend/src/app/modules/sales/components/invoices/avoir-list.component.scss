@@ -1,4 +1,4 @@
-@use '../../../../shared/styles/transaction-ui';
+@use '../../../../shared/styles/transaction-ui' as transaction-ui;
 
 .page-container { padding: 24px; max-width: 1400px; margin: 0 auto; }
 
@@ -259,3 +259,5 @@ textarea.form-control { resize: vertical; }
   &:hover:not(:disabled) { background: color-mix(in srgb, #7C3AED 80%, black); }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
+
+@include transaction-ui.apply;

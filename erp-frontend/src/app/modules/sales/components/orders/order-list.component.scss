@@ -1,3 +1,5 @@
+@use '../../../../shared/styles/transaction-ui' as transaction-ui;
+
 
 
 .page-container {
@@ -211,3 +213,5 @@
   &.btn-view { color: var(--text-muted); &:hover { background: var(--bg-hover); } }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
+
+@include transaction-ui.apply;

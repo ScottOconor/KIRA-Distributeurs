@@ -1,4 +1,4 @@
-@use '../../../../shared/styles/transaction-ui';
+@use '../../../../shared/styles/transaction-ui' as transaction-ui;
 
 $accent: #00A09D;
 
@@ -381,3 +381,4 @@ td .form-control {
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
+@include transaction-ui.apply;

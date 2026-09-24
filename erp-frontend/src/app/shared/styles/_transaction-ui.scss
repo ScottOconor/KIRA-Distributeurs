@@ -1,7 +1,8 @@
+@mixin apply {
 // Shared visual language for sales, purchase and credit-note workflows.
 :host { display: block; }
 
-.so-page, .pur-form-page, .page-container {
+.so-page, .pur-form-page, .pur-list-page, .page-container {
   max-width: 1440px;
   padding: clamp(16px, 2.2vw, 30px);
 }
@@ -90,11 +91,13 @@
 .empty-state { padding: 52px 20px; }
 
 @media (max-width: 760px) {
-  .so-page, .pur-form-page, .page-container { padding: 14px; }
+  .so-page, .pur-form-page, .pur-list-page, .page-container { padding: 14px; }
   .so-header, .form-header, .page-header { align-items: flex-start; }
   .header-actions, .header-right { width: 100%; }
   .meta-grid, .modal-grid { grid-template-columns: 1fr !important; }
   .modal-overlay { padding: 10px; align-items: flex-end; }
   .modal-box { max-height: 94vh; border-radius: 16px 16px 10px 10px; }
   .lines-table, .data-table { min-width: 760px; }
+}
+
 }
