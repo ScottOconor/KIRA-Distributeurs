@@ -2896,6 +2896,14 @@ public class SalesService {
                 : ZERO;
 
         for (SalesInvoiceRequest.LineRequest req : lineRequests) {
+            // Ignorer la ligne de saisie vide au lieu de la créer avec une quantité par défaut de 1.
+            if (req == null) continue;
+            boolean hasDescription = req.getDescription() != null && !req.getDescription().isBlank();
+            boolean hasProductCode = req.getProductCode() != null && !req.getProductCode().isBlank();
+            boolean hasPrice = req.getPrixUnitaire() != null
+                    && req.getPrixUnitaire().compareTo(ZERO) != 0;
+            if (req.getProductId() == null && !hasProductCode && !hasDescription && !hasPrice) continue;
+
             // Résoudre le productId depuis le code si non fourni
             Long resolvedProductId = req.getProductId() != null ? req.getProductId()
                     : (req.getProductCode() != null && companyId != null

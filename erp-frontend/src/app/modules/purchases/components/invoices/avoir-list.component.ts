@@ -322,6 +322,11 @@ export class PurchaseAvoirListComponent implements OnInit {
   onLineEnter(event: Event): void {
     event.preventDefault();
     this.addLine();
+    setTimeout(() => {
+      const tbody = (event.target as HTMLElement | null)?.closest('tbody');
+      const rows = tbody?.querySelectorAll('tr');
+      rows?.[rows.length - 1]?.querySelector<HTMLInputElement>('input[type="text"]')?.focus();
+    });
   }
 
   closeSuggestions(i: number): void {
