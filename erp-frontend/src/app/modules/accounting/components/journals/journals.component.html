@@ -232,7 +232,7 @@
             <div class="form-group">
               <label>Moyen de paiement</label>
               <input formControlName="paymentMethod" class="form-control" list="payment-method-suggestions"
-                placeholder="Ex: Espèces, Carte bancaire, Mobile Money, Chèque…">
+                placeholder="Ex: Espèces, Carte bancaire, Mobile Money, OM, Chèque…">
               <datalist id="payment-method-suggestions">
                 @for (m of paymentMethodSuggestions; track m) { <option [value]="m"></option> }
               </datalist>

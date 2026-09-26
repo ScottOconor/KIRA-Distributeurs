@@ -170,6 +170,7 @@ export interface SalesInvoice {
   payments?: InvoicePayment[];
   createdAt?: string;
   createdBy?: string;
+  createdByName?: string;
   updatedBy?: string;
   updatedAt?: string;
 }

@@ -39,7 +39,7 @@ export class JournalsComponent implements OnInit {
     { value: 'general', label: 'Opérations diverses', icon: 'sync_alt' }
   ];
 
-  paymentMethodSuggestions = ['Espèces', 'Carte bancaire', 'Mobile Money', 'Chèque', 'Virement'];
+  paymentMethodSuggestions = ['Espèces', 'Carte bancaire', 'Mobile Money', 'OM', 'Chèque', 'Virement'];
 
   constructor(
     private accountingService: AccountingService,
