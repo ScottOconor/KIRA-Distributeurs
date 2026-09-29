@@ -7,6 +7,7 @@ import com.erp.common.entity.Company;
 import com.erp.common.repository.CompanyRepository;
 import com.erp.audit.service.AuditService;
 import com.erp.common.service.TenantGuard;
+import com.erp.common.service.UsageGuard;
 import com.erp.sync.service.SyncEventPublisher;
 import com.erp.sync.entity.SyncEventType;
 import jakarta.persistence.EntityNotFoundException;
@@ -51,6 +52,7 @@ public class AccountingService {
     private final AuditService auditService;
     private final FiscalLockGuard fiscalLockGuard;
     private final TenantGuard tenantGuard;
+    private final UsageGuard usageGuard;
     private final jakarta.persistence.EntityManager em;
     private final com.fasterxml.jackson.databind.ObjectMapper objectMapper;
 
@@ -116,6 +118,7 @@ public class AccountingService {
         AccountAccount account = accountRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found: " + id));
         tenantGuard.check(account.getCompany() != null ? account.getCompany().getId() : null);
+        usageGuard.assertAccountUnused(id);
         account.setDeprecated(true);
         accountRepo.save(account);
         auditService.log("ACCOUNT_ACCOUNT", id, account.getName(), "DEPRECATED", "Compte désactivé",
@@ -203,6 +206,7 @@ public class AccountingService {
         AccountJournal journal = journalRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Journal not found: " + id));
         tenantGuard.check(journal.getCompany() != null ? journal.getCompany().getId() : null);
+        usageGuard.assertJournalUnused(id);
         Long companyId = journal.getCompany() != null ? journal.getCompany().getId() : null;
         String journalName = journal.getName();
         try {
@@ -876,7 +880,11 @@ public class AccountingService {
     public void deletePartner(Long id) {
         Partner partner = partnerRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Partner not found: " + id));
-        tenantGuard.check(partner.getCompany() != null ? partner.getCompany().getId() : null);
+        Long companyId = partner.getCompany() != null ? partner.getCompany().getId() : null;
+        tenantGuard.check(companyId);
+        if (companyId != null && partnerRepo.hasOperationalReferences(id, companyId)) {
+            throw new IllegalStateException("Impossible de supprimer ce client/fournisseur : il est déjà utilisé dans des ventes, achats, écritures comptables ou mouvements de stock.");
+        }
         partner.setActive(false);
         partnerRepo.save(partner);
         auditService.log("PARTNER", id, partner.getName(), "DEACTIVATED", "Tiers désactivé",
@@ -888,19 +896,29 @@ public class AccountingService {
         Company company = companyRepo.findById(com.erp.auth.SecurityUtils.currentCompanyId())
                 .orElseThrow(() -> new EntityNotFoundException("Company not found"));
 
-        Partner partner = Partner.builder()
-                .ref(dto.getRef())
-                .name(dto.getName())
-                .type(dto.getType())
-                .phone(dto.getPhone())
-                .email(dto.getEmail())
-                .address(dto.getAddress())
-                .company(company)
-                .tauxPrecompte(dto.getTauxPrecompte())
-                .tauxRistourne(dto.getTauxRistourne())
-                .creditLimit(dto.getCreditLimit())
-                .receivableAccountCode(dto.getReceivableAccountCode())
-                .build();
+        String ref = dto.getRef() != null && !dto.getRef().isBlank() ? dto.getRef().trim() : null;
+        Partner partner = (ref != null
+                ? partnerRepo.findFirstByRefIgnoreCaseAndCompanyId(ref, company.getId())
+                        .or(() -> partnerRepo.findFirstByNameIgnoreCaseAndCompanyId(dto.getName().trim(), company.getId()))
+                : partnerRepo.findFirstByNameIgnoreCaseAndCompanyId(dto.getName().trim(), company.getId()))
+                .orElse(Partner.builder().company(company).build());
+        partner.setRef(ref);
+        partner.setName(dto.getName().trim());
+        // Tiers déjà existant sous l'autre rôle (client ↔ fournisseur) : il devient "both" au lieu
+        // de perdre son rôle précédent.
+        String oldType = partner.getType();
+        boolean otherRole = oldType != null && dto.getType() != null && !oldType.equals(dto.getType())
+                && java.util.Set.of("customer", "supplier").contains(oldType)
+                && java.util.Set.of("customer", "supplier").contains(dto.getType());
+        partner.setType(otherRole ? "both" : ("both".equals(oldType) ? oldType : dto.getType()));
+        partner.setPhone(dto.getPhone());
+        partner.setEmail(dto.getEmail());
+        partner.setAddress(dto.getAddress());
+        partner.setTauxPrecompte(dto.getTauxPrecompte());
+        partner.setTauxRistourne(dto.getTauxRistourne());
+        partner.setCreditLimit(dto.getCreditLimit());
+        partner.setReceivableAccountCode(dto.getReceivableAccountCode());
+        partner.setActive(true);
 
         return toPartnerDTO(partnerRepo.save(partner));
     }

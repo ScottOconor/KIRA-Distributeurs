@@ -148,6 +148,9 @@ public class SnapshotService {
         // CA lu en comptabilité : 701100 (ventes) + 443100 (TVA facturée) + 441200 (PSA ventes).
         BigDecimal caComptesTotal  = orZ(moveLineRepo.soldeComptesCA(cid, yearStart, today));
         BigDecimal caComptesMois   = orZ(moveLineRepo.soldeComptesCA(cid, monthStart, today));
+        BigDecimal caComptesHT     = orZ(moveLineRepo.soldeCompteCAHT(cid, yearStart, today));
+        BigDecimal caComptesHTMois = orZ(moveLineRepo.soldeCompteCAHT(cid, monthStart, today));
+        BigDecimal caComptesHTJour = orZ(moveLineRepo.soldeCompteCAHTJour(cid, today));
         BigDecimal caVentesTotal   = orZ(salesInvoiceRepo.sumCaVentesTotal(cid));
         BigDecimal caVentesJour    = orZ(moveLineRepo.soldeComptesCAJour(cid, today));
         BigDecimal caVentesHier    = orZ(moveLineRepo.soldeComptesCAJour(cid, hier));
@@ -173,7 +176,10 @@ public class SnapshotService {
         // (avance, trop-perçu) est exclu des créances et compté dans les dettes, au lieu de faire
         // baisser le total créances en dessous de zéro comme le faisait l'ancien solde brut 411/401.
         BigDecimal creancesTotal = sumSoldeParTiers(moveLineRepo.creancesParTiers(cid), true);
-        BigDecimal dettesTotal   = sumSoldeParTiers(moveLineRepo.dettesParTiers(cid), false);
+        List<Object[]> dettesParTiers = moveLineRepo.dettesParTiers(cid);
+        BigDecimal dettesTotal   = sumSoldeParTiers(dettesParTiers, false);
+        BigDecimal detteBrasseries = sumDettesFournisseur(dettesParTiers, "brasseries");
+        BigDecimal detteGuinness = sumDettesFournisseur(dettesParTiers, "guinness");
 
         // Jour/Mois : PAS le même calcul par tiers restreint à la période — un tiers déjà soldé
         // avant le mois mais avec une grosse facture nouvelle ce mois-ci gonflait "Ce mois" au-delà
@@ -634,6 +640,9 @@ public class SnapshotService {
                 .snapshotAt(LocalDateTime.now())
                 .caComptesTotal(caComptesTotal)
                 .caComptesMoisCourant(caComptesMois)
+                .caComptesHT(caComptesHT)
+                .caComptesHTMoisCourant(caComptesHTMois)
+                .caComptesHTJour(caComptesHTJour)
                 .caVentesTotal(caVentesTotal)
                 .caVentesJour(caVentesJour)
                 .caVentesHier(caVentesHier)
@@ -648,6 +657,8 @@ public class SnapshotService {
                 .creancesJour(creancesJour)
                 .creancesMois(creancesMois)
                 .dettesTotal(dettesTotal)
+                .dettesBrasseriesCameroun(detteBrasseries)
+                .dettesGuinnessCameroun(detteGuinness)
                 .dettesJour(dettesJour)
                 .dettesMois(dettesMois)
                 .ristournesTotalTotal(ristTotalTotal)
@@ -742,6 +753,21 @@ public class SnapshotService {
             BigDecimal debit  = toBD(row[2]);
             BigDecimal credit = toBD(row[3]);
             total = total.add(creance ? debit.subtract(credit) : credit.subtract(debit));
+        }
+        return total;
+    }
+
+    private static BigDecimal sumDettesFournisseur(java.util.List<Object[]> rows, String supplierToken) {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Object[] row : rows) {
+            String partner = row[1] != null ? row[1].toString().toLowerCase(java.util.Locale.ROOT) : "";
+            boolean match = "brasseries".equals(supplierToken)
+                    // SABC = Société Anonyme des Brasseries du Cameroun, souvent saisie sous son nom
+                    // commercial « Boissons du Cameroun » : sans ce cas, sa dette remontait à 0.
+                    ? partner.contains("brasserie") || partner.contains("boissons du cameroun")
+                        || partner.contains("sabc")
+                    : partner.contains("guinness") || partner.contains("guiness");
+            if (match) total = total.add(toBD(row[3]).subtract(toBD(row[2])));
         }
         return total;
     }

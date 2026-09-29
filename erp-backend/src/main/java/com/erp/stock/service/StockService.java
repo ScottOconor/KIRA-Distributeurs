@@ -17,6 +17,7 @@ import com.erp.stock.repository.*;
 import com.erp.audit.service.AuditService;
 import com.erp.auth.SecurityUtils;
 import com.erp.common.service.TenantGuard;
+import com.erp.common.service.UsageGuard;
 import com.erp.accounting.service.FiscalLockGuard;
 import com.erp.sync.service.SyncEventPublisher;
 import com.erp.sync.entity.SyncEventType;
@@ -80,6 +81,7 @@ public class StockService {
     private final AuditService auditService;
     private final FiscalLockGuard fiscalLockGuard;
     private final TenantGuard tenantGuard;
+    private final UsageGuard usageGuard;
 
     // ============================================================
     // MIGRATION AU DÉMARRAGE
@@ -286,14 +288,13 @@ public class StockService {
 
     public ProductCategoryDTO createCategory(ProductCategoryDTO dto) {
         Long companyId = SecurityUtils.currentCompanyId();
-        ProductCategory c = ProductCategory.builder()
-                .name(dto.getName())
-                .code(dto.getCode())
-                .stockAccountCode(dto.getStockAccountCode() != null ? dto.getStockAccountCode() : "311000")
-                .stockInAccountCode(dto.getStockInAccountCode() != null ? dto.getStockInAccountCode() : "603100")
-                .parentId(dto.getParentId())
-                .companyId(companyId)
-                .build();
+        ProductCategory c = categoryRepo.findByNameIgnoreCaseAndCompanyId(dto.getName().trim(), companyId)
+                .orElse(ProductCategory.builder().companyId(companyId).build());
+        c.setName(dto.getName().trim());
+        c.setCode(dto.getCode());
+        c.setStockAccountCode(dto.getStockAccountCode() != null ? dto.getStockAccountCode() : "311000");
+        c.setStockInAccountCode(dto.getStockInAccountCode() != null ? dto.getStockInAccountCode() : "603100");
+        c.setParentId(dto.getParentId());
         return toCategoryDTO(categoryRepo.save(c));
     }
 
@@ -309,7 +310,11 @@ public class StockService {
     }
 
     public void deleteCategory(Long id) {
-        categoryRepo.deleteById(id);
+        ProductCategory c = categoryRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Catégorie introuvable: " + id));
+        tenantGuard.check(c.getCompanyId());
+        usageGuard.assertCategoryUnused(id);
+        categoryRepo.delete(c);
     }
 
     private ProductCategoryDTO toCategoryDTO(ProductCategory c) {
@@ -338,11 +343,10 @@ public class StockService {
 
     public UnitOfMeasureDTO createUnitOfMeasure(UnitOfMeasureDTO dto) {
         Long companyId = SecurityUtils.currentCompanyId();
-        UnitOfMeasure u = UnitOfMeasure.builder()
-                .name(dto.getName())
-                .code(dto.getCode())
-                .companyId(companyId)
-                .build();
+        UnitOfMeasure u = uomRepo.findByNameIgnoreCaseAndCompanyId(dto.getName().trim(), companyId)
+                .orElse(UnitOfMeasure.builder().companyId(companyId).build());
+        u.setName(dto.getName().trim());
+        u.setCode(dto.getCode());
         return toUomDTO(uomRepo.save(u));
     }
 
@@ -355,7 +359,11 @@ public class StockService {
     }
 
     public void deleteUnitOfMeasure(Long id) {
-        uomRepo.deleteById(id);
+        UnitOfMeasure u = uomRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Unité de mesure introuvable: " + id));
+        tenantGuard.check(u.getCompanyId());
+        usageGuard.assertUnitOfMeasureUnused(id);
+        uomRepo.delete(u);
     }
 
     private UnitOfMeasureDTO toUomDTO(UnitOfMeasure u) {
@@ -376,7 +384,7 @@ public class StockService {
 
     @Transactional(readOnly = true)
     public List<ProductDTO> getProducts(Long companyId, Long warehouseId) {
-        List<Product> products = new ArrayList<>(productRepo.findByCompanyIdOrderByNameAsc(companyId));
+        List<Product> products = new ArrayList<>(productRepo.findByCompanyIdAndActiveOrderByNameAsc(companyId, true));
         Map<Long, BigDecimal> qtyMap      = new HashMap<>();
         Map<Long, BigDecimal> reservedMap = new HashMap<>();
 
@@ -433,22 +441,34 @@ public class StockService {
         String stockCode = dto.getStockAccountCode();
         if (stockCode == null) stockCode = resolveStockAccountCode(dto.getCategoryId(), companyId);
 
-        Product p = Product.builder()
-                .defaultCode(dto.getDefaultCode())
-                .name(dto.getName())
-                .categoryId(dto.getCategoryId())
-                .unitOfMeasureId(dto.getUnitOfMeasureId())
-                .uomName(resolveUomName(dto.getUnitOfMeasureId(), dto.getUomName()))
-                .standardPrice(dto.getStandardPrice() != null ? dto.getStandardPrice() : ZERO)
-                .salePrice(dto.getSalePrice() != null ? dto.getSalePrice() : ZERO)
-                .type(dto.getType() != null ? dto.getType() : "product")
-                .stockAccountCode(stockCode)
-                .description(dto.getDescription())
-                .active(true)
-                .exemptTva(dto.isExemptTva())
-                .exemptTvaAchat(dto.isExemptTvaAchat())
-                .companyId(companyId)
-                .build();
+        String type = dto.getType() != null ? dto.getType() : "product";
+        String code = dto.getDefaultCode() != null && !dto.getDefaultCode().isBlank() ? dto.getDefaultCode().trim() : null;
+        Product p = (code != null
+                ? productRepo.findByNormalizedCode(companyId, code).stream().findFirst()
+                : productRepo.findFirstByCompanyIdAndNameIgnoreCaseAndCategoryIdAndType(companyId, dto.getName().trim(), dto.getCategoryId(), type))
+                .orElse(Product.builder().companyId(companyId).build());
+        // Référence unique : un article ACTIF portant déjà ce code n'est jamais écrasé par une
+        // création (les imports le retrouvent et le mettent à jour via updateProduct). Un article
+        // désactivé portant ce code est en revanche réactivé et mis à jour, sans doublon.
+        if (p.getId() != null && p.isActive()) {
+            throw new IllegalStateException(code != null
+                    ? "La référence « " + code + " » est déjà utilisée par l'article « " + p.getName() + " »."
+                    : "L'article « " + p.getName() + " » existe déjà dans cette catégorie.");
+        }
+        p.setDefaultCode(code);
+        p.setName(dto.getName().trim());
+        p.setCategoryId(dto.getCategoryId());
+        p.setUnitOfMeasureId(dto.getUnitOfMeasureId());
+        p.setUomName(resolveUomName(dto.getUnitOfMeasureId(), dto.getUomName()));
+        p.setStandardPrice(dto.getStandardPrice() != null ? dto.getStandardPrice() : ZERO);
+        p.setSalePrice(dto.getSalePrice() != null ? dto.getSalePrice() : ZERO);
+        p.setType(type);
+        p.setStockAccountCode(stockCode);
+        p.setDescription(dto.getDescription());
+        p.setActive(true);
+        p.setExemptTva(dto.isExemptTva());
+        p.setExemptTvaAchat(dto.isExemptTvaAchat());
+        p.setCompanyId(companyId);
         Product saved = productRepo.save(p);
 
         // Créer un quant dans le magasin principal avec qty=0 pour que le produit apparaisse dans les inventaires
@@ -473,7 +493,19 @@ public class StockService {
     public ProductDTO updateProduct(Long id, ProductDTO dto) {
         Product p = productRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Product not found: " + id));
         tenantGuard.check(p.getCompanyId());
-        if (dto.getDefaultCode() != null) p.setDefaultCode(dto.getDefaultCode());
+        if (dto.getDefaultCode() != null) {
+            String code = dto.getDefaultCode().trim();
+            if (!code.isEmpty()) {
+                productRepo.findByNormalizedCode(p.getCompanyId(), code).stream()
+                        .filter(other -> !other.getId().equals(p.getId()))
+                        .findFirst()
+                        .ifPresent(other -> {
+                            throw new IllegalStateException("La référence « " + code
+                                    + " » est déjà utilisée par l'article « " + other.getName() + " ».");
+                        });
+            }
+            p.setDefaultCode(code.isEmpty() ? null : code);
+        }
         p.setName(dto.getName());
         if (dto.getCategoryId() != null) p.setCategoryId(dto.getCategoryId());
         if (dto.getUnitOfMeasureId() != null) {
@@ -499,6 +531,9 @@ public class StockService {
         Product p = productRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found: " + id));
         tenantGuard.check(p.getCompanyId());
+        if (productRepo.hasOperationalReferences(id, p.getCompanyId())) {
+            throw new IllegalStateException("Impossible de supprimer cet article : il est déjà utilisé dans des mouvements de stock, des ajustements, des pertes ou des documents de vente/achat.");
+        }
         p.setActive(false);
         productRepo.save(p);
     }
@@ -636,10 +671,13 @@ public class StockService {
 
     public WarehouseDTO createWarehouse(WarehouseDTO dto) {
         Long companyId = SecurityUtils.currentCompanyId();
-        if (warehouseRepo.existsByCodeAndCompanyId(dto.getCode().toUpperCase(), companyId)) {
-            throw new IllegalStateException("Un entrepôt avec le code " + dto.getCode() + " existe déjà");
-        }
         String code = dto.getCode().toUpperCase();
+        Warehouse existing = warehouseRepo.findFirstByCodeAndCompanyId(code, companyId).orElse(null);
+        if (existing != null) {
+            existing.setName(dto.getName());
+            existing.setActive(true);
+            return toWarehouseDTO(warehouseRepo.save(existing), true);
+        }
 
         // 1. Emplacements système (fournisseurs / clients)
         StockLocation supplierLoc = locationRepo.save(StockLocation.builder()
@@ -782,6 +820,7 @@ public class StockService {
         Warehouse wh = warehouseRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Warehouse not found: " + id));
         tenantGuard.check(wh.getCompanyId());
+        usageGuard.assertWarehouseUnused(id);
         wh.setActive(false);
         warehouseRepo.save(wh);
     }
@@ -1377,17 +1416,22 @@ public class StockService {
     }
 
     public StockLocationDTO createLocation(StockLocationDTO dto) {
-        StockLocation l = StockLocation.builder()
-                .name(dto.getName()).parentId(dto.getParentId())
-                .usage(dto.getUsage() != null ? dto.getUsage() : "internal")
-                .warehouseId(dto.getWarehouseId())
-                .companyId(SecurityUtils.currentCompanyId())
-                .active(true).build();
+        Long companyId = SecurityUtils.currentCompanyId();
+        String usage = dto.getUsage() != null ? dto.getUsage() : "internal";
+        StockLocation l = locationRepo.findFirstByCompanyIdAndNameIgnoreCaseAndUsageAndParentIdAndWarehouseId(
+                        companyId, dto.getName().trim(), usage, dto.getParentId(), dto.getWarehouseId())
+                .orElse(StockLocation.builder().companyId(companyId).build());
+        l.setName(dto.getName().trim());
+        l.setParentId(dto.getParentId());
+        l.setUsage(usage);
+        l.setWarehouseId(dto.getWarehouseId());
+        l.setActive(true);
         return toLocationDTO(locationRepo.save(l), false);
     }
 
     public StockLocationDTO updateLocation(Long id, StockLocationDTO dto) {
         StockLocation l = locationRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Location not found: " + id));
+        tenantGuard.check(l.getCompanyId());
         l.setName(dto.getName());
         l.setActive(dto.isActive());
         return toLocationDTO(locationRepo.save(l), false);
@@ -1397,6 +1441,7 @@ public class StockService {
         StockLocation l = locationRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Location not found: " + id));
         tenantGuard.check(l.getCompanyId());
+        usageGuard.assertLocationUnused(id);
         l.setActive(false);
         locationRepo.save(l);
     }
