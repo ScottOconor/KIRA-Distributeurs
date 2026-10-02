@@ -241,6 +241,10 @@ export class CaisseService {
     return this.http.get<BrouillardDTO>(`${this.base}/${caisseId}/brouillard`, { params: { date } });
   }
 
+  downloadBrouillardPdf(caisseId: number, date: string): Observable<Blob> {
+    return this.http.get(`${this.base}/${caisseId}/brouillard/pdf`, { params: { date }, responseType: 'blob' });
+  }
+
   // ── Coupures ──
 
   getDenominations(companyId: number): Observable<CashDenominationDTO[]> {
