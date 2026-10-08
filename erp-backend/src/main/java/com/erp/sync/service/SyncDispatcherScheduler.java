@@ -59,6 +59,9 @@ public class SyncDispatcherScheduler {
 
     private String spokeApiUrl;
 
+    /** Type d'ERP, figé dans le code : le hub refuse de rattacher ce spoke à une entreprise d'un autre type. */
+    public static final String SPOKE_CATEGORY = "DISTRIBUTEUR";
+
     /**
      * Sans publisher confirms, rabbitTemplate.convertAndSend() rend la main dès que le frame est
      * écrit sur le socket : un rejet broker ultérieur (taille max dépassée, message unroutable...)
@@ -217,6 +220,7 @@ public class SyncDispatcherScheduler {
             reg.setSpokeName(spokeName);
             reg.setSpokeApiUrl(spokeApiUrl);
             reg.setSpokeApiKey(interAgencyKeyService.getOrCreateKey());
+            reg.setSpokeCategory(SPOKE_CATEGORY);
             reg.setEventType("REGISTER");
             reg.setEventModule("SYSTEM");
             reg.setEventLabel("Enregistrement du spoke");
@@ -235,6 +239,7 @@ public class SyncDispatcherScheduler {
             SyncMessage hb = new SyncMessage();
             hb.setOutboxId(null);
             hb.setSpokeId(spokeId);
+            hb.setSpokeCategory(SPOKE_CATEGORY);
             hb.setEventType("HEARTBEAT");
             hb.setEventModule("SYSTEM");
             hb.setEventLabel("Heartbeat");
@@ -385,6 +390,7 @@ public class SyncDispatcherScheduler {
         SyncMessage msg = new SyncMessage();
         msg.setOutboxId(event.getId());
         msg.setSpokeId(spokeId);
+        msg.setSpokeCategory(SPOKE_CATEGORY);
         msg.setEventType(event.getEventType().name());
         msg.setEventModule(resolveModule(event.getEventType()));
         msg.setEventLabel(resolveLabel(event.getEventType()));
@@ -489,6 +495,7 @@ public class SyncDispatcherScheduler {
         String spokeName;
         String spokeApiUrl;
         String spokeApiKey;
+        String spokeCategory;   // DISTRIBUTEUR | COMMERCANT
         String eventType;
         String eventModule;
         String eventLabel;
