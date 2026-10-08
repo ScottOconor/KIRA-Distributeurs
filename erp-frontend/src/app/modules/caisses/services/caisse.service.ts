@@ -185,10 +185,6 @@ export class CaisseService {
     return this.http.get<CaisseDTO[]>(this.base, { params: { companyId } });
   }
 
-  getCaisse(id: number): Observable<CaisseDTO> {
-    return this.http.get<CaisseDTO>(`${this.base}/${id}`);
-  }
-
   createCaisse(dto: CaisseDTO): Observable<CaisseDTO> {
     return this.http.post<CaisseDTO>(this.base, dto);
   }
@@ -203,12 +199,6 @@ export class CaisseService {
 
   getDashboard(companyId: number): Observable<CaisseDTO[]> {
     return this.http.get<CaisseDTO[]>(`${this.base}/dashboard`, { params: { companyId } });
-  }
-
-  getOperations(caisseId: number, companyId: number, type?: 'ENTREE' | 'SORTIE'): Observable<CaisseOperationDTO[]> {
-    let params: any = { companyId };
-    if (type) params['type'] = type;
-    return this.http.get<CaisseOperationDTO[]>(`${this.base}/${caisseId}/operations`, { params });
   }
 
   getAllOperations(companyId: number, type?: 'ENTREE' | 'SORTIE'): Observable<CaisseOperationDTO[]> {
@@ -231,10 +221,6 @@ export class CaisseService {
 
   rouvrirCaisse(id: number): Observable<CaisseDTO> {
     return this.http.post<CaisseDTO>(`${this.base}/${id}/rouvrir`, null);
-  }
-
-  getSessions(caisseId: number): Observable<CaisseSessionDTO[]> {
-    return this.http.get<CaisseSessionDTO[]>(`${this.base}/${caisseId}/sessions`);
   }
 
   getBrouillard(caisseId: number, date: string): Observable<BrouillardDTO> {
