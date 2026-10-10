@@ -176,6 +176,8 @@ export interface SalesInvoice {
   notes?: string;
   partnerId: number;
   partnerName?: string;
+  /** Code client (référence du partenaire) */
+  partnerRef?: string;
   journalId: number;
   journalName?: string;
   companyId: number;
