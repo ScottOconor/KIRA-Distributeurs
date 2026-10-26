@@ -1,5 +1,7 @@
 package com.erp.sync;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -52,22 +54,38 @@ public class RabbitMQConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Bean RabbitTemplate rabbitTemplate(ConnectionFactory cf, Jackson2JsonMessageConverter mc) {
+    // Compresse chaque message sortant (en-tête content-encoding: gzip) — le hub le décompresse
+    // automatiquement côté réception (DelegatingDecompressingPostProcessor, RabbitMQConfig côté
+    // hub-backend). Sans ce post-processor, un FULL_SNAPSHOT un peu volumineux (société avec
+    // beaucoup d'historique comptable) dépasse la limite de taille de message du broker (16 Mo)
+    // et échoue indéfiniment à chaque tentative puisque la taille ne change jamais entre deux
+    // retries. Le JSON compresse typiquement 5-8x, ce qui passe largement sous la limite.
+    @Bean RabbitTemplate rabbitTemplate(ConnectionFactory cf, Jackson2JsonMessageConverter mc,
+                                        @Value("${spring.rabbitmq.username:}") String rabbitUser,
+                                        @Value("${sync.spoke.id:}") String spokeId) {
         RabbitTemplate tpl = new RabbitTemplate(cf);
         tpl.setMessageConverter(mc);
-        // Compresse chaque message sortant (en-tête content-encoding: gzip) — le hub le décompresse
-        // déjà automatiquement côté réception (DelegatingDecompressingPostProcessor, RabbitMQConfig
-        // côté hub-backend), mais ce post-processor manquait ici côté spoke. Sans lui, un
-        // FULL_SNAPSHOT un peu volumineux (ex: 29 Mo pour une société avec beaucoup d'historique)
-        // dépasse la limite de taille de message du broker (16 Mo) et échoue indéfiniment à chaque
-        // tentative puisque la taille ne change jamais entre deux retries. Le JSON compresse
-        // typiquement 5-8x, ce qui passe largement sous la limite.
-        tpl.setBeforePublishPostProcessors(new GZipPostProcessor());
-        // mandatory + publisher confirms (spring.rabbitmq.publisher-confirm-type/returns) : sans ça,
-        // un message rejeté par le broker après écriture sur le socket (taille max dépassée, routing
-        // key sans file liée...) reste invisible côté spoke — SyncDispatcherScheduler.confirmCallback
-        // s'appuie là-dessus pour corriger le statut SENT optimiste en cas de rejet réel.
+        tpl.setBeforePublishPostProcessors(new GZipPostProcessor(), proveIdentity(rabbitUser, spokeId));
+        // mandatory + publisher confirms (spring.rabbitmq.publisher-confirm-type/returns) : un rejet
+        // broker (taille max dépassée, message non routable...) n'est connu qu'après l'écriture du
+        // message sur le socket ; SyncDispatcherScheduler.dispatch() attend cette confirmation avant
+        // de marquer un événement SENT (cf. incident Blessing "Forcer envoi" du 2026-09-17).
         tpl.setMandatory(true);
         return tpl;
+    }
+
+    /**
+     * Preuve d'identité exigée par le Hub (SpokeIdentityVerifier) : la propriété user_id, que
+     * RabbitMQ refuse si elle diffère du compte authentifié, doit être égale au spokeId. Elle n'est
+     * posée que si le compte RabbitMQ de l'installation porte ce nom : avec un compte partagé, le
+     * Hub refuserait le message comme usurpé ; il reste alors accepté « non vérifié » (mode
+     * transitoire du Hub) et un avertissement est journalisé au démarrage (SyncDispatcherScheduler).
+     */
+    static MessagePostProcessor proveIdentity(String rabbitUser, String spokeId) {
+        boolean provable = rabbitUser != null && !rabbitUser.isBlank() && rabbitUser.equals(spokeId);
+        return message -> {
+            if (provable) message.getMessageProperties().setUserId(rabbitUser);
+            return message;
+        };
     }
 }
