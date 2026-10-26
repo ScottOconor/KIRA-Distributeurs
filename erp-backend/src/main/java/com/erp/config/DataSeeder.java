@@ -190,16 +190,24 @@ public class DataSeeder implements ApplicationRunner {
             Role superAdminRole = roleRepository.findByCode(SUPER_ADMIN)
                     .orElseThrow(() -> new IllegalStateException("Rôle SUPER_ADMIN introuvable"));
 
+            // Surchargeable par SUPERADMIN_INITIAL_PASSWORD (déploiement automatisé) : le mot de passe
+            // par défaut reste celui choisi pour toutes les installations, à changer dès la première
+            // connexion (mustChangePassword) ; il n'est plus écrit dans le journal.
+            String initialPassword = System.getenv("SUPERADMIN_INITIAL_PASSWORD");
+            boolean fromEnv = initialPassword != null && !initialPassword.isBlank();
+            if (!fromEnv) initialPassword = "Admin@2024!";
+
             userRepository.save(User.builder()
                     .username("superadmin")
                     .email("admin@erp-system.com")
                     .fullName("Super Administrateur")
-                    .password(passwordEncoder.encode("Admin@2024!"))
+                    .password(passwordEncoder.encode(initialPassword))
                     .role(superAdminRole)
                     .active(true)
                     .mustChangePassword(true)
                     .build());
-            log.info("Compte superadmin créé (mot de passe temporaire : Admin@2024!)");
+            log.warn("Compte superadmin créé avec le mot de passe {} — à changer dès la première connexion.",
+                    fromEnv ? "fourni via SUPERADMIN_INITIAL_PASSWORD" : "par défaut");
         }
     }
 }
