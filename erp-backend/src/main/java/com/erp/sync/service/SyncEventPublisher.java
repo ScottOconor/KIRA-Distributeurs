@@ -38,13 +38,11 @@ public class SyncEventPublisher {
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> ACCOUNT_MOVE_LINES = SpokeSnapshotPayload::getAccountMoveLines;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> PRODUCTS = SpokeSnapshotPayload::getProducts;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> PARTNERS = SpokeSnapshotPayload::getPartners;
-    private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> TOP_STOCK = SpokeSnapshotPayload::getTopStock;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> SALES_ORDERS = SpokeSnapshotPayload::getSalesOrders;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> PURCHASE_INVOICES = SpokeSnapshotPayload::getPurchaseInvoices;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> PURCHASE_ORDERS = SpokeSnapshotPayload::getPurchaseOrders;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> RISTOURNE_PAIEMENTS = SpokeSnapshotPayload::getRistournePaiements;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> REMISE_PAIEMENTS = SpokeSnapshotPayload::getRemisePaiements;
-    private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> VENTES_JOUR_PAR_ENTREPOT = SpokeSnapshotPayload::getVentesJourParEntrepot;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> ACCOUNTS = SpokeSnapshotPayload::getAccounts;
 
     /**
@@ -71,14 +69,17 @@ public class SyncEventPublisher {
     }
 
     /**
-     * Découpe un `SpokeSnapshotPayload` en plusieurs parties dont la taille JSON sérialisée
-     * ne dépasse pas `maxBytes` si possible. Le découpage se fait en parcourant les gros
-     * tableaux présents dans le snapshot et en les répartissant entre parties.
+     * Découpe un `SpokeSnapshotPayload` en parties dont la taille JSON sérialisée ne dépasse pas
+     * `maxBytes` (sauf élément isolé plus gros que la limite). Chaque partie reprend tous les
+     * indicateurs scalaires et petites listes du snapshot ; les grosses listes sont réparties dans
+     * l'ordre, sans perte ni doublon.
+     *
+     * Linéaire : la taille de chaque élément est calculée une seule fois. L'algorithme précédent
+     * recopiait la liste ET resérialisait toute la partie en cours à chaque élément ajouté
+     * (quadratique) : un snapshot de ~200 000 éléments n'était pas terminé après 12 minutes de
+     * calcul, relancé toutes les heures.
      */
-    private java.util.List<SpokeSnapshotPayload> splitSnapshotBySize(SpokeSnapshotPayload snapshot, int maxBytes) throws com.fasterxml.jackson.core.JsonProcessingException {
-        java.util.List<SpokeSnapshotPayload> parts = new java.util.ArrayList<>();
-        ObjectMapper mapper = this.objectMapper;
-
+    java.util.List<SpokeSnapshotPayload> splitSnapshotBySize(SpokeSnapshotPayload snapshot, int maxBytes) throws JsonProcessingException {
         // Base de chaque partie = copie INTÉGRALE du snapshot (toBuilder) : tous les indicateurs
         // scalaires et les petites listes affichées telles quelles par le Hub (caisses,
         // caissesActuelles, topStock, ventes du jour) sont présents dans chaque partie, et seules
@@ -98,126 +99,59 @@ public class SyncEventPublisher {
                 .ristournePaiements(new java.util.ArrayList<>())
                 .remisePaiements(new java.util.ArrayList<>());
 
-        // Order of list fields to pack (largest/most numerous first by empirical knowledge)
-        java.util.List<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>> listGetters =
-            java.util.Arrays.<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>>asList(
-                SALE_INVOICES,
-                ACCOUNT_MOVE_LINES,
-                PRODUCTS,
-                PARTNERS,
-                SALES_ORDERS,
-                PURCHASE_INVOICES,
-                PURCHASE_ORDERS,
-                RISTOURNE_PAIEMENTS,
-                REMISE_PAIEMENTS,
-                ACCOUNTS
-            );
+        java.util.List<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>> listGetters = java.util.List.of(
+                SALE_INVOICES, ACCOUNT_MOVE_LINES, PRODUCTS, PARTNERS, SALES_ORDERS, PURCHASE_INVOICES, PURCHASE_ORDERS,
+                RISTOURNE_PAIEMENTS, REMISE_PAIEMENTS, ACCOUNTS);
 
-        // Keep track of remaining iterators for each list field
-        java.util.Map<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>, java.util.Iterator<?>> iters = new java.util.LinkedHashMap<>();
-        for (var g : listGetters) {
-            var l = g.apply(snapshot);
-            iters.put(g, l == null ? java.util.Collections.emptyIterator() : l.iterator());
-        }
+        // Taille d'une partie = base (listes vides) + somme des éléments + une virgule par élément :
+        // majorant exact de la taille sérialisée réelle, donc jamais au-dessus de maxBytes.
+        int baseBytes = objectMapper.writeValueAsBytes(baseBuilder.get().build()).length;
+        java.util.List<SpokeSnapshotPayload> parts = new java.util.ArrayList<>();
+        java.util.Map<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>, java.util.List<Object>> current = new java.util.LinkedHashMap<>();
+        long currentBytes = baseBytes;
+        int currentCount = 0;
 
-        SpokeSnapshotPayload.SpokeSnapshotPayloadBuilder current = baseBuilder.get();
-
-        while (true) {
-            // Try to find next item from any iterator
-            Object nextItem = null;
-            java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> sourceKey = null;
-            for (var e : iters.entrySet()) {
-                var it = e.getValue();
-                if (it.hasNext()) {
-                    nextItem = it.next();
-                    sourceKey = e.getKey();
-                    break;
+        for (var getter : listGetters) {
+            java.util.List<?> items = getter.apply(snapshot);
+            if (items == null) continue;
+            for (Object item : items) {
+                int itemBytes = objectMapper.writeValueAsBytes(item).length + 1;
+                if (currentCount > 0 && currentBytes + itemBytes > maxBytes) {
+                    parts.add(buildPart(baseBuilder.get(), current));
+                    current = new java.util.LinkedHashMap<>();
+                    currentBytes = baseBytes;
+                    currentCount = 0;
                 }
-            }
-            if (nextItem == null) break; // nothing left
-
-            // Add nextItem to the appropriate list on current builder
-            addItemToBuilder(current, sourceKey, nextItem);
-
-            // Serialize and check size
-            SpokeSnapshotPayload candidate = current.build();
-            byte[] bytes = mapper.writeValueAsBytes(candidate);
-            if (bytes.length > maxBytes) {
-                // remove the last added item from current and finalize it
-                removeLastFromBuilder(current, sourceKey);
-                parts.add(current.build());
-                // start new part and re-add the item
-                current = baseBuilder.get();
-                // add the item to new part
-                addItemToBuilder(current, sourceKey, nextItem);
-                // Edge case: single item is larger than maxBytes — accept it (can't split further)
-                candidate = current.build();
-                bytes = mapper.writeValueAsBytes(candidate);
-                if (bytes.length > maxBytes) {
+                if (baseBytes + itemBytes > maxBytes) {
                     log.warn("Un élément individuel du snapshot dépasse la taille max {} bytes; acceptez une partie plus grande", maxBytes);
                 }
+                current.computeIfAbsent(getter, g -> new java.util.ArrayList<>()).add(item);
+                currentBytes += itemBytes;
+                currentCount++;
             }
         }
-
-        // finalize last part
-        SpokeSnapshotPayload last = current.build();
-        // Ne jeter la dernière partie que si elle ne porte AUCUN élément découpé. Avant, elle était
-        // jetée dès qu'elle n'avait ni factures, ni lignes comptables, ni articles, ni tiers — or
-        // la fin du découpage (commandes, ristournes/remises, comptes) atterrit justement là.
-        boolean empty = listGetters.stream().allMatch(g -> { var l = g.apply(last); return l == null || l.isEmpty(); });
-        if (!empty || parts.isEmpty()) parts.add(last);
-
+        // Dernière partie : gardée si elle porte des éléments, ou si c'est la seule (snapshot sans liste).
+        if (currentCount > 0 || parts.isEmpty()) parts.add(buildPart(baseBuilder.get(), current));
         return parts;
     }
 
-    private void addItemToBuilder(SpokeSnapshotPayload.SpokeSnapshotPayloadBuilder builder,
-                                  java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> sourceKey,
-                                  Object item) {
-        if (sourceKey == SALE_INVOICES) builder.saleInvoices(java.util.stream.Stream.concat(builder.build().getSaleInvoices()==null?java.util.stream.Stream.empty():builder.build().getSaleInvoices().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.SaleInvoiceItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == ACCOUNT_MOVE_LINES) builder.accountMoveLines(java.util.stream.Stream.concat(builder.build().getAccountMoveLines()==null?java.util.stream.Stream.empty():builder.build().getAccountMoveLines().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.AccountMoveLineItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == PRODUCTS) builder.products(java.util.stream.Stream.concat(builder.build().getProducts()==null?java.util.stream.Stream.empty():builder.build().getProducts().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.ProductItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == PARTNERS) builder.partners(java.util.stream.Stream.concat(builder.build().getPartners()==null?java.util.stream.Stream.empty():builder.build().getPartners().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.PartnerItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == TOP_STOCK) builder.topStock(java.util.stream.Stream.concat(builder.build().getTopStock()==null?java.util.stream.Stream.empty():builder.build().getTopStock().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.StockItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == SALES_ORDERS) builder.salesOrders(java.util.stream.Stream.concat(builder.build().getSalesOrders()==null?java.util.stream.Stream.empty():builder.build().getSalesOrders().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.SaleOrderItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == PURCHASE_INVOICES) builder.purchaseInvoices(java.util.stream.Stream.concat(builder.build().getPurchaseInvoices()==null?java.util.stream.Stream.empty():builder.build().getPurchaseInvoices().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.PurchaseInvoiceItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == PURCHASE_ORDERS) builder.purchaseOrders(java.util.stream.Stream.concat(builder.build().getPurchaseOrders()==null?java.util.stream.Stream.empty():builder.build().getPurchaseOrders().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.PurchaseOrderItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == RISTOURNE_PAIEMENTS) builder.ristournePaiements(java.util.stream.Stream.concat(builder.build().getRistournePaiements()==null?java.util.stream.Stream.empty():builder.build().getRistournePaiements().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.RistournePaiementItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == REMISE_PAIEMENTS) builder.remisePaiements(java.util.stream.Stream.concat(builder.build().getRemisePaiements()==null?java.util.stream.Stream.empty():builder.build().getRemisePaiements().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.RemisePaiementItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == VENTES_JOUR_PAR_ENTREPOT) builder.ventesJourParEntrepot(java.util.stream.Stream.concat(builder.build().getVentesJourParEntrepot()==null?java.util.stream.Stream.empty():builder.build().getVentesJourParEntrepot().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.WarehouseDailySalesItem) item)).collect(java.util.stream.Collectors.toList()));
-        else if (sourceKey == ACCOUNTS) builder.accounts(java.util.stream.Stream.concat(builder.build().getAccounts()==null?java.util.stream.Stream.empty():builder.build().getAccounts().stream(), java.util.stream.Stream.of((SpokeSnapshotPayload.AccountItem) item)).collect(java.util.stream.Collectors.toList()));
-        else {
-            // Unknown source — ignore
-        }
-    }
-
-    private void removeLastFromBuilder(SpokeSnapshotPayload.SpokeSnapshotPayloadBuilder builder,
-                                       java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> sourceKey) {
-        // Rebuild list without last element
-        SpokeSnapshotPayload built = builder.build();
-        if (sourceKey == SALE_INVOICES && built.getSaleInvoices() != null && !built.getSaleInvoices().isEmpty())
-            builder.saleInvoices(new java.util.ArrayList<>(built.getSaleInvoices().subList(0, built.getSaleInvoices().size() - 1)));
-        else if (sourceKey == ACCOUNT_MOVE_LINES && built.getAccountMoveLines() != null && !built.getAccountMoveLines().isEmpty())
-            builder.accountMoveLines(new java.util.ArrayList<>(built.getAccountMoveLines().subList(0, built.getAccountMoveLines().size() - 1)));
-        else if (sourceKey == PRODUCTS && built.getProducts() != null && !built.getProducts().isEmpty())
-            builder.products(new java.util.ArrayList<>(built.getProducts().subList(0, built.getProducts().size() - 1)));
-        else if (sourceKey == PARTNERS && built.getPartners() != null && !built.getPartners().isEmpty())
-            builder.partners(new java.util.ArrayList<>(built.getPartners().subList(0, built.getPartners().size() - 1)));
-        else if (sourceKey == TOP_STOCK && built.getTopStock() != null && !built.getTopStock().isEmpty())
-            builder.topStock(new java.util.ArrayList<>(built.getTopStock().subList(0, built.getTopStock().size() - 1)));
-        else if (sourceKey == SALES_ORDERS && built.getSalesOrders() != null && !built.getSalesOrders().isEmpty())
-            builder.salesOrders(new java.util.ArrayList<>(built.getSalesOrders().subList(0, built.getSalesOrders().size() - 1)));
-        else if (sourceKey == PURCHASE_INVOICES && built.getPurchaseInvoices() != null && !built.getPurchaseInvoices().isEmpty())
-            builder.purchaseInvoices(new java.util.ArrayList<>(built.getPurchaseInvoices().subList(0, built.getPurchaseInvoices().size() - 1)));
-        else if (sourceKey == PURCHASE_ORDERS && built.getPurchaseOrders() != null && !built.getPurchaseOrders().isEmpty())
-            builder.purchaseOrders(new java.util.ArrayList<>(built.getPurchaseOrders().subList(0, built.getPurchaseOrders().size() - 1)));
-        else if (sourceKey == RISTOURNE_PAIEMENTS && built.getRistournePaiements() != null && !built.getRistournePaiements().isEmpty())
-            builder.ristournePaiements(new java.util.ArrayList<>(built.getRistournePaiements().subList(0, built.getRistournePaiements().size() - 1)));
-        else if (sourceKey == REMISE_PAIEMENTS && built.getRemisePaiements() != null && !built.getRemisePaiements().isEmpty())
-            builder.remisePaiements(new java.util.ArrayList<>(built.getRemisePaiements().subList(0, built.getRemisePaiements().size() - 1)));
-        else if (sourceKey == VENTES_JOUR_PAR_ENTREPOT && built.getVentesJourParEntrepot() != null && !built.getVentesJourParEntrepot().isEmpty())
-            builder.ventesJourParEntrepot(new java.util.ArrayList<>(built.getVentesJourParEntrepot().subList(0, built.getVentesJourParEntrepot().size() - 1)));
-        else if (sourceKey == ACCOUNTS && built.getAccounts() != null && !built.getAccounts().isEmpty())
-            builder.accounts(new java.util.ArrayList<>(built.getAccounts().subList(0, built.getAccounts().size() - 1)));
+    @SuppressWarnings("unchecked")
+    private static SpokeSnapshotPayload buildPart(SpokeSnapshotPayload.SpokeSnapshotPayloadBuilder builder,
+            java.util.Map<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>, java.util.List<Object>> lists) {
+        lists.forEach((getter, items) -> {
+            java.util.List raw = items;
+            if (getter == SALE_INVOICES) builder.saleInvoices(raw);
+            else if (getter == ACCOUNT_MOVE_LINES) builder.accountMoveLines(raw);
+            else if (getter == PRODUCTS) builder.products(raw);
+            else if (getter == PARTNERS) builder.partners(raw);
+            else if (getter == SALES_ORDERS) builder.salesOrders(raw);
+            else if (getter == PURCHASE_INVOICES) builder.purchaseInvoices(raw);
+            else if (getter == PURCHASE_ORDERS) builder.purchaseOrders(raw);
+            else if (getter == RISTOURNE_PAIEMENTS) builder.ristournePaiements(raw);
+            else if (getter == REMISE_PAIEMENTS) builder.remisePaiements(raw);
+            else if (getter == ACCOUNTS) builder.accounts(raw);
+        });
+        return builder.build();
     }
 
     /**
