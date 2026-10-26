@@ -5,6 +5,8 @@ import com.erp.config.dto.*;
 import com.erp.config.service.ConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,9 +27,17 @@ public class ConfigController {
         return ResponseEntity.ok(configService.getAllCompanies());
     }
 
+    /** Avant connexion (écran de login), seuls le nom, le sigle et le nom d'application sont
+     *  renvoyés : RCCM, NIF, adresse, téléphone et email ne sont lisibles qu'une fois connecté. */
     @GetMapping("/companies/{id}")
-    public ResponseEntity<CompanyDTO> getCompany(@PathVariable Long id) {
-        return ResponseEntity.ok(configService.getCompany(id));
+    public ResponseEntity<CompanyDTO> getCompany(@PathVariable Long id, Authentication auth) {
+        CompanyDTO company = configService.getCompany(id);
+        if (auth == null || auth instanceof AnonymousAuthenticationToken) {
+            company = CompanyDTO.builder().id(company.getId()).name(company.getName()).sigle(company.getSigle())
+                    .appName(company.getAppName()).hasAppLogo(company.isHasAppLogo()).active(company.isActive())
+                    .build();
+        }
+        return ResponseEntity.ok(company);
     }
 
     @PostMapping("/companies")

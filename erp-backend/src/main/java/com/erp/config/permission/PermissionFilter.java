@@ -84,6 +84,8 @@ public class PermissionFilter extends OncePerRequestFilter {
 
         if (permissionService.isPrivileged(auth)) { chain.doFilter(req, res); return; }
 
+        if (permissionService.isOpenToAuthenticated(req.getMethod(), uri)) { chain.doFilter(req, res); return; }
+
         PermissionRule rule = permissionService.findRule(req.getMethod(), uri);
 
         // Fail-closed : une route authentifiée sans règle correspondante est refusée par défaut

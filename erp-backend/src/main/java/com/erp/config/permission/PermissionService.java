@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PermissionService {
@@ -374,9 +376,39 @@ public class PermissionService {
         new PermissionRule("DELETE", "/api/sync/**",                 "CONFIG","AUDIT","EDIT")
     );
 
+    // RULES est une liste statique fixée au chargement de la classe (pas de table PermissionRule en
+    // base, pas de mutation via ConfigService) : contrairement à RolePermissionCache, il n'y a donc
+    // aucun point d'invalidation à câbler — un simple regroupement par méthode HTTP calculé une fois
+    // suffit à éviter de rebalayer toutes les règles (~150) à chaque requête, qu'elle qu'en soit la
+    // méthode.
+    private static final Map<String, List<PermissionRule>> RULES_BY_METHOD = RULES.stream()
+            .collect(Collectors.groupingBy(r -> r.method().toUpperCase()));
+
+    /**
+     * Routes /api/** ouvertes à tout utilisateur connecté, sans droit particulier. Toute autre route
+     * sans règle dans RULES est refusée (PermissionFilter) : un nouvel endpoint oublié dans RULES
+     * n'est plus ouvert à tous par défaut.
+     */
+    private static final List<String[]> AUTHENTICATED_ROUTES = List.of(
+        // En-tête de société (nom, adresse, NIF...) imprimé sur les documents de tous les modules
+        new String[]{"GET",  "/api/config/companies/*"},
+        new String[]{"POST", "/api/config/change-password"},
+        // États des modules : construisent les menus de chaque utilisateur
+        new String[]{"GET",  "/api/config/modules"}
+    );
+
+    public boolean isOpenToAuthenticated(String method, String uri) {
+        for (String[] route : AUTHENTICATED_ROUTES) {
+            if (route[0].equalsIgnoreCase(method) && MATCHER.match(route[1], uri)) return true;
+        }
+        return false;
+    }
+
     public PermissionRule findRule(String method, String uri) {
-        for (PermissionRule rule : RULES) {
-            if (rule.method().equalsIgnoreCase(method) && MATCHER.match(rule.pattern(), uri)) {
+        List<PermissionRule> candidates = RULES_BY_METHOD.get(method.toUpperCase());
+        if (candidates == null) return null;
+        for (PermissionRule rule : candidates) {
+            if (MATCHER.match(rule.pattern(), uri)) {
                 return rule;
             }
         }
