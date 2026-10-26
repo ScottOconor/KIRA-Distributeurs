@@ -32,6 +32,9 @@ import java.net.NetworkInterface;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Component
 @RequiredArgsConstructor
@@ -62,53 +65,8 @@ public class SyncDispatcherScheduler {
     /** Type d'ERP, figé dans le code : le hub refuse de rattacher ce spoke à une entreprise d'un autre type. */
     public static final String SPOKE_CATEGORY = "DISTRIBUTEUR";
 
-    /**
-     * Sans publisher confirms, rabbitTemplate.convertAndSend() rend la main dès que le frame est
-     * écrit sur le socket : un rejet broker ultérieur (taille max dépassée, message unroutable...)
-     * arrive de façon asynchrone et l'événement outbox reste marqué SENT sans avoir jamais été
-     * livré au Hub — succès affiché côté spoke, rien ne remonte (cf. incident Blessing "Forcer
-     * envoi" du 2026-09-17). confirmCallback/returnsCallback corrigent ce statut optimiste dès
-     * que le broker signale explicitement l'échec.
-     */
-    @PostConstruct
-    void wireConfirmCallbacks() {
-        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
-            if (ack || correlationData == null) return;
-            markDeliveryFailed(correlationData.getId(), "Rejeté par le broker : " + cause);
-        });
-        rabbitTemplate.setReturnsCallback(returned -> {
-            String correlationId = returned.getMessage().getMessageProperties().getCorrelationId();
-            markDeliveryFailed(correlationId, "Message non routable (retour broker, code "
-                    + returned.getReplyCode() + " " + returned.getReplyText() + ")");
-        });
-    }
-
-    /** Remet en PENDING (ou FAILED si tentatives épuisées) un événement marqué SENT à tort par
-     *  dispatch() avant que le broker ne signale le rejet réel. */
-    private void markDeliveryFailed(String outboxId, String reason) {
-        if (outboxId == null) return;
-        try {
-            Long id = Long.valueOf(outboxId);
-            outboxRepo.findById(id).ifPresent(event -> {
-                if (event.getStatus() != OutboxStatus.SENT) return; // déjà repris par ailleurs
-                event.setRetryCount(event.getRetryCount() + 1);
-                event.setLastAttemptAt(LocalDateTime.now());
-                event.setErrorMessage(reason);
-                if (event.getRetryCount() >= MAX_RETRIES) {
-                    event.setStatus(OutboxStatus.FAILED);
-                    log.warn("Événement {} id={} FAILED (rejet broker) : {}",
-                            event.getEventType(), event.getEntityId(), reason);
-                } else {
-                    event.setStatus(OutboxStatus.PENDING);
-                    log.warn("Événement {} id={} rejeté par le broker, remis en PENDING : {}",
-                            event.getEventType(), event.getEntityId(), reason);
-                }
-                outboxRepo.save(event);
-            });
-        } catch (NumberFormatException e) {
-            log.warn("Rejet broker sans correlation id exploitable ({}) : {}", outboxId, reason);
-        }
-    }
+    /** Délai d'attente de la confirmation du broker pour chaque événement envoyé. */
+    private static final long CONFIRM_TIMEOUT_SECONDS = 10;
 
     @PostConstruct
     void detectSpokeApiUrl() {
@@ -273,6 +231,7 @@ public class SyncDispatcherScheduler {
 
         lastBatchSize = pending.size();
         int sent = 0;
+        List<InFlight> inFlight = new java.util.ArrayList<>();
 
         for (OutboxEvent event : pending) {
             try {
@@ -300,27 +259,66 @@ public class SyncDispatcherScheduler {
                     // processus d'envoi original tenter et se débrouiller (confirmCallbacks géreront).
                     log.debug("Impossible de mesurer la taille du message avant envoi : {}", ex.getMessage());
                 }
-                rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, routingKey, msg,
-                        new CorrelationData(String.valueOf(event.getId())));
+                CorrelationData correlation = new CorrelationData(String.valueOf(event.getId()));
+                rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, routingKey, msg, correlation);
+                inFlight.add(new InFlight(event, correlation));
+            } catch (AmqpException e) {
+                recordFailure(event, e.getMessage());
+                outboxRepo.save(event);
+            }
+        }
+
+        // Statut fixé APRÈS la réponse du broker, jamais avant : l'événement était auparavant
+        // marqué SENT dès l'écriture sur le socket, et le rejet asynchrone pouvait arriver avant
+        // cet enregistrement (puis être écrasé par lui) ; un message non routable était en outre
+        // confirmé (ack) par le broker et restait SENT sans avoir été livré (constaté).
+        for (InFlight f : inFlight) {
+            String failure = awaitDelivery(f.correlation());
+            OutboxEvent event = f.event();
+            if (failure == null) {
                 event.setStatus(OutboxStatus.SENT);
                 event.setLastAttemptAt(LocalDateTime.now());
                 event.setErrorMessage(null);
                 sent++;
-            } catch (AmqpException e) {
-                event.setRetryCount(event.getRetryCount() + 1);
-                event.setLastAttemptAt(LocalDateTime.now());
-                event.setErrorMessage(e.getMessage());
-                if (event.getRetryCount() >= MAX_RETRIES) {
-                    event.setStatus(OutboxStatus.FAILED);
-                    log.warn("Événement {} id={} FAILED après {} tentatives",
-                            event.getEventType(), event.getEntityId(), MAX_RETRIES);
-                }
+            } else {
+                recordFailure(event, failure);
             }
             outboxRepo.save(event);
         }
         lastBatchSent  = sent;
         lastDispatchAt = LocalDateTime.now();
         log.debug("Sync: {}/{} événements envoyés", sent, pending.size());
+    }
+
+    private record InFlight(OutboxEvent event, CorrelationData correlation) {}
+
+    /** null si le broker a accepté ET routé le message, sinon la raison de l'échec. */
+    private String awaitDelivery(CorrelationData correlation) {
+        try {
+            CorrelationData.Confirm confirm = correlation.getFuture().get(CONFIRM_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            if (correlation.getReturned() != null) {
+                return "Message non routable (retour broker, code " + correlation.getReturned().getReplyCode()
+                        + " " + correlation.getReturned().getReplyText() + ")";
+            }
+            return confirm.isAck() ? null : "Rejeté par le broker : " + confirm.getReason();
+        } catch (TimeoutException e) {
+            return "Pas de confirmation du broker sous " + CONFIRM_TIMEOUT_SECONDS + " s";
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return "Attente de confirmation interrompue";
+        } catch (ExecutionException e) {
+            return "Confirmation du broker en échec : " + e.getCause().getMessage();
+        }
+    }
+
+    /** Échec d'envoi : l'événement reste PENDING pour le prochain cycle, FAILED après MAX_RETRIES. */
+    private void recordFailure(OutboxEvent event, String reason) {
+        event.setRetryCount(event.getRetryCount() + 1);
+        event.setLastAttemptAt(LocalDateTime.now());
+        event.setErrorMessage(reason);
+        event.setStatus(event.getRetryCount() >= MAX_RETRIES ? OutboxStatus.FAILED : OutboxStatus.PENDING);
+        log.warn("Événement {} id={} non livré ({}/{}) : {}", event.getEventType(), event.getEntityId(),
+                event.getRetryCount(), MAX_RETRIES, reason);
     }
 
     @Transactional
