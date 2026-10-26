@@ -2,6 +2,7 @@ package com.erp.common;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +46,16 @@ class GlobalExceptionHandlerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(response.getBody().toString()).contains("Ressource introuvable");
+
+    }
+
+    @Test
+    void numeroEnDoubleDonneUnConflitSansDetailSql() {
+        var ex = new DataIntegrityViolationException("could not execute statement",
+                new RuntimeException("duplicate key value violates unique constraint \"ux_sales_invoices_number\""));
+        var response = handler.handleDataIntegrityViolation(ex);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(response.getBody().get("message")).doesNotContain("ux_", "duplicate", "constraint");
     }
 }

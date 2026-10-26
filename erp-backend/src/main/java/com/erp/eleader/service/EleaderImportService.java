@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 public class EleaderImportService {
 
     private final EleaderPdfParserService     parserService;
+    private final com.erp.common.service.DocumentNumberLock documentNumberLock;
     private final EleaderConfigService        configService;
     private final EleaderConfigRepository     configRepo;
     private final EleaderImportLogRepository  logRepo;
@@ -382,11 +383,14 @@ public class EleaderImportService {
     }
 
     private String generateReference(Long companyId) {
+        documentNumberLock.lock("eleader.import." + companyId);
         long count = logRepo.countByCompanyId(companyId) + 1;
         return String.format("ELIMP/%05d", count);
     }
 
     private String generateOrderName(Long companyId, LocalDate date) {
+        // Même séquence BC- que SalesService.generateOrderName : même verrou.
+        documentNumberLock.lock("sales.order." + companyId);
         int year = date.getYear();
         Integer max = orderRepo.findMaxSequenceByCompanyAndYear(companyId, year);
         int next = (max != null ? max : 0) + 1;

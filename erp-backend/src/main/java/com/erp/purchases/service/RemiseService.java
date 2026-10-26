@@ -44,6 +44,7 @@ public class RemiseService {
 
     private final RemiseRepository remiseRepo;
     private final RemisePaiementRepository paiementRepo;
+    private final com.erp.common.service.DocumentNumberLock documentNumberLock;
     private final com.erp.common.service.JsonArrayStreamer jsonArrayStreamer;
     private final PartnerRepository partnerRepo;
     private final ProductCategoryRepository categoryRepo;
@@ -774,8 +775,9 @@ public class RemiseService {
     }
 
     private String generateRmsName(Long companyId) {
-        companyRepo.findByIdForUpdate(companyId);
-        long count = paiementRepo.findByCompanyIdOrderByCreatedAtDesc(companyId).size() + 1;
+        documentNumberLock.lock("purchases.remise." + companyId);
+        // Plus grand numéro attribué + 1 (un comptage redonnait un numéro déjà pris après suppression).
+        long count = paiementRepo.findMaxNameSequence(companyId) + 1;
         return String.format("RMS-%d-%05d", java.time.Year.now().getValue(), count);
     }
 

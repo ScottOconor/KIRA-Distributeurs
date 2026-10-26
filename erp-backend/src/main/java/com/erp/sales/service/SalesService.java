@@ -1,5 +1,6 @@
 package com.erp.sales.service;
 
+import com.erp.common.service.DocumentNumberLock;
 import com.erp.accounting.dto.PartnerDTO;
 import com.erp.accounting.entity.*;
 import com.erp.accounting.repository.*;
@@ -65,6 +66,8 @@ public class SalesService {
 
     private final com.erp.stock.service.ProductValuationService productValuationService;
     private final com.erp.auth.repository.UserRepository userRepository;
+
+    private final DocumentNumberLock documentNumberLock;
     private final SalesOrderRepository orderRepo;
     private final SalesInvoiceRepository invoiceRepo;
     private final InvoicePaymentRepository paymentRepo;
@@ -1295,6 +1298,7 @@ public class SalesService {
                 .map(StockPickingType::getId).findFirst()
                 .orElse(outTypes.get(0).getId());
 
+        documentNumberLock.lock("stock.picking." + companyId + ".ANN/VTE");
         Integer seq = stockPickingRepo.findMaxSeq(companyId, "ANN/VTE");
         String pickingName = "ANN/VTE/" + String.format("%05d", (seq == null ? 0 : seq) + 1);
 
@@ -1409,6 +1413,7 @@ public class SalesService {
                 .map(StockPickingType::getId).findFirst()
                 .orElse(inTypes.get(0).getId());
 
+        documentNumberLock.lock("stock.picking." + companyId + ".ANN/VTE");
         Integer seq = stockPickingRepo.findMaxSeq(companyId, "ANN/VTE");
         String pickingName = "ANN/VTE/" + String.format("%05d", (seq == null ? 0 : seq) + 1);
 
@@ -2691,6 +2696,7 @@ public class SalesService {
         String labelAut = prefix + invoice.getName();
 
         int year = date.getYear();
+        documentNumberLock.lock("accounting.move." + journal.getId());
         Integer maxSeq = moveRepo.findMaxSequenceByJournalAndYear(journal.getId(), year);
         String moveName = String.format("%s-%d-%05d", journal.getCode().toUpperCase(), year,
                 (maxSeq != null ? maxSeq : 0) + 1);
@@ -2912,6 +2918,7 @@ public class SalesService {
 
         // Générer la référence du picking
         String prefix = isAvoir ? "RET/VTE" : "LIV/VTE";
+        documentNumberLock.lock("stock.picking." + companyId + "." + prefix);
         Integer seq = stockPickingRepo.findMaxSeq(companyId, prefix);
         String pickingName = prefix + "/" + String.format("%05d", (seq == null ? 0 : seq) + 1);
 
@@ -3697,10 +3704,7 @@ public class SalesService {
     // ===================== SÉQUENCES =====================
 
     private String generateOrderName(Long companyId, LocalDate date) {
-        // Verrou pessimiste sur la société : sérialise ce générateur jusqu'au commit de la
-        // transaction appelante, pour que deux requêtes concurrentes ne lisent jamais le même max
-        // avant qu'aucune n'ait écrit (cf. AccountJournalRepository.findByIdForUpdate / CompanyRepository.findByIdForUpdate).
-        companyRepo.findByIdForUpdate(companyId);
+        documentNumberLock.lock("sales.order." + companyId);
         int year = date.getYear();
         Integer max = orderRepo.findMaxSequenceByCompanyAndYear(companyId, year);
         int next = (max != null ? max : 0) + 1;
@@ -3708,7 +3712,7 @@ public class SalesService {
     }
 
     private String generateInvoiceName(Long companyId, LocalDate date) {
-        companyRepo.findByIdForUpdate(companyId);
+        documentNumberLock.lock("sales.invoice." + companyId);
         int year = date.getYear();
         Integer max = invoiceRepo.findMaxSequenceByCompanyTypeAndYear(companyId, "invoice", year);
         int next = (max != null ? max : 0) + 1;
@@ -3716,7 +3720,7 @@ public class SalesService {
     }
 
     private String generateAvoirName(Long companyId, LocalDate date) {
-        companyRepo.findByIdForUpdate(companyId);
+        documentNumberLock.lock("sales.credit_note." + companyId);
         int year = date.getYear();
         Integer max = invoiceRepo.findMaxSequenceByCompanyTypeAndYear(companyId, "credit_note", year);
         int next = (max != null ? max : 0) + 1;
@@ -3724,7 +3728,7 @@ public class SalesService {
     }
 
     private String generatePaymentName(Long companyId, LocalDate date) {
-        companyRepo.findByIdForUpdate(companyId);
+        documentNumberLock.lock("sales.payment." + companyId);
         int year = date.getYear();
         Integer max = paymentRepo.findMaxSequenceByCompanyAndYear(companyId, year);
         int next = (max != null ? max : 0) + 1;

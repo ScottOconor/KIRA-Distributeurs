@@ -42,6 +42,7 @@ public class RistourneService {
 
     private final RistourneRepository ristourneRepo;
     private final RistournePaiementRepository paiementRepo;
+    private final com.erp.common.service.DocumentNumberLock documentNumberLock;
     private final com.erp.common.service.JsonArrayStreamer jsonArrayStreamer;
     private final PartnerRepository partnerRepo;
     private final ProductCategoryRepository categoryRepo;
@@ -826,8 +827,9 @@ public class RistourneService {
     }
 
     private String generateRstName(Long companyId) {
-        companyRepo.findByIdForUpdate(companyId);
-        long count = paiementRepo.findByCompanyIdOrderByCreatedAtDesc(companyId).size() + 1;
+        documentNumberLock.lock("sales.ristourne." + companyId);
+        // Plus grand numéro attribué + 1 (un comptage redonnait un numéro déjà pris après suppression).
+        long count = paiementRepo.findMaxNameSequence(companyId) + 1;
         return String.format("RST-%d-%05d", java.time.Year.now().getValue(), count);
     }
 

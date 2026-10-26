@@ -1,5 +1,6 @@
 package com.erp.stock.service;
 
+import com.erp.common.service.DocumentNumberLock;
 import com.erp.accounting.entity.*;
 import com.erp.accounting.repository.*;
 import com.erp.common.entity.Company;
@@ -46,6 +47,8 @@ import java.util.stream.Collectors;
 @Transactional
 @Slf4j
 public class StockService {
+
+    private final DocumentNumberLock documentNumberLock;
 
     private static final BigDecimal ZERO = BigDecimal.ZERO;
 
@@ -170,9 +173,7 @@ public class StockService {
             Long ptId = pts.isEmpty() ? null : pts.get(0).getId();
 
             String prefix = "STOCK-INIT";
-            // Verrou pessimiste sur la société : sérialise ce générateur de numéro de bon jusqu'au
-            // commit, pour qu'aucune transaction concurrente ne lise le même max avant écriture.
-            companyRepo.findByIdForUpdate(adj.getCompanyId());
+            documentNumberLock.lock("stock.picking." + adj.getCompanyId() + "." + prefix);
             Integer maxSeq = pickingRepo.findMaxSeq(adj.getCompanyId(), prefix);
             String pickingName = String.format("%s/%05d", prefix, (maxSeq != null ? maxSeq : 0) + 1);
 
@@ -1073,15 +1074,15 @@ public class StockService {
         StockPicking transferAvar = null;
 
         if (internalType != null) {
-            // Verrou pessimiste sur la société : sérialise les générateurs de numéro de bon ci-dessous.
-            companyRepo.findByIdForUpdate(companyId);
             // Le transfert vers le magasin principal porte un préfixe dédié (MP/IN) pour le
             // distinguer d'un transfert inter-dépôts manuel dans la fiche de stock et les listes.
             String mpInPrefix = "MP/IN";
+            documentNumberLock.lock("stock.picking." + companyId + "." + mpInPrefix);
             Integer maxMpInSeq = pickingRepo.findMaxSeq(companyId, mpInPrefix);
             String nameMain = String.format("%s/%05d", mpInPrefix, (maxMpInSeq != null ? maxMpInSeq : 0) + 1);
 
             String intPrefix = internalType.getSequencePrefix() != null ? internalType.getSequencePrefix() : "INT";
+            documentNumberLock.lock("stock.picking." + companyId + "." + intPrefix);
             Integer maxIntSeq = pickingRepo.findMaxSeq(companyId, intPrefix);
             String nameAvar = String.format("%s/%05d", intPrefix, (maxIntSeq != null ? maxIntSeq : 0) + 1);
 
@@ -1260,7 +1261,7 @@ public class StockService {
 
         // Générer le nom du picking
         String prefix = "REC/DIR";
-        companyRepo.findByIdForUpdate(companyId);
+        documentNumberLock.lock("stock.picking." + companyId + "." + prefix);
         Integer maxSeq = pickingRepo.findMaxSeq(companyId, prefix);
         String pickingName = String.format("%s/%05d", prefix, (maxSeq != null ? maxSeq : 0) + 1);
 
@@ -1993,15 +1994,15 @@ public class StockService {
         String srcCode = resolveWarehouseCode(transfer.getLocationId(), companyId);
         String dstCode = resolveWarehouseCode(transfer.getLocationDestId(), companyId);
 
-        // Verrou pessimiste sur la société : sérialise les deux générateurs de numéro ci-dessous.
-        companyRepo.findByIdForUpdate(companyId);
         if (srcCode != null && !srcCode.isBlank()) {
             String outPrefix = srcCode + "/OUT";
+            documentNumberLock.lock("stock.picking." + companyId + "." + outPrefix);
             Integer maxOutSeq = pickingRepo.findMaxSeq(companyId, outPrefix);
             transfer.setName(String.format("%s/%05d", outPrefix, (maxOutSeq != null ? maxOutSeq : 0) + 1));
         }
 
         String recPrefix = (dstCode != null && !dstCode.isBlank()) ? dstCode + "/IN" : "REC-INT";
+        documentNumberLock.lock("stock.picking." + companyId + "." + recPrefix);
         Integer maxSeq = pickingRepo.findMaxSeq(companyId, recPrefix);
         int nextSeq = (maxSeq != null ? maxSeq : 0) + 1;
         String recName = String.format("%s/%05d", recPrefix, nextSeq);
@@ -2479,7 +2480,7 @@ public class StockService {
             Long ptId = pts.isEmpty() ? null : pts.get(0).getId();
 
             String prefix = "ADJ";
-            companyRepo.findByIdForUpdate(companyId);
+            documentNumberLock.lock("stock.picking." + companyId + "." + prefix);
             Integer maxSeq = pickingRepo.findMaxSeq(companyId, prefix);
             String pickingName = String.format("%s/%05d", prefix, (maxSeq != null ? maxSeq : 0) + 1);
 
@@ -2556,8 +2557,13 @@ public class StockService {
             boolean isIncrease = diff.compareTo(ZERO) > 0;
             String description = (notes != null && !notes.isBlank() ? notes : "Ajustement inventaire: " + product.getName());
 
+            // Numéro séquentiel par société et par année (l'ancien suffixe System.currentTimeMillis()
+            // % 100000 pouvait donner deux fois le même numéro).
+            documentNumberLock.lock("accounting.move.AJ." + companyId);
+            String ajPrefix = "AJ/" + date.getYear() + "/";
+            Integer maxAj = accountMoveRepo.findMaxSequenceByCompanyAndPrefix(companyId, ajPrefix);
             AccountMove move = AccountMove.builder()
-                    .name("AJ/" + date.getYear() + "/" + System.currentTimeMillis() % 100000)
+                    .name(ajPrefix + ((maxAj != null ? maxAj : 0) + 1))
                     .date(date)
                     .ref(description)
                     .state("posted")
@@ -2698,6 +2704,7 @@ public class StockService {
         createStockLossPicking(resolved, srcLocId, companyId, description, date);
         Long accountMoveId = createStockLossAccountingEntry(totalValue, companyId, description, date);
 
+        documentNumberLock.lock("stock.loss." + companyId);
         long seq = stockLossRepo.countByCompanyId(companyId) + 1;
         StockLoss loss = StockLoss.builder()
                 .name(String.format("CASSE/%05d", seq))
@@ -2746,7 +2753,7 @@ public class StockService {
             List<StockPickingType> pts = pickingTypeRepo.findByCompanyIdAndCodeOrderByNameAsc(companyId, "outgoing");
             Long ptId = pts.isEmpty() ? null : pts.get(0).getId();
 
-            companyRepo.findByIdForUpdate(companyId);
+            documentNumberLock.lock("stock.picking." + companyId + ".CASSE");
             Integer maxSeq = pickingRepo.findMaxSeq(companyId, "CASSE");
             String pickingName = String.format("CASSE/%05d", (maxSeq != null ? maxSeq : 0) + 1);
 
@@ -3304,6 +3311,7 @@ public class StockService {
             if (lines.isEmpty() || totalValue.compareTo(ZERO) == 0) return null;
 
             int year = icDate.getYear();
+            documentNumberLock.lock("accounting.move." + journalId);
             Integer maxSeq = accountMoveRepo.findMaxSequenceByJournalAndYear(journalId, year);
             int nextSeq = (maxSeq != null ? maxSeq : 0) + 1;
             String moveName = String.format("IC-%d-%05d", year, nextSeq);
@@ -3496,8 +3504,8 @@ public class StockService {
     }
 
     private String generatePickingName(StockPickingType pt, Long companyId) {
-        companyRepo.findByIdForUpdate(companyId);
         String prefix = pt.getSequencePrefix() != null ? pt.getSequencePrefix() : pt.getCode().toUpperCase();
+        documentNumberLock.lock("stock.picking." + companyId + "." + prefix);
         Integer maxSeq = pickingRepo.findMaxSeq(companyId, prefix);
         int next = (maxSeq != null ? maxSeq : 0) + 1;
         return String.format("%s/%05d", prefix, next);
@@ -3609,6 +3617,7 @@ public class StockService {
         // Numéro de pièce
         int year = effectiveDate.getYear();
         String prefix = "STK";
+        documentNumberLock.lock("accounting.move." + journalId);
         Integer maxSeq = accountMoveRepo.findMaxSequenceByJournalAndYear(journalId, year);
         int nextSeq = (maxSeq != null ? maxSeq : 0) + 1;
         String moveName = String.format("%s-%d-%05d", prefix, year, nextSeq);

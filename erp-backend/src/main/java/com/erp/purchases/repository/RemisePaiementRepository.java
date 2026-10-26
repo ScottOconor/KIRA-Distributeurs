@@ -65,4 +65,9 @@ public interface RemisePaiementRepository extends JpaRepository<RemisePaiement, 
     @Query("SELECT COALESCE(SUM(r.totalAmount), 0) FROM RemisePaiement r " +
            "WHERE r.companyId = :cid AND r.state = 'done' AND r.datePaiement = :date")
     BigDecimal sumByDatePaiement(@Param("cid") Long companyId, @Param("date") LocalDate date);
+
+    /** Plus grand numéro attribué (RMS-2026-00042 -> 42), toutes années confondues, 0 si aucun. */
+    @org.springframework.data.jpa.repository.Query(value = "SELECT COALESCE(MAX(CAST(SUBSTRING(name FROM '^RMS-[0-9]{4}-([0-9]+)$') AS BIGINT)), 0) " +
+                   "FROM remise_paiements WHERE company_id = :cid", nativeQuery = true)
+    long findMaxNameSequence(@org.springframework.data.repository.query.Param("cid") Long companyId);
 }
