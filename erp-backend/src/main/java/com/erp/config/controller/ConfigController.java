@@ -1,5 +1,6 @@
 package com.erp.config.controller;
 
+import com.erp.common.service.ImageFiles;
 import com.erp.config.dto.*;
 import com.erp.config.service.ConfigService;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,8 @@ public class ConfigController {
     @PostMapping("/companies/{id}/logo")
     public ResponseEntity<Void> uploadLogo(@PathVariable Long id,
                                            @RequestParam("file") MultipartFile file) throws IOException {
-        configService.uploadLogo(id, file.getBytes(), file.getContentType());
+        byte[] data = file.getBytes();
+        configService.uploadLogo(id, data, ImageFiles.detectType(data));
         return ResponseEntity.ok().build();
     }
 
@@ -54,7 +56,8 @@ public class ConfigController {
     @PostMapping("/companies/{id}/app-logo")
     public ResponseEntity<Void> uploadAppLogo(@PathVariable Long id,
                                               @RequestParam("file") MultipartFile file) throws IOException {
-        configService.uploadAppLogo(id, file.getBytes(), file.getContentType());
+        byte[] data = file.getBytes();
+        configService.uploadAppLogo(id, data, ImageFiles.detectType(data));
         return ResponseEntity.ok().build();
     }
 

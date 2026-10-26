@@ -7,6 +7,7 @@ import com.erp.auth.repository.UserRepository;
 import com.erp.common.entity.Company;
 import com.erp.common.repository.CompanyRepository;
 import com.erp.common.service.TenantGuard;
+import com.erp.common.service.ImageFiles;
 import com.erp.config.dto.*;
 import com.erp.config.entity.Role;
 import com.erp.config.entity.RolePermission;
@@ -14,10 +15,11 @@ import com.erp.config.repository.RolePermissionRepository;
 import com.erp.config.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -194,6 +196,7 @@ public class ConfigService {
         Role role = req.getRoleId() != null
                 ? roleRepository.findById(req.getRoleId()).orElseThrow(() -> new IllegalArgumentException("Rôle introuvable"))
                 : null;
+        assertCanGrant(role);
 
         Long currentCompanyId = SecurityUtils.currentCompanyId();
         Company company = currentCompanyId != null ? companyRepository.findById(currentCompanyId).orElse(null) : null;
@@ -212,13 +215,17 @@ public class ConfigService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Utilisateur introuvable"));
         tenantGuard.check(user.getCompany() != null ? user.getCompany().getId() : null);
+        assertCanGrant(user.getRole());
         if (req.getFullName() != null) user.setFullName(req.getFullName());
         if (req.getEmail()    != null) user.setEmail(req.getEmail());
         if (req.getPassword() != null && !req.getPassword().isBlank())
             user.setPassword(passwordEncoder.encode(req.getPassword()));
-        if (req.getRoleId() != null)
-            user.setRole(roleRepository.findById(req.getRoleId())
-                    .orElseThrow(() -> new IllegalArgumentException("Rôle introuvable")));
+        if (req.getRoleId() != null) {
+            Role role = roleRepository.findById(req.getRoleId())
+                    .orElseThrow(() -> new IllegalArgumentException("Rôle introuvable"));
+            assertCanGrant(role);
+            user.setRole(role);
+        }
         user.setCaisseId(requireCaisse(req.getCaisseId()));
         return toUserDTO(userRepository.save(user));
     }
@@ -234,12 +241,31 @@ public class ConfigService {
     public void toggleUserActive(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Utilisateur introuvable"));
         tenantGuard.check(user.getCompany() != null ? user.getCompany().getId() : null);
+        assertCanGrant(user.getRole());
         user.setActive(!user.isActive());
         userRepository.save(user);
         auditService.log("USER", id, user.getUsername(),
                 user.isActive() ? "ACTIVATED" : "DEACTIVATED",
                 user.isActive() ? "Utilisateur activé" : "Utilisateur désactivé",
                 user.getCompany() != null ? user.getCompany().getId() : null);
+    }
+
+    /**
+     * Seul un SUPER_ADMIN attribue (ou modifie un compte qui a) le rôle SUPER_ADMIN, et seul un
+     * ADMIN/SUPER_ADMIN le fait pour le rôle ADMIN. Sans ce contrôle, le simple droit « modifier
+     * les utilisateurs » suffisait pour se donner — ou donner à un autre compte — tous les droits.
+     */
+    private void assertCanGrant(Role role) {
+        String code = role != null ? role.getCode() : null;
+        if (!"SUPER_ADMIN".equals(code) && !"ADMIN".equals(code)) return;
+        Set<String> callerRoles = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+        boolean allowed = callerRoles.contains("ROLE_SUPER_ADMIN")
+                || ("ADMIN".equals(code) && callerRoles.contains("ROLE_ADMIN"));
+        if (!allowed) {
+            throw new AccessDeniedException("Seul un " + ("ADMIN".equals(code) ? "administrateur" : "super administrateur")
+                    + " peut attribuer ou modifier le rôle " + role.getLabel());
+        }
     }
 
     // ── Logo ──────────────────────────────────────────────────────────────
@@ -276,9 +302,10 @@ public class ConfigService {
         Company c = companyRepository.findById(id).orElse(null);
         if (c == null || c.getLogoData() == null || c.getLogoData().length == 0)
             return ResponseEntity.notFound().build();
-        String ct = c.getLogoContentType() != null ? c.getLogoContentType() : MediaType.IMAGE_PNG_VALUE;
+        String ct = ImageFiles.servedType(c.getLogoContentType());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, ct)
+                .header("Content-Security-Policy", ImageFiles.CONTENT_SECURITY_POLICY)
                 .header(HttpHeaders.CACHE_CONTROL, "max-age=86400")
                 .body(c.getLogoData());
     }
@@ -288,9 +315,10 @@ public class ConfigService {
         Company c = companyRepository.findById(id).orElse(null);
         if (c == null || c.getAppLogoData() == null || c.getAppLogoData().length == 0)
             return ResponseEntity.notFound().build();
-        String ct = c.getAppLogoContentType() != null ? c.getAppLogoContentType() : MediaType.IMAGE_PNG_VALUE;
+        String ct = ImageFiles.servedType(c.getAppLogoContentType());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, ct)
+                .header("Content-Security-Policy", ImageFiles.CONTENT_SECURITY_POLICY)
                 .header(HttpHeaders.CACHE_CONTROL, "no-cache")
                 .body(c.getAppLogoData());
     }
