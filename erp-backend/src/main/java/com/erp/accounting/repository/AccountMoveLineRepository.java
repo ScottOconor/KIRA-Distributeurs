@@ -72,16 +72,10 @@ public interface AccountMoveLineRepository extends JpaRepository<AccountMoveLine
                                          @Param("from") LocalDate from,
                                          @Param("to") LocalDate to);
 
-    /** Seule `account` est déréférencée par les appelants (balances via buildBalanceByCode). */
-    @Query("SELECT l FROM AccountMoveLine l " +
-           "LEFT JOIN FETCH l.account " +
-           "WHERE l.company.id = :companyId " +
-           "AND l.date < :date " +
-           "AND l.move.state = 'posted' " +
-           "ORDER BY l.account.code, l.date")
-    List<AccountMoveLine> findPostedBeforeDate(
-            @Param("companyId") Long companyId,
-            @Param("date") LocalDate date);
+    // ── Totaux par compte calculés en base (balances, bilan, compte de résultat, grand livre) ──
+    // Chaque ligne : [id du compte, code du compte, somme des débits, somme des crédits], par code
+    // croissant. Mêmes lignes que les requêtes find* correspondantes (écritures validées, ligne
+    // rattachée à un compte), sans charger une seule ligne en mémoire.
 
     /**
      * Toutes les lignes postées jusqu'à une date INCLUSIVE (date <= :date).
@@ -151,6 +145,61 @@ public interface AccountMoveLineRepository extends JpaRepository<AccountMoveLine
             @Param("date") LocalDate date,
             @Param("journalIds") List<Long> journalIds);
 
+    @Query("SELECT a.id, a.code, COALESCE(SUM(l.debit), 0), COALESCE(SUM(l.credit), 0) " +
+           "FROM AccountMoveLine l JOIN l.account a JOIN l.move m " +
+           "WHERE l.company.id = :companyId AND l.date BETWEEN :from AND :to AND m.state = 'posted' " +
+           "GROUP BY a.id, a.code ORDER BY a.code, a.id")
+    List<Object[]> sumPostedByAccountInPeriod(@Param("companyId") Long companyId,
+                                              @Param("from") LocalDate from,
+                                              @Param("to") LocalDate to);
+
+    @Query("SELECT a.id, a.code, COALESCE(SUM(l.debit), 0), COALESCE(SUM(l.credit), 0) " +
+           "FROM AccountMoveLine l JOIN l.account a JOIN l.move m " +
+           "WHERE l.company.id = :companyId AND l.date BETWEEN :from AND :to AND m.state = 'posted' " +
+           "AND l.journal.id IN :journalIds " +
+           "GROUP BY a.id, a.code ORDER BY a.code, a.id")
+    List<Object[]> sumPostedByAccountInPeriodAndJournals(@Param("companyId") Long companyId,
+                                                         @Param("from") LocalDate from,
+                                                         @Param("to") LocalDate to,
+                                                         @Param("journalIds") List<Long> journalIds);
+
+    @Query("SELECT a.id, a.code, COALESCE(SUM(l.debit), 0), COALESCE(SUM(l.credit), 0) " +
+           "FROM AccountMoveLine l JOIN l.account a JOIN l.move m " +
+           "WHERE l.company.id = :companyId AND l.date < :date AND m.state = 'posted' " +
+           "GROUP BY a.id, a.code ORDER BY a.code, a.id")
+    List<Object[]> sumPostedByAccountBefore(@Param("companyId") Long companyId,
+                                            @Param("date") LocalDate date);
+
+    @Query("SELECT a.id, a.code, COALESCE(SUM(l.debit), 0), COALESCE(SUM(l.credit), 0) " +
+           "FROM AccountMoveLine l JOIN l.account a JOIN l.move m " +
+           "WHERE l.company.id = :companyId AND l.date < :date AND m.state = 'posted' " +
+           "AND l.journal.id IN :journalIds " +
+           "GROUP BY a.id, a.code ORDER BY a.code, a.id")
+    List<Object[]> sumPostedByAccountBeforeAndJournals(@Param("companyId") Long companyId,
+                                                       @Param("date") LocalDate date,
+                                                       @Param("journalIds") List<Long> journalIds);
+
+    /** Totaux par compte jusqu'à une date INCLUSIVE, écritures non validées comprises si demandé (bilan OHADA). */
+    @Query("SELECT a.id, a.code, COALESCE(SUM(l.debit), 0), COALESCE(SUM(l.credit), 0) " +
+           "FROM AccountMoveLine l JOIN l.account a JOIN l.move m " +
+           "WHERE l.company.id = :companyId AND l.date <= :date " +
+           "AND (:includeUnposted = true OR m.state = 'posted') " +
+           "GROUP BY a.id, a.code ORDER BY a.code, a.id")
+    List<Object[]> sumByAccountUpToDateOptionalUnposted(@Param("companyId") Long companyId,
+                                                        @Param("date") LocalDate date,
+                                                        @Param("includeUnposted") boolean includeUnposted);
+
+    /** Totaux par compte sur une période, écritures non validées comprises si demandé (résultat de l'exercice au bilan). */
+    @Query("SELECT a.id, a.code, COALESCE(SUM(l.debit), 0), COALESCE(SUM(l.credit), 0) " +
+           "FROM AccountMoveLine l JOIN l.account a JOIN l.move m " +
+           "WHERE l.company.id = :companyId AND l.date BETWEEN :from AND :to " +
+           "AND (:includeUnposted = true OR m.state = 'posted') " +
+           "GROUP BY a.id, a.code ORDER BY a.code, a.id")
+    List<Object[]> sumByAccountInPeriodOptionalUnposted(@Param("companyId") Long companyId,
+                                                        @Param("from") LocalDate from,
+                                                        @Param("to") LocalDate to,
+                                                        @Param("includeUnposted") boolean includeUnposted);
+
     @Query("SELECT COALESCE(SUM(l.debit), 0) FROM AccountMoveLine l " +
            "WHERE l.account.id = :accountId AND l.move.state = 'posted'")
     BigDecimal sumDebitByAccount(@Param("accountId") Long accountId);
@@ -173,7 +222,7 @@ public interface AccountMoveLineRepository extends JpaRepository<AccountMoveLine
            "AND l.date BETWEEN :from AND :to " +
            "AND l.move.state = 'posted' " +
            "AND l.account.internalType IN ('receivable', 'payable') " +
-           "ORDER BY l.partner.name, l.account.code, l.date")
+           "ORDER BY l.partner.name, l.account.code, l.date, l.id")
     List<AccountMoveLine> findTiersLinesInPeriod(
             @Param("companyId") Long companyId,
             @Param("from") LocalDate from,
@@ -184,17 +233,20 @@ public interface AccountMoveLineRepository extends JpaRepository<AccountMoveLine
            "AND l.date < :date " +
            "AND l.move.state = 'posted' " +
            "AND l.account.internalType IN ('receivable', 'payable') " +
-           "ORDER BY l.partner.name, l.account.code, l.date")
+           "ORDER BY l.partner.name, l.account.code, l.date, l.id")
     List<AccountMoveLine> findTiersLinesBeforeDate(
             @Param("companyId") Long companyId,
             @Param("date") LocalDate date);
 
+    /** Déréférence account, move, journal et partner (Grand Livre). Tri complété par l.id : sans lui,
+     *  les lignes d'une même pièce changeaient de place d'une impression à l'autre, et le solde
+     *  progressif affiché sur chaque ligne avec (même chose pour les requêtes des tiers ci-dessus). */
     @Query("SELECT l FROM AccountMoveLine l " +
            "WHERE l.company.id = :companyId " +
            "AND (:accountIds IS NULL OR l.account.id IN :accountIds) " +
            "AND l.date BETWEEN :from AND :to " +
            "AND l.move.state = 'posted' " +
-           "ORDER BY l.account.code, l.date, l.move.name")
+           "ORDER BY l.account.code, l.date, l.move.name, l.id")
     List<AccountMoveLine> findForGrandLivre(
             @Param("companyId") Long companyId,
             @Param("from") LocalDate from,
