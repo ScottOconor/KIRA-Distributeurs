@@ -31,11 +31,22 @@ public interface OutboxEventRepository extends JpaRepository<OutboxEvent, Long> 
            nativeQuery = true)
     void dropStaleEventTypeCheckConstraint();
 
+    /** Contrainte CHECK posée par Hibernate sur la colonne status : elle ne connaît pas les états
+     *  ajoutés depuis (CONFIRMED) et refuserait leur enregistrement. Idempotent (IF EXISTS). */
+    @Modifying
+    @Query(value = "ALTER TABLE sync_outbox_events DROP CONSTRAINT IF EXISTS sync_outbox_events_status_check",
+           nativeQuery = true)
+    void dropStaleStatusCheckConstraint();
+
     // Tri par id en second critère : deux événements insérés dans la MÊME transaction métier
     // (ex. ACCOUNT_MOVE_FROM_SALE puis SALE_INVOICE_POSTED) reçoivent des createdAt indépendants,
     // sans garantie d'ordre stable en cas d'égalité — l'id d'insertion (auto-incrémenté) donne
     // l'ordre réel, déterministe, quelle que soit la résolution de l'horloge JVM.
     List<OutboxEvent> findByStatusOrderByCreatedAtAscIdAsc(OutboxStatus status, Pageable pageable);
+
+    /** Événements envoyés dont la confirmation par le Hub est à demander (les plus anciens d'abord). */
+    List<OutboxEvent> findByStatusAndLastAttemptAtBeforeOrderByIdAsc(OutboxStatus status, LocalDateTime before,
+                                                                    Pageable pageable);
 
     long countByStatus(OutboxStatus status);
 
