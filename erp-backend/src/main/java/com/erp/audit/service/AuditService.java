@@ -61,17 +61,28 @@ public class AuditService {
     public void log(String entityType, Long entityId, String entityRef,
                     String action, String actionLabel,
                     String details, Long companyId) {
+        // Les colonnes sont bornées (voir AuditLog) : une valeur trop longue faisait échouer
+        // l'écriture au commit et l'entrée était perdue (constaté : clôture d'exercice, libellé de
+        // ~100 caractères pour 80). Un libellé trop long est tronqué et conservé en entier dans details.
+        String label = actionLabel;
+        String fullDetails = details;
+        if (label != null && label.length() > LABEL_MAX) {
+            fullDetails = details == null ? label : label + "\n" + details;
+            label = fit(label, LABEL_MAX);
+        }
+        final String finalLabel = label;
+        final String finalDetails = fullDetails;
         try {
             requiresNew.executeWithoutResult(status -> {
                 AuditLog entry = AuditLog.builder()
-                        .entityType(entityType)
+                        .entityType(fit(entityType, 60))
                         .entityId(entityId)
-                        .entityRef(entityRef)
-                        .action(action)
-                        .actionLabel(actionLabel)
-                        .performedBy(getCurrentUsername())
-                        .performedByFullname(getCurrentFullname())
-                        .details(details)
+                        .entityRef(fit(entityRef, 120))
+                        .action(fit(action, 40))
+                        .actionLabel(finalLabel)
+                        .performedBy(fit(getCurrentUsername(), 100))
+                        .performedByFullname(fit(getCurrentFullname(), 150))
+                        .details(finalDetails)
                         .companyId(companyId)
                         .build();
                 auditLogRepo.save(entry);
@@ -80,6 +91,14 @@ public class AuditService {
             log.error("Erreur AuditLog entityType={} entityId={} action={}: {}",
                     entityType, entityId, action, e.getMessage());
         }
+    }
+
+    private static final int LABEL_MAX = 80;
+
+    /** Tronque à la longueur de la colonne (dernier caractère remplacé par « … »). */
+    static String fit(String value, int max) {
+        if (value == null || value.length() <= max) return value;
+        return value.substring(0, max - 1) + "…";
     }
 
     /** Raccourci pour les actions sans détails supplémentaires. */
