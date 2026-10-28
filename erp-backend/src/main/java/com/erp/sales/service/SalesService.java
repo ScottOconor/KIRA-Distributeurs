@@ -2289,32 +2289,40 @@ public class SalesService {
             if (whName != null) warehouseName = whName;
         }
 
+        // Quantités cumulées par article (STK-01) : un article peut figurer sur plusieurs lignes du
+        // bon ; vérifier chaque ligne isolément validait 2 × 95 pour 95 en stock (survente).
+        Map<Long, BigDecimal> qtyByProduct = new java.util.LinkedHashMap<>();
         for (SalesOrderLine line : order.getLines()) {
-            if (line.getProductId() == null) continue;
-            var productOpt = stockProductRepo.findById(line.getProductId());
+            if (line.getProductId() == null || line.getQuantity() == null) continue;
+            qtyByProduct.merge(line.getProductId(), line.getQuantity(), BigDecimal::add);
+        }
+
+        for (Map.Entry<Long, BigDecimal> e : qtyByProduct.entrySet()) {
+            var productOpt = stockProductRepo.findById(e.getKey());
             if (productOpt.isEmpty()) continue;
             var product = productOpt.get();
             if ("service".equals(product.getType())) continue;
+            BigDecimal demandeQty = e.getValue();
 
             BigDecimal totalQty;
             BigDecimal reserved;
             if (warehouseLocId != null) {
                 // Vérifier uniquement dans l'entrepôt sélectionné
                 StockQuant q = stockQuantRepo
-                        .findFirstByProductIdAndLocationIdAndCompanyId(line.getProductId(), warehouseLocId, companyId)
+                        .findFirstByProductIdAndLocationIdAndCompanyId(e.getKey(), warehouseLocId, companyId)
                         .orElse(null);
                 totalQty = q != null ? q.getQuantity() : ZERO;
                 reserved = q != null ? q.getReservedQuantity() : ZERO;
             } else {
                 // Pas d'entrepôt spécifié : vérification globale
-                totalQty = stockQuantRepo.findByProductIdAndCompanyId(line.getProductId(), companyId)
+                totalQty = stockQuantRepo.findByProductIdAndCompanyId(e.getKey(), companyId)
                         .stream().map(StockQuant::getQuantity).reduce(ZERO, BigDecimal::add);
-                reserved = stockQuantRepo.findByProductIdAndCompanyId(line.getProductId(), companyId)
+                reserved = stockQuantRepo.findByProductIdAndCompanyId(e.getKey(), companyId)
                         .stream().map(StockQuant::getReservedQuantity).reduce(ZERO, BigDecimal::add);
             }
             BigDecimal available = totalQty.subtract(reserved).max(ZERO);
-            if (line.getQuantity() != null && line.getQuantity().compareTo(available) > 0) {
-                String demande = line.getQuantity().setScale(0, RoundingMode.HALF_UP).toPlainString();
+            if (demandeQty.compareTo(available) > 0) {
+                String demande = demandeQty.setScale(0, RoundingMode.HALF_UP).toPlainString();
                 String msg;
                 if (totalQty.compareTo(ZERO) == 0) {
                     msg = "\"" + product.getName() + "\" n'est pas en stock dans " + warehouseName +
@@ -2387,9 +2395,16 @@ public class SalesService {
             if (whName != null) warehouseName = whName;
         }
 
+        // Quantités cumulées par article (STK-01) : un même article (ex. casier/emballage) peut figurer
+        // sur plusieurs lignes ; vérifier chaque ligne isolément laissait passer un total supérieur au
+        // stock, que la sortie plafonnait ensuite silencieusement à 0 (fiche de stock faussée).
+        Map<Long, BigDecimal> qtyByProduct = new java.util.LinkedHashMap<>();
+        Map<Long, Product> productById = new java.util.HashMap<>();
         for (SalesInvoiceLine line : invoice.getLines()) {
             BigDecimal qty = line.getQuantity() != null ? line.getQuantity() : ZERO;
-            if (qty.compareTo(ZERO) <= 0) continue; // retour client / déconsigne : entrée en stock, pas de sortie
+            if (qty.compareTo(ZERO) == 0) continue;
+            // Les lignes négatives (retour client / déconsigne) restent dans le cumul : elles
+            // compensent la sortie du même article sur la même facture (échange casier).
 
             Product product = null;
             if (line.getProductId() != null) {
@@ -2402,6 +2417,14 @@ public class SalesService {
             boolean isConsigneProd = line.isConsigne() || ConsigneCodes.isConsigne(line.getProductCode(), companyId);
             if ("service".equals(product.getType()) && !isConsigneProd) continue;
 
+            qtyByProduct.merge(product.getId(), qty, BigDecimal::add);
+            productById.putIfAbsent(product.getId(), product);
+        }
+
+        for (Map.Entry<Long, BigDecimal> entry : qtyByProduct.entrySet()) {
+            Product product = productById.get(entry.getKey());
+            BigDecimal qty = entry.getValue();
+            if (qty.compareTo(ZERO) <= 0) continue; // sortie nette nulle ou entrée nette
             BigDecimal available;
             if (warehouseLocId != null) {
                 available = stockQuantRepo.findFirstByProductIdAndLocationIdAndCompanyId(product.getId(), warehouseLocId, companyId)
