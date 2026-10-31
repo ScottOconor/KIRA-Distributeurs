@@ -451,6 +451,9 @@ public class StockService {
                     : "L'article « " + p.getName() + " » existe déjà dans cette catégorie.");
         }
         p.setDefaultCode(code);
+        String barcode = dto.getBarcode() != null && !dto.getBarcode().isBlank() ? dto.getBarcode().trim() : null;
+        if (barcode != null) requireUniqueBarcode(barcode, dto.getCompanyId(), p.getId());
+        p.setBarcode(barcode);
         p.setName(dto.getName().trim());
         p.setCategoryId(dto.getCategoryId());
         p.setUnitOfMeasureId(dto.getUnitOfMeasureId());
@@ -459,6 +462,8 @@ public class StockService {
         BigDecimal oldSalePrice = p.getSalePrice();
         p.setStandardPrice(dto.getStandardPrice() != null ? dto.getStandardPrice() : ZERO);
         p.setSalePrice(dto.getSalePrice() != null ? dto.getSalePrice() : ZERO);
+        p.setMinPrice(dto.getMinPrice());
+        requireMinPriceWithinSalePrice(p);
         p.setType(type);
         p.setStockAccountCode(stockCode);
         p.setDescription(dto.getDescription());
@@ -504,6 +509,11 @@ public class StockService {
             }
             p.setDefaultCode(code.isEmpty() ? null : code);
         }
+        if (dto.getBarcode() != null) {
+            String barcode = dto.getBarcode().isBlank() ? null : dto.getBarcode().trim();
+            if (barcode != null) requireUniqueBarcode(barcode, p.getCompanyId(), p.getId());
+            p.setBarcode(barcode);
+        }
         p.setName(dto.getName());
         if (dto.getCategoryId() != null) p.setCategoryId(dto.getCategoryId());
         if (dto.getUnitOfMeasureId() != null) {
@@ -520,6 +530,8 @@ public class StockService {
             productValuationService.logGlobalPriceChange(p, ProductPriceHistory.TYPE_SALE, p.getSalePrice(), dto.getSalePrice());
             p.setSalePrice(dto.getSalePrice());
         }
+        if (dto.getMinPrice() != null) p.setMinPrice(dto.getMinPrice());
+        requireMinPriceWithinSalePrice(p);
         if (dto.getType() != null) p.setType(dto.getType());
         if (dto.getStockAccountCode() != null) p.setStockAccountCode(dto.getStockAccountCode());
         if (dto.getDescription() != null) p.setDescription(dto.getDescription());
@@ -529,6 +541,14 @@ public class StockService {
         BigDecimal qty = quantRepo.findByProductIdAndCompanyId(p.getId(), p.getCompanyId())
                 .stream().map(StockQuant::getQuantity).reduce(ZERO, BigDecimal::add);
         return toProductDTO(productRepo.save(p), qty);
+    }
+
+    private void requireUniqueBarcode(String barcode, Long companyId, Long excludeProductId) {
+        productRepo.findFirstByBarcodeAndCompanyId(barcode, companyId).ifPresent(existing -> {
+            if (!existing.getId().equals(excludeProductId)) {
+                throw new IllegalArgumentException("Ce code-barres est déjà utilisé par un autre article : " + existing.getName());
+            }
+        });
     }
 
     public void deleteProduct(Long id) {
@@ -542,6 +562,18 @@ public class StockService {
     }
 
     // ---- Photo article ----
+
+    private void requireMinPriceWithinSalePrice(Product p) {
+        BigDecimal min = p.getMinPrice();
+        BigDecimal sale = p.getSalePrice();
+        if (min != null && min.signum() < 0) {
+            throw new IllegalArgumentException("Le prix minimum ne peut pas être négatif.");
+        }
+        if (min != null && sale != null && sale.signum() > 0 && min.compareTo(sale) > 0) {
+            throw new IllegalArgumentException("Le prix minimum de « " + p.getName()
+                    + " » ne peut pas dépasser son prix de vente.");
+        }
+    }
 
     public record ProductPhoto(byte[] data, String contentType) {}
 
@@ -616,11 +648,11 @@ public class StockService {
         BigDecimal reserved  = qtyReserved != null ? qtyReserved : ZERO;
         BigDecimal available = qtyOnHand.subtract(reserved).max(ZERO);
         return ProductDTO.builder()
-                .id(p.getId()).defaultCode(p.getDefaultCode()).name(p.getName())
+                .id(p.getId()).defaultCode(p.getDefaultCode()).barcode(p.getBarcode()).name(p.getName())
                 .categoryId(p.getCategoryId()).categoryName(catName)
                 .uomName(p.getUomName()).unitOfMeasureId(p.getUnitOfMeasureId())
                 .standardPrice(p.getStandardPrice())
-                .salePrice(p.getSalePrice()).type(p.getType())
+                .salePrice(p.getSalePrice()).minPrice(p.getMinPrice()).type(p.getType())
                 .stockAccountCode(p.getStockAccountCode())
                 .description(p.getDescription()).active(p.isActive())
                 .exemptTva(Boolean.TRUE.equals(p.getExemptTva()))
