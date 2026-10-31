@@ -7,7 +7,6 @@ import com.erp.accounting.repository.*;
 import com.erp.common.entity.Company;
 import com.erp.common.repository.CompanyRepository;
 import com.erp.audit.service.AuditService;
-import com.erp.common.service.TenantGuard;
 import com.erp.common.service.UsageGuard;
 import com.erp.sync.service.SyncEventPublisher;
 import com.erp.sync.entity.SyncEventType;
@@ -39,6 +38,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class AccountingService {
 
+    private final com.erp.common.service.SingleCompany singleCompany;
     private final DocumentNumberLock documentNumberLock;
 
     private final AccountAccountRepository accountRepo;
@@ -54,7 +54,6 @@ public class AccountingService {
     private final SyncEventPublisher syncEventPublisher;
     private final AuditService auditService;
     private final FiscalLockGuard fiscalLockGuard;
-    private final TenantGuard tenantGuard;
     private final UsageGuard usageGuard;
     private final jakarta.persistence.EntityManager em;
     private final com.fasterxml.jackson.databind.ObjectMapper objectMapper;
@@ -73,7 +72,7 @@ public class AccountingService {
     public AccountAccountDTO createAccount(AccountAccountDTO dto) {
         // dto.getCompanyId() vient du client — ne jamais lui faire confiance pour choisir sous
         // quelle société le compte est créé.
-        Company company = companyRepo.findById(com.erp.auth.SecurityUtils.currentCompanyId())
+        Company company = companyRepo.findById(singleCompany.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Company not found"));
 
         AccountAccount account = AccountAccount.builder()
@@ -92,7 +91,6 @@ public class AccountingService {
     public AccountAccountDTO updateAccount(Long id, AccountAccountDTO dto) {
         AccountAccount account = accountRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found: " + id));
-        tenantGuard.check(account.getCompany() != null ? account.getCompany().getId() : null);
 
         boolean codeChanged = dto.getCode() != null && !dto.getCode().equals(account.getCode());
         if (codeChanged) {
@@ -121,7 +119,6 @@ public class AccountingService {
     public void deleteAccount(Long id) {
         AccountAccount account = accountRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found: " + id));
-        tenantGuard.check(account.getCompany() != null ? account.getCompany().getId() : null);
         usageGuard.assertAccountUnused(id);
         account.setDeprecated(true);
         accountRepo.save(account);
@@ -132,7 +129,6 @@ public class AccountingService {
     public AccountAccountDTO toggleAccountDeprecated(Long id) {
         AccountAccount account = accountRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found: " + id));
-        tenantGuard.check(account.getCompany() != null ? account.getCompany().getId() : null);
         account.setDeprecated(!account.isDeprecated());
         AccountAccountDTO updated = toAccountDTO(accountRepo.save(account));
         auditService.log("ACCOUNT_ACCOUNT", id, account.getName(),
@@ -154,7 +150,7 @@ public class AccountingService {
 
     public AccountJournalDTO createJournal(AccountJournalDTO dto) {
         // dto.getCompanyId() vient du client — même correctif que createAccount.
-        Company company = companyRepo.findById(com.erp.auth.SecurityUtils.currentCompanyId())
+        Company company = companyRepo.findById(singleCompany.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Company not found"));
 
         AccountAccount debitAccount = dto.getDefaultDebitAccountId() != null
@@ -182,7 +178,6 @@ public class AccountingService {
     public AccountJournalDTO updateJournal(Long id, AccountJournalDTO dto) {
         AccountJournal journal = journalRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Journal not found: " + id));
-        tenantGuard.check(journal.getCompany() != null ? journal.getCompany().getId() : null);
 
         journal.setCode(dto.getCode());
         journal.setName(dto.getName());
@@ -209,7 +204,6 @@ public class AccountingService {
     public void deleteJournal(Long id) {
         AccountJournal journal = journalRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Journal not found: " + id));
-        tenantGuard.check(journal.getCompany() != null ? journal.getCompany().getId() : null);
         usageGuard.assertJournalUnused(id);
         Long companyId = journal.getCompany() != null ? journal.getCompany().getId() : null;
         String journalName = journal.getName();
@@ -309,7 +303,6 @@ public class AccountingService {
         AccountMove move = moveRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Entry not found: " + id));
 
-        tenantGuard.check(move.getCompany() != null ? move.getCompany().getId() : null);
         if (!"draft".equals(move.getState())) {
             throw new IllegalStateException("Seules les écritures en brouillon peuvent être modifiées");
         }
@@ -388,7 +381,6 @@ public class AccountingService {
         AccountMove move = moveRepo.findById(moveId)
                 .orElseThrow(() -> new EntityNotFoundException("Entry not found: " + moveId));
 
-        tenantGuard.check(move.getCompany() != null ? move.getCompany().getId() : null);
         if (!"draft".equals(move.getState())) {
             throw new IllegalStateException("Only draft entries can be posted");
         }
@@ -504,7 +496,6 @@ public class AccountingService {
         AccountMove move = moveRepo.findById(moveId)
                 .orElseThrow(() -> new EntityNotFoundException("Entry not found: " + moveId));
 
-        tenantGuard.check(move.getCompany() != null ? move.getCompany().getId() : null);
         if ("cancel".equals(move.getState())) {
             throw new IllegalStateException("Cette écriture est déjà annulée");
         }
@@ -527,7 +518,6 @@ public class AccountingService {
     public AccountMoveDTO resetToDraft(Long moveId) {
         AccountMove move = moveRepo.findById(moveId)
                 .orElseThrow(() -> new EntityNotFoundException("Écriture introuvable: " + moveId));
-        tenantGuard.check(move.getCompany() != null ? move.getCompany().getId() : null);
         if (!"posted".equals(move.getState())) {
             throw new IllegalStateException("Seules les écritures validées peuvent être remises en brouillon");
         }
@@ -560,7 +550,6 @@ public class AccountingService {
     public AccountMoveDTO reverseEntry(Long moveId) {
         AccountMove move = moveRepo.findById(moveId)
                 .orElseThrow(() -> new EntityNotFoundException("Entry not found: " + moveId));
-        tenantGuard.check(move.getCompany() != null ? move.getCompany().getId() : null);
 
         if (!"posted".equals(move.getState())) {
             throw new IllegalStateException("Seules les écritures validées peuvent être extournées");
@@ -911,7 +900,6 @@ public class AccountingService {
     public AccountMoveDTO getJournalEntry(Long id) {
         AccountMove move = moveRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Entry not found: " + id));
-        tenantGuard.check(move.getCompany() != null ? move.getCompany().getId() : null);
         return toMoveDTO(move);
     }
 
@@ -929,7 +917,6 @@ public class AccountingService {
         Partner partner = partnerRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Partner not found: " + id));
         Long companyId = partner.getCompany() != null ? partner.getCompany().getId() : null;
-        tenantGuard.check(companyId);
         if (companyId != null && partnerRepo.hasOperationalReferences(id, companyId)) {
             throw new IllegalStateException("Impossible de supprimer ce client/fournisseur : il est déjà utilisé dans des ventes, achats, écritures comptables ou mouvements de stock.");
         }
@@ -941,7 +928,7 @@ public class AccountingService {
 
     public PartnerDTO createPartner(PartnerDTO dto) {
         // dto.getCompanyId() vient du client — même correctif que createAccount.
-        Company company = companyRepo.findById(com.erp.auth.SecurityUtils.currentCompanyId())
+        Company company = companyRepo.findById(singleCompany.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Company not found"));
 
         String ref = dto.getRef() != null && !dto.getRef().isBlank() ? dto.getRef().trim() : null;
@@ -974,7 +961,6 @@ public class AccountingService {
     public PartnerDTO updatePartner(Long id, PartnerDTO dto) {
         Partner partner = partnerRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Partner not found: " + id));
-        tenantGuard.check(partner.getCompany() != null ? partner.getCompany().getId() : null);
 
         if (dto.getName() != null) partner.setName(dto.getName());
         if (dto.getRef() != null) partner.setRef(dto.getRef());

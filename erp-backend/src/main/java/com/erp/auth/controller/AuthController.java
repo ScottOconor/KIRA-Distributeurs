@@ -75,7 +75,6 @@ public class AuthController {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("roleCode", roleCode);
-        claims.put("companyId", user.getCompany() != null ? user.getCompany().getId() : null);
 
         String token = jwtService.generateToken(claims, userDetails);
 

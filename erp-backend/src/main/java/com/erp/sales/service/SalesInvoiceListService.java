@@ -1,6 +1,5 @@
 package com.erp.sales.service;
 
-import com.erp.common.service.TenantGuard;
 import com.erp.sales.dto.InvoiceListDTO;
 import com.erp.sales.dto.SalesInvoiceDTO;
 import com.erp.sales.entity.SalesInvoice;
@@ -48,7 +47,6 @@ public class SalesInvoiceListService {
     private final EntityManager em;
     private final SalesService salesService;
     private final WarehouseRepository warehouseRepo;
-    private final TenantGuard tenantGuard;
 
     public record Filter(Long companyId, String type, String state, LocalDate dateFrom,
                          LocalDate dateTo, Long journalId, String groupBy, String groupKey) {}
@@ -136,7 +134,6 @@ public class SalesInvoiceListService {
 
     private Where where(Filter f, boolean withGroup) {
         if (f.companyId() == null) throw new IllegalArgumentException("companyId est obligatoire");
-        tenantGuard.check(f.companyId());
         String type = f.type() == null || f.type().isBlank() ? "invoice" : f.type();
         if (!TYPES.contains(type)) throw new IllegalArgumentException("Type inconnu : " + type);
 

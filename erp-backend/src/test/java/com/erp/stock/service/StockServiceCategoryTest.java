@@ -1,6 +1,5 @@
 package com.erp.stock.service;
 
-import com.erp.auth.TenantAuthenticationDetails;
 import com.erp.stock.dto.ProductCategoryDTO;
 import com.erp.stock.entity.ProductCategory;
 import com.erp.stock.repository.ProductCategoryRepository;
@@ -31,6 +30,7 @@ import static org.mockito.Mockito.when;
 class StockServiceCategoryTest {
 
     @Mock private ProductCategoryRepository categoryRepo;
+    @Mock private com.erp.common.service.SingleCompany singleCompany;
 
     @InjectMocks
     private StockService service;
@@ -41,9 +41,7 @@ class StockServiceCategoryTest {
     }
 
     private void authenticateAsCompany(Long companyId) {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("user", null, List.of());
-        auth.setDetails(new TenantAuthenticationDetails(companyId, "10.0.0.1"));
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        when(singleCompany.getId()).thenReturn(companyId);
     }
 
     @Test
@@ -96,18 +94,10 @@ class StockServiceCategoryTest {
     }
 
     @Test
-    void createCategoryWithoutSecurityContextFailsExplicitly() {
-        assertThatThrownBy(() -> service.createCategory(ProductCategoryDTO.builder().name("X").build()))
-                .isInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
-    void createCategoryWithoutTenantDetailsSavesNullCompanyId() {
-        // Cas limite documenté : sans TenantAuthenticationDetails, companyId est null et la
+    void createCategoryBeforeCompanyExistsSavesNullCompanyId() {
+        // Cas limite documenté : tant que la société n'existe pas, companyId est null et la
         // colonne (nullable=false) fera échouer l'INSERT en base -> 409 via GlobalExceptionHandler.
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("user", null, List.of());
-        auth.setDetails("autre");
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        when(singleCompany.getId()).thenReturn(null);
         when(categoryRepo.save(any(ProductCategory.class))).thenAnswer(inv -> inv.getArgument(0));
 
         service.createCategory(ProductCategoryDTO.builder().name("X").build());

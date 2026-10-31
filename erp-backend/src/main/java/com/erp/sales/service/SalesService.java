@@ -8,7 +8,6 @@ import com.erp.accounting.service.AccountingService;
 import com.erp.accounting.service.FiscalLockGuard;
 import com.erp.audit.service.AuditService;
 import com.erp.common.ConsigneCodes;
-import com.erp.common.service.TenantGuard;
 import com.erp.common.service.UsageGuard;
 import com.erp.sync.service.SyncEventPublisher;
 import com.erp.sync.entity.SyncEventType;
@@ -64,6 +63,7 @@ import java.util.stream.Stream;
 @Transactional
 public class SalesService {
 
+    private final com.erp.common.service.SingleCompany singleCompany;
     private final com.erp.stock.service.ProductValuationService productValuationService;
     private final com.erp.auth.repository.UserRepository userRepository;
 
@@ -99,7 +99,6 @@ public class SalesService {
     private final PrixClientArticleRepository prixClientArticleRepo;
     private final AuditService auditService;
     private final FiscalLockGuard fiscalLockGuard;
-    private final TenantGuard tenantGuard;
     private final com.erp.common.list.ListQueryService listQuery;
     private final UsageGuard usageGuard;
     private final SellerRepository sellerRepo;
@@ -202,7 +201,6 @@ public class SalesService {
     public SalesOrderDTO getOrderById(Long id) {
         SalesOrder order = orderRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Bon de commande introuvable: " + id));
-        tenantGuard.check(order.getCompany() != null ? order.getCompany().getId() : null);
         return toOrderDTO(order);
     }
 
@@ -243,7 +241,6 @@ public class SalesService {
     public SalesOrderDTO updateOrder(Long id, SalesOrderRequest req) {
         SalesOrder order = orderRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Bon de commande introuvable: " + id));
-        tenantGuard.check(order.getCompany() != null ? order.getCompany().getId() : null);
 
         if (!"draft".equals(order.getState())) {
             throw new IllegalStateException("Seuls les bons en brouillon peuvent être modifiés");
@@ -275,7 +272,6 @@ public class SalesService {
     public SalesOrderDTO confirmOrder(Long id) {
         SalesOrder order = orderRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Bon de commande introuvable: " + id));
-        tenantGuard.check(order.getCompany() != null ? order.getCompany().getId() : null);
 
         if (!"draft".equals(order.getState()) && !"confirmed".equals(order.getState())) {
             throw new IllegalStateException("Ce bon ne peut pas être confirmé");
@@ -311,7 +307,6 @@ public class SalesService {
     public SalesOrderDTO cancelOrder(Long id) {
         SalesOrder order = orderRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Bon de commande introuvable: " + id));
-        tenantGuard.check(order.getCompany() != null ? order.getCompany().getId() : null);
 
         if ("invoiced".equals(order.getState())) {
             throw new IllegalStateException("Un bon déjà facturé ne peut pas être annulé");
@@ -342,7 +337,6 @@ public class SalesService {
     public void deleteOrder(Long id) {
         SalesOrder order = orderRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Bon de commande introuvable: " + id));
-        tenantGuard.check(order.getCompany() != null ? order.getCompany().getId() : null);
         if (!"draft".equals(order.getState())) {
             throw new IllegalStateException("Seul un bon en brouillon peut être supprimé — annulez-le plutôt");
         }
@@ -449,7 +443,6 @@ public class SalesService {
     public SalesInvoiceDTO createAvoirFromInvoice(Long invoiceId, com.erp.sales.dto.AvoirRequest req) {
         SalesInvoice original = invoiceRepo.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + invoiceId));
-        tenantGuard.check(original.getCompany() != null ? original.getCompany().getId() : null);
 
         if (!"posted".equals(original.getState()) && !"paid".equals(original.getState())
                 && !"partiellement_extournee".equals(original.getState())) {
@@ -471,7 +464,6 @@ public class SalesService {
             // Recharger la facture : l'état est maintenant "posted" après annulation des paiements
             original = invoiceRepo.findById(invoiceId)
                     .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + invoiceId));
-            tenantGuard.check(original.getCompany() != null ? original.getCompany().getId() : null);
         }
 
         boolean isPartiel = req != null && "partiel".equals(req.getAvoirType())
@@ -671,7 +663,6 @@ public class SalesService {
     public SalesInvoiceDTO getInvoiceById(Long id) {
         SalesInvoice invoice = invoiceRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + id));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
         return toInvoiceDTOWithPayments(invoice);
     }
 
@@ -722,7 +713,6 @@ public class SalesService {
     public SalesInvoiceDTO updateInvoice(Long id, SalesInvoiceRequest req) {
         SalesInvoice invoice = invoiceRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + id));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
 
         if (!"draft".equals(invoice.getState())) {
             throw new IllegalStateException("Seules les factures en brouillon peuvent être modifiées");
@@ -765,7 +755,6 @@ public class SalesService {
     public SalesInvoiceDTO postInvoice(Long id) {
         SalesInvoice invoice = invoiceRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + id));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
 
         if (!"draft".equals(invoice.getState())) {
             throw new IllegalStateException("Seules les documents en brouillon peuvent être validés");
@@ -1121,7 +1110,6 @@ public class SalesService {
     public SalesInvoiceDTO setInvoiceWarehouse(Long invoiceId, Long warehouseId) {
         SalesInvoice invoice = invoiceRepo.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + invoiceId));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
         if (!"draft".equals(invoice.getState())) {
             throw new IllegalStateException("L'entrepôt ne peut être modifié que sur un document en brouillon");
         }
@@ -1132,7 +1120,6 @@ public class SalesService {
     public SalesInvoiceDTO cancelInvoice(Long id) {
         SalesInvoice invoice = invoiceRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + id));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
 
         if ("cancelled".equals(invoice.getState())) {
             throw new IllegalStateException("Cette facture est déjà annulée");
@@ -1198,7 +1185,6 @@ public class SalesService {
     public SalesInvoiceDTO reverseInvoiceEntries(Long id) {
         SalesInvoice invoice = invoiceRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + id));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
 
         if (!"cancelled".equals(invoice.getState())) {
             throw new IllegalStateException("La facture doit être annulée avant d'inverser les écritures");
@@ -1532,7 +1518,6 @@ public class SalesService {
     public InvoicePaymentDTO createPayment(InvoicePaymentRequest req) {
         SalesInvoice invoice = invoiceRepo.findById(req.getInvoiceId())
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable"));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
 
         // "partiellement_extournee" (avoir partiel émis) doit rester payable pour le solde restant
         // dû — sans cet état, une facture partiellement extournée devenait impossible à solder
@@ -1795,7 +1780,6 @@ public class SalesService {
         }
         SalesInvoice invoice = invoiceRepo.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable"));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
         if (!"posted".equals(invoice.getState())) {
             throw new IllegalStateException("Seules les factures validées acceptent une compensation");
         }
@@ -1884,7 +1868,6 @@ public class SalesService {
     private SalesInvoiceDTO applySurplusToInvoice(Long invoiceId, BigDecimal amount, Long companyId) {
         SalesInvoice invoice = invoiceRepo.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable"));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
         if (!"posted".equals(invoice.getState()) && !"partiellement_extournee".equals(invoice.getState())) {
             throw new IllegalStateException("Seules les factures validées acceptent une compensation");
         }
@@ -1952,7 +1935,6 @@ public class SalesService {
     public InvoicePaymentDTO reversePayment(Long paymentId) {
         InvoicePayment payment = paymentRepo.findById(paymentId)
                 .orElseThrow(() -> new EntityNotFoundException("Paiement introuvable"));
-        tenantGuard.check(payment.getCompany() != null ? payment.getCompany().getId() : null);
 
         if ("reversed".equals(payment.getState())) {
             throw new IllegalStateException("Ce paiement a déjà été annulé");
@@ -2075,7 +2057,6 @@ public class SalesService {
     public PartnerDTO updateClient(Long id, PartnerDTO dto) {
         Partner partner = partnerRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Client introuvable: " + id));
-        tenantGuard.check(partner.getCompany() != null ? partner.getCompany().getId() : null);
 
         partner.setRef(dto.getRef());
         partner.setName(dto.getName());
@@ -2096,7 +2077,6 @@ public class SalesService {
         Partner partner = partnerRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Client introuvable: " + id));
         Long companyId = partner.getCompany() != null ? partner.getCompany().getId() : null;
-        tenantGuard.check(companyId);
         if (companyId != null && partnerRepo.hasOperationalReferences(id, companyId)) {
             throw new IllegalStateException("Impossible de supprimer ce client : il est déjà utilisé dans des ventes, achats, écritures comptables ou mouvements de stock.");
         }
@@ -2147,7 +2127,6 @@ public class SalesService {
     public void deleteSeller(Long id) {
         Seller seller = sellerRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Vendeur introuvable: " + id));
-        tenantGuard.check(seller.getCompany() != null ? seller.getCompany().getId() : null);
         usageGuard.assertSellerUnused(id);
         seller.setActive(false);
         sellerRepo.save(seller);
@@ -4068,7 +4047,6 @@ public class SalesService {
     public List<AvailableMoveDTO> getAvailableMovesForSalesReconciliation(Long invoiceId, Long companyId) {
         SalesInvoice invoice = invoiceRepo.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + invoiceId));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
         if (invoice.getPartner() == null) return List.of();
 
         Long partnerId = invoice.getPartner().getId();
@@ -4111,7 +4089,6 @@ public class SalesService {
     public SalesInvoiceReconciliationDTO reconcileSalesInvoice(Long invoiceId, ReconcileRequest req) {
         SalesInvoice invoice = invoiceRepo.findById(invoiceId)
                 .orElseThrow(() -> new EntityNotFoundException("Facture introuvable: " + invoiceId));
-        tenantGuard.check(invoice.getCompany() != null ? invoice.getCompany().getId() : null);
         if (!"posted".equals(invoice.getState()) && !"paid".equals(invoice.getState())
                 && !"partiellement_extournee".equals(invoice.getState())) {
             throw new IllegalStateException("La facture doit être validée pour être lettrée");
@@ -4127,7 +4104,6 @@ public class SalesService {
         // Le move réconcilié agit comme preuve de paiement pour CETTE facture : accepter un move
         // d'une autre société permettrait de solder frauduleusement une facture avec l'écriture
         // d'un tiers — l'appartenance compte ici, contrairement à un simple attach de référence.
-        tenantGuard.check(move.getCompany() != null ? move.getCompany().getId() : null);
         if (!"posted".equals(move.getState()))
             throw new IllegalStateException("L'écriture doit être validée");
 
@@ -4167,7 +4143,6 @@ public class SalesService {
         SalesInvoiceReconciliation rec = reconciliationRepo.findById(reconciliationId)
                 .orElseThrow(() -> new EntityNotFoundException("Lettrage introuvable: " + reconciliationId));
         SalesInvoice invoice = rec.getInvoice();
-        tenantGuard.check(invoice != null && invoice.getCompany() != null ? invoice.getCompany().getId() : null);
 
         BigDecimal newPaye = (invoice.getMontantPaye() != null ? invoice.getMontantPaye() : ZERO).subtract(rec.getAmount());
         BigDecimal newDu = (invoice.getMontantDu() != null ? invoice.getMontantDu() : ZERO).add(rec.getAmount());
@@ -4283,7 +4258,7 @@ public class SalesService {
     public PrixClientArticleDTO savePrixClient(PrixClientArticleDTO dto) {
         // companyId vient du corps de la requête (client) — ne jamais lui faire confiance pour
         // choisir SOUS QUELLE société le prix client est créé/modifié.
-        Long companyId = com.erp.auth.SecurityUtils.currentCompanyId();
+        Long companyId = singleCompany.getId();
         PrixClientArticle entity = prixClientArticleRepo
                 .findByProductIdAndClientIdAndCompanyId(dto.getProductId(), dto.getClientId(), companyId)
                 .orElseGet(() -> PrixClientArticle.builder()
