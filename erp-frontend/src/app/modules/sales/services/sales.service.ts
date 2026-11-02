@@ -309,6 +309,7 @@ export interface SalesStatsLine {
   prixRevient: number;
   margeHT: number;
   tauxMarge: number;
+  tauxMarque: number;
   caTTC: number;
   remise: number;
 }
@@ -428,6 +429,9 @@ export interface InvoiceGroup {
   du: number;
 }
 
+/** Solde du compte d'un tiers, positif ou négatif. */
+export interface TiersSolde { partnerId: number; partnerName: string; solde: number; }
+
 @Injectable({ providedIn: 'root' })
 export class SalesService {
   private apiUrl = `${environment.apiUrl}/api/sales`;
@@ -476,6 +480,11 @@ export class SalesService {
   }
 
   // Invoices
+  /** Soldes des comptes clients, positifs ou négatifs. */
+  getCreancesTiers(companyId: number): Observable<TiersSolde[]> {
+    return this.http.get<TiersSolde[]>(`${this.apiUrl}/creances-tiers`, { params: { companyId: companyId.toString() } });
+  }
+
   getInvoices(companyId: number): Observable<SalesInvoice[]> {
     return this.http.get<SalesInvoice[]>(`${this.apiUrl}/invoices`, {
       params: new HttpParams().set('companyId', companyId)

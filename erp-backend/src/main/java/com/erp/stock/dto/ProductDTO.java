@@ -30,5 +30,9 @@ public class ProductDTO {
     private BigDecimal qtyOnHand;
     private BigDecimal qtyReserved;
     private BigDecimal qtyAvailable;
+    // CMUP (lecture seule) et valeur du stock au prix d'achat
+    private BigDecimal cmup;
+    private BigDecimal stockValue;
+    private boolean stockValueEstablished;
     private LocalDateTime createdAt;
 }

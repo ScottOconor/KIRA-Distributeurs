@@ -28,6 +28,7 @@ public class InterAgencyReceptionService {
     private final WarehouseRepository      warehouseRepo;
     private final StockLocationRepository  locationRepo;
     private final ProductValuationService  productValuationService;
+    private final StockLedgerService       stockLedger;
     private final StockPickingTypeRepository pickingTypeRepo;
     private final StockPickingRepository   pickingRepo;
     private final ProductRepository        productRepo;
@@ -122,6 +123,7 @@ public class InterAgencyReceptionService {
                         .uomName(line.getUomName() != null ? line.getUomName() : product.getUomName())
                         .qtyDemanded(line.getQtyExpedied())
                         .qtyDone(line.getQtyExpedied())
+                        .purchasePrice(StockLedgerService.purchasePriceOf(product))
                         .priceUnit(line.getPriceUnit() != null ? line.getPriceUnit()
                                 : productValuationService.getWarehouseCmup(product.getId(),
                                         productValuationService.resolveWarehouseId(destLocationId), product))
@@ -196,6 +198,7 @@ public class InterAgencyReceptionService {
                                 .companyId(p.getCompanyId()).quantity(BigDecimal.ZERO).build());
                 quant.setQuantity(quant.getQuantity().add(qty));
                 quantRepo.save(quant);
+                stockLedger.postCancelOut(p, move, qty);
             }
 
             p.setState("cancelled");
