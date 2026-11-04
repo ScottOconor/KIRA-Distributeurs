@@ -43,6 +43,7 @@ public class SyncEventPublisher {
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> PURCHASE_ORDERS = SpokeSnapshotPayload::getPurchaseOrders;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> RISTOURNE_PAIEMENTS = SpokeSnapshotPayload::getRistournePaiements;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> REMISE_PAIEMENTS = SpokeSnapshotPayload::getRemisePaiements;
+    private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> RISTOURNES_RAPPORT = SpokeSnapshotPayload::getRistournesRapport;
     private static final java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> ACCOUNTS = SpokeSnapshotPayload::getAccounts;
 
     /**
@@ -97,11 +98,12 @@ public class SyncEventPublisher {
                 .salesOrders(new java.util.ArrayList<>())
                 .purchaseOrders(new java.util.ArrayList<>())
                 .ristournePaiements(new java.util.ArrayList<>())
-                .remisePaiements(new java.util.ArrayList<>());
+                .remisePaiements(new java.util.ArrayList<>())
+                .ristournesRapport(new java.util.ArrayList<>());
 
         java.util.List<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>> listGetters = java.util.List.of(
                 SALE_INVOICES, ACCOUNT_MOVE_LINES, PRODUCTS, PARTNERS, SALES_ORDERS, PURCHASE_INVOICES, PURCHASE_ORDERS,
-                RISTOURNE_PAIEMENTS, REMISE_PAIEMENTS, ACCOUNTS);
+                RISTOURNE_PAIEMENTS, REMISE_PAIEMENTS, RISTOURNES_RAPPORT, ACCOUNTS);
 
         // Taille d'une partie = base (listes vides) + somme des éléments + une virgule par élément :
         // majorant exact de la taille sérialisée réelle, donc jamais au-dessus de maxBytes.
@@ -149,6 +151,7 @@ public class SyncEventPublisher {
             else if (getter == PURCHASE_ORDERS) builder.purchaseOrders(raw);
             else if (getter == RISTOURNE_PAIEMENTS) builder.ristournePaiements(raw);
             else if (getter == REMISE_PAIEMENTS) builder.remisePaiements(raw);
+            else if (getter == RISTOURNES_RAPPORT) builder.ristournesRapport(raw);
             else if (getter == ACCOUNTS) builder.accounts(raw);
         });
         return builder.build();
