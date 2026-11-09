@@ -77,6 +77,7 @@ public class StockService {
     private final PartnerRepository partnerRepo;
 
     private final RemoteAgencyRepository remoteAgencyRepo;
+    private final com.erp.sync.service.RemoteSyncGuard remoteSyncGuard;
     private final InterAgencyKeyService  interAgencyKeyService;
     private final RestTemplate           restTemplate;
 
@@ -3299,7 +3300,7 @@ public class StockService {
     }
 
     private void notifyRemoteAgency(StockPicking picking) {
-        if (picking.getRemoteAgencyId() == null) return;
+        if (picking.getRemoteAgencyId() == null || !remoteSyncGuard.isEnabled()) return;
         RemoteAgency agency = remoteAgencyRepo.findById(picking.getRemoteAgencyId()).orElse(null);
         if (agency == null || !agency.isActive() || agency.getApiKey() == null) return;
 
@@ -3451,6 +3452,9 @@ public class StockService {
      * injoignable ou d'une version sans ce contrôle : l'expédition reste possible, comme avant.
      */
     private void requireProductsKnownByRemoteAgency(StockPicking picking) {
+        // Synchronisation coupée : le destinataire ne serait jamais prévenu, le stock sortirait d'ici
+        // sans jamais entrer chez lui. Refus explicite plutôt qu'une expédition « perdue ».
+        if (picking.getRemoteAgencyId() != null) remoteSyncGuard.requireEnabled();
         List<StockMove> lines = picking.getMoves().stream()
                 .filter(m -> m.getQtyDone() != null && m.getQtyDone().compareTo(ZERO) > 0)
                 .collect(java.util.stream.Collectors.toList());
@@ -3567,6 +3571,7 @@ public class StockService {
     /** @return null si la notification a réussi, sinon un message explicatif (visible côté admin,
      *  pas seulement dans les logs serveur — un échec réseau ne doit jamais rester silencieux). */
     private String notifySenderExpeditionDone(StockPicking reception) {
+        if (!remoteSyncGuard.isEnabled()) return com.erp.sync.service.RemoteSyncGuard.DISABLED_MESSAGE + " Expéditeur non notifié.";
         RemoteAgency sender = remoteAgencyRepo.findById(reception.getRemoteAgencyId()).orElse(null);
         if (sender == null) {
             return "Agence expéditrice introuvable dans la configuration locale.";
@@ -3596,6 +3601,7 @@ public class StockService {
     }
 
     private void notifyRemoteAgencyCancellation(StockPicking picking) {
+        if (!remoteSyncGuard.isEnabled()) return;
         RemoteAgency agency = remoteAgencyRepo.findById(picking.getRemoteAgencyId()).orElse(null);
         if (agency == null || !agency.isActive() || agency.getApiKey() == null) return;
         try {
@@ -3616,6 +3622,7 @@ public class StockService {
      *  l'expéditeur doit en être informé pour annuler son expédition et récupérer son stock.
      *  @return null si la notification a réussi, sinon un message explicatif (visible côté admin). */
     private String notifySenderExpeditionCancelled(StockPicking reception) {
+        if (!remoteSyncGuard.isEnabled()) return com.erp.sync.service.RemoteSyncGuard.DISABLED_MESSAGE + " Expéditeur non notifié.";
         RemoteAgency sender = remoteAgencyRepo.findById(reception.getRemoteAgencyId()).orElse(null);
         if (sender == null) {
             return "Agence expéditrice introuvable dans la configuration locale.";
