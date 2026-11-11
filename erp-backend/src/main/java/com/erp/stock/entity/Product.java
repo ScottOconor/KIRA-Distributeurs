@@ -3,6 +3,7 @@ package com.erp.stock.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
@@ -62,7 +63,7 @@ public class Product {
     @Column(nullable = false)
     private String type;
 
-    /** Compte de produit (classe 7) des ventes de ce service, paramétré en comptabilité
+    /** Compte (toute classe) des ventes de ce service, paramétré en comptabilité
      *  (écran "Comptes des services"). Null = compte par défaut des services de la société. */
     @Column(name = "income_account_code")
     private String incomeAccountCode;
@@ -88,9 +89,12 @@ public class Product {
     @Column(name = "company_id", nullable = false)
     private Long companyId;
 
-    /** Photo de l'article */
-    @Column(name = "photo_data", columnDefinition = "bytea")
-    private byte[] photoData;
+    /** Photo de l'article : données dans ProductPhotoData (même table), jamais chargées avec
+     *  Product — chaque liste d'articles (ventes, stock, snapshot...) ramenait sinon toutes les
+     *  photos. Seul l'indicateur, calculé en SQL, reste ici. */
+    @Formula("(photo_data IS NOT NULL)")
+    @Setter(AccessLevel.NONE)
+    private boolean hasPhoto;
 
     @Column(name = "photo_content_type")
     private String photoContentType;

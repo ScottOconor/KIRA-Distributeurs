@@ -54,6 +54,7 @@ public class StockService {
     private final ProductCategoryRepository categoryRepo;
     private final UnitOfMeasureRepository uomRepo;
     private final ProductRepository productRepo;
+    private final ProductPhotoDataRepository productPhotoRepo;
     private final com.erp.common.service.JsonArrayStreamer jsonArrayStreamer;
     private final WarehouseRepository warehouseRepo;
     private final StockLocationRepository locationRepo;
@@ -621,26 +622,25 @@ public class StockService {
     public void uploadProductPhoto(Long productId, byte[] data, String contentType) {
         Product p = productRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found: " + productId));
-        p.setPhotoData(data);
+        productPhotoRepo.findById(productId).orElseThrow().setPhotoData(data);
         p.setPhotoContentType(contentType);
-        productRepo.save(p);
     }
 
     @Transactional(readOnly = true)
     public ProductPhoto getProductPhoto(Long productId) {
         Product p = productRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found: " + productId));
-        if (p.getPhotoData() == null) return null;
-        return new ProductPhoto(p.getPhotoData(), p.getPhotoContentType());
+        byte[] data = productPhotoRepo.findById(productId).map(ProductPhotoData::getPhotoData).orElse(null);
+        if (data == null) return null;
+        return new ProductPhoto(data, p.getPhotoContentType());
     }
 
     @Transactional
     public void deleteProductPhoto(Long productId) {
         Product p = productRepo.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found: " + productId));
-        p.setPhotoData(null);
+        productPhotoRepo.findById(productId).orElseThrow().setPhotoData(null);
         p.setPhotoContentType(null);
-        productRepo.save(p);
     }
 
     /**
@@ -699,7 +699,7 @@ public class StockService {
                 .exemptTvaAchat(Boolean.TRUE.equals(p.getExemptTvaAchat()))
                 .companyId(p.getCompanyId()).qtyOnHand(qtyOnHand)
                 .qtyReserved(reserved).qtyAvailable(available)
-                .hasPhoto(p.getPhotoData() != null)
+                .hasPhoto(p.isHasPhoto())
                 .createdAt(p.getCreatedAt())
                 .build();
     }
@@ -2934,8 +2934,13 @@ public class StockService {
             AccountAccount stockVariationAccount = findOrCreateAccount("603100",
                     "Variation de stocks de marchandises", "expense", companyId, journal, company);
 
+            // Numéro séquentiel par société et par année (le suffixe currentTimeMillis() % 100000
+            // pouvait donner deux fois le même numéro), comme les ajustements AJ/.
+            documentNumberLock.lock("accounting.move.CASSE." + companyId);
+            String casPrefix = "CASSE/" + date.getYear() + "/";
+            Integer maxCas = accountMoveRepo.findMaxSequenceByCompanyAndPrefix(companyId, casPrefix);
             AccountMove move = AccountMove.builder()
-                    .name("CASSE/" + date.getYear() + "/" + System.currentTimeMillis() % 100000)
+                    .name(casPrefix + ((maxCas != null ? maxCas : 0) + 1))
                     .date(date)
                     .ref(description)
                     .state("posted")
@@ -3165,7 +3170,9 @@ public class StockService {
         if (req.getLocationDestId() == null)
             throw new IllegalArgumentException("L'emplacement de destination est obligatoire pour une expédition inter-agences");
 
-        Integer count = pickingRepo.countInterCompanyByCompany(req.getCompanyId());
+        // Plus grand numéro IC/ sous verrou (un comptage redonnait un numéro déjà pris).
+        documentNumberLock.lock("stock.picking." + req.getCompanyId() + ".IC");
+        Integer count = pickingRepo.findMaxSeq(req.getCompanyId(), "IC");
         String name = String.format("IC/%05d", (count != null ? count : 0) + 1);
 
         final Long finalSrcLocId  = srcLocationId;

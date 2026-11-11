@@ -273,7 +273,9 @@ public class SyncDispatcherScheduler {
     @Scheduled(fixedDelayString = "${sync.dispatch.interval-ms:30000}")
     public void dispatch() {
         if (!spokeIdConfigured()) return;
-        List<OutboxEvent> pending = outboxRepo.findByStatusOrderByCreatedAtAscIdAsc(
+        // Ids seuls puis chargement un par un : un lot de BATCH_SIZE entités complètes (parties de
+        // FULL_SNAPSHOT jusqu'à 8 Mo chacune) suffisait à épuiser le heap (incident du 2026-10-13).
+        List<Long> pending = outboxRepo.findIdsByStatus(
                 OutboxStatus.PENDING, PageRequest.of(0, BATCH_SIZE));
 
         if (pending.isEmpty()) return;
@@ -284,7 +286,9 @@ public class SyncDispatcherScheduler {
         int sent = 0;
         List<InFlight> inFlight = new java.util.ArrayList<>();
 
-        for (OutboxEvent event : pending) {
+        for (Long eventId : pending) {
+            OutboxEvent event = outboxRepo.findById(eventId).orElse(null);
+            if (event == null || event.getStatus() != OutboxStatus.PENDING) continue;
             try {
                 SyncMessage msg = buildMessage(event);
                 String routingKey = "erp.sync." + event.getEventType().name().toLowerCase();
@@ -307,12 +311,14 @@ public class SyncDispatcherScheduler {
                     }
                 } catch (Exception ex) {
                     // En cas d'erreur de (dé)sérialisation locale, ne bloquer pas tout : laisser le
-                    // processus d'envoi original tenter et se débrouiller (confirmCallbacks géreront).
+                    // processus d'envoi tenter : la confirmation du broker (awaitDelivery) tranchera.
                     log.debug("Impossible de mesurer la taille du message avant envoi : {}", ex.getMessage());
                 }
                 CorrelationData correlation = new CorrelationData(String.valueOf(event.getId()));
                 rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE, routingKey, msg, correlation);
-                inFlight.add(new InFlight(event, correlation));
+                // Seul l'identifiant est conservé en attendant la confirmation : garder les entités
+                // (parties de FULL_SNAPSHOT jusqu'à 8 Mo) épuiserait le heap (incident du 2026-10-13).
+                inFlight.add(new InFlight(event.getId(), correlation));
             } catch (AmqpException e) {
                 recordFailure(event, e.getMessage());
                 outboxRepo.save(event);
@@ -325,7 +331,8 @@ public class SyncDispatcherScheduler {
         // confirmé (ack) par le broker et restait SENT sans avoir été livré (constaté).
         for (InFlight f : inFlight) {
             String failure = awaitDelivery(f.correlation());
-            OutboxEvent event = f.event();
+            OutboxEvent event = outboxRepo.findById(f.eventId()).orElse(null);
+            if (event == null) continue;
             if (failure == null) {
                 event.setStatus(OutboxStatus.SENT);
                 event.setLastAttemptAt(LocalDateTime.now());
@@ -341,7 +348,7 @@ public class SyncDispatcherScheduler {
         log.debug("Sync: {}/{} événements envoyés", sent, pending.size());
     }
 
-    private record InFlight(OutboxEvent event, CorrelationData correlation) {}
+    private record InFlight(Long eventId, CorrelationData correlation) {}
 
     /** null si le broker a accepté ET routé le message, sinon la raison de l'échec. */
     private String awaitDelivery(CorrelationData correlation) {
@@ -367,6 +374,16 @@ public class SyncDispatcherScheduler {
         event.setRetryCount(event.getRetryCount() + 1);
         event.setLastAttemptAt(LocalDateTime.now());
         event.setErrorMessage(reason);
+        if (isMessageTooLarge(new RuntimeException(reason))) {
+            // Rejet définitif du broker (message au-delà de sa taille max, 406 PRECONDITION_FAILED) :
+            // aucune nouvelle tentative ne passera avec le même contenu (cf. incident du 2026-09-14).
+            // Figé en FAILED hors reprise automatique ; seule une reprise manuelle le relance.
+            event.setStatus(OutboxStatus.FAILED);
+            event.setAutoRequeueCount(MAX_AUTO_REQUEUES);
+            log.error("Événement {} id={} FAILED définitivement : message trop volumineux pour le broker ({})",
+                    event.getEventType(), event.getEntityId(), reason);
+            return;
+        }
         event.setStatus(event.getRetryCount() >= MAX_RETRIES ? OutboxStatus.FAILED : OutboxStatus.PENDING);
         log.warn("Événement {} id={} non livré ({}/{}) : {}", event.getEventType(), event.getEntityId(),
                 event.getRetryCount(), MAX_RETRIES, reason);
@@ -374,11 +391,7 @@ public class SyncDispatcherScheduler {
 
     @Transactional
     public int requeueFailed() {
-        List<OutboxEvent> failed = outboxRepo.findByStatusOrderByCreatedAtAscIdAsc(
-                OutboxStatus.FAILED, PageRequest.of(0, 500));
-        failed.forEach(e -> { e.setStatus(OutboxStatus.PENDING); e.setRetryCount(0); });
-        outboxRepo.saveAll(failed);
-        return failed.size();
+        return outboxRepo.requeueAllFailed();
     }
 
     /** Supprime définitivement les événements FAILED — à utiliser seulement quand ces opérations
@@ -399,23 +412,16 @@ public class SyncDispatcherScheduler {
     @Scheduled(fixedDelayString = "${sync.dispatch.retry-failed-interval-ms:300000}")
     @Transactional
     public void autoRequeueFailed() {
-        List<OutboxEvent> failed = outboxRepo.findByStatusOrderByCreatedAtAscIdAsc(
-                OutboxStatus.FAILED, PageRequest.of(0, 500));
-        List<OutboxEvent> toRequeue = failed.stream()
-                .filter(e -> e.getAutoRequeueCount() < MAX_AUTO_REQUEUES)
-                .toList();
-        int poisoned = failed.size() - toRequeue.size();
+        // UPDATE/COUNT en masse : charger les entités FAILED (payloads de FULL_SNAPSHOT compris)
+        // provoquait un OutOfMemoryError toutes les 5 min pendant une coupure broker (2026-10-13).
+        long poisoned = outboxRepo.countByStatusAndAutoRequeueCountGreaterThanEqual(
+                OutboxStatus.FAILED, MAX_AUTO_REQUEUES);
         if (poisoned > 0) {
             log.warn("Sync: {} événement(s) FAILED laissé(s) tel quel (>{} reprises automatiques déjà tentées) — reprise manuelle requise",
                     poisoned, MAX_AUTO_REQUEUES);
         }
-        toRequeue.forEach(e -> {
-            e.setStatus(OutboxStatus.PENDING);
-            e.setRetryCount(0);
-            e.setAutoRequeueCount(e.getAutoRequeueCount() + 1);
-        });
-        outboxRepo.saveAll(toRequeue);
-        if (!toRequeue.isEmpty()) log.info("Sync: {} événement(s) FAILED remis en PENDING automatiquement", toRequeue.size());
+        int requeued = outboxRepo.requeueFailedBelow(MAX_AUTO_REQUEUES);
+        if (requeued > 0) log.info("Sync: {} événement(s) FAILED remis en PENDING automatiquement", requeued);
     }
 
     /**
@@ -443,6 +449,19 @@ public class SyncDispatcherScheduler {
             n = outboxRepo.deleteByStatusAndCreatedAtBefore(OutboxStatus.SENT, cutoff);
         }
         if (n > 0) log.info("Sync: {} événement(s) transmis de plus de {} jour(s) purgé(s)", n, retentionDays);
+    }
+
+    /** Détecte un rejet broker "message trop gros" (406 PRECONDITION_FAILED, taille > max size
+     *  configurée) — une erreur définitive à ne jamais confondre avec un simple aléa réseau
+     *  transitoire (broker injoignable, timeout...), seul cas pour lequel réessayer a du sens. */
+    private boolean isMessageTooLarge(Throwable e) {
+        for (Throwable t = e; t != null; t = t.getCause()) {
+            String msg = t.getMessage();
+            if (msg != null && msg.contains("PRECONDITION_FAILED") && msg.contains("message size")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private SyncMessage buildMessage(OutboxEvent event) {

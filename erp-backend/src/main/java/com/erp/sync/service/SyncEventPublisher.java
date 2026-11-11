@@ -21,6 +21,7 @@ public class SyncEventPublisher {
 
     private final OutboxEventRepository outboxRepo;
     private final ObjectMapper objectMapper;
+    private final jakarta.persistence.EntityManager entityManager;
     private final RemoteSyncGuard remoteSyncGuard;
 
     @Value("${sync.spoke.id}")
@@ -63,6 +64,11 @@ public class SyncEventPublisher {
                 var part = parts.get(i);
                 String entityId = String.format("SNAPSHOT_%s_part_%d_of_%d", snapshot.getSpokeId(), i + 1, total);
                 publish(SyncEventType.FULL_SNAPSHOT, entityId, part);
+                // Écrit la partie puis la détache : sinon chaque OutboxEvent (JSON jusqu'à 8 Mo)
+                // reste dans le contexte de persistance jusqu'au commit, toutes parties cumulées.
+                // Sans risque : cette transaction REQUIRES_NEW ne gère que ces événements outbox.
+                entityManager.flush();
+                entityManager.clear();
             }
         } catch (Exception e) {
             log.error("Erreur fractionnement snapshot {}: {}", snapshot.getSpokeId(), e.getMessage(), e);
@@ -71,18 +77,44 @@ public class SyncEventPublisher {
         }
     }
 
+    /** Liste découpable du snapshot : lecture sur le snapshot source, écriture sur une partie. */
+    private record SplitList(java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>> getter,
+                             java.util.function.BiConsumer<SpokeSnapshotPayload, java.util.List<?>> setter) {}
+
+    @SuppressWarnings("unchecked")
+    private static <T> java.util.function.BiConsumer<SpokeSnapshotPayload, java.util.List<?>> setter(
+            java.util.function.BiConsumer<SpokeSnapshotPayload, java.util.List<T>> typed) {
+        return (p, l) -> typed.accept(p, (java.util.List<T>) l);
+    }
+
+    // Ordre de remplissage des parties (les plus volumineuses d'abord).
+    private static final java.util.List<SplitList> SPLIT_LISTS = java.util.List.of(
+            new SplitList(SALE_INVOICES,       setter(SpokeSnapshotPayload::setSaleInvoices)),
+            new SplitList(ACCOUNT_MOVE_LINES,  setter(SpokeSnapshotPayload::setAccountMoveLines)),
+            new SplitList(PRODUCTS,            setter(SpokeSnapshotPayload::setProducts)),
+            new SplitList(PARTNERS,            setter(SpokeSnapshotPayload::setPartners)),
+            new SplitList(SALES_ORDERS,        setter(SpokeSnapshotPayload::setSalesOrders)),
+            new SplitList(PURCHASE_INVOICES,   setter(SpokeSnapshotPayload::setPurchaseInvoices)),
+            new SplitList(PURCHASE_ORDERS,     setter(SpokeSnapshotPayload::setPurchaseOrders)),
+            new SplitList(RISTOURNE_PAIEMENTS, setter(SpokeSnapshotPayload::setRistournePaiements)),
+            new SplitList(REMISE_PAIEMENTS,    setter(SpokeSnapshotPayload::setRemisePaiements)),
+            new SplitList(RISTOURNES_RAPPORT,  setter(SpokeSnapshotPayload::setRistournesRapport)),
+            new SplitList(ACCOUNTS,            setter(SpokeSnapshotPayload::setAccounts))
+    );
+
     /**
-     * Découpe un `SpokeSnapshotPayload` en parties dont la taille JSON sérialisée ne dépasse pas
-     * `maxBytes` (sauf élément isolé plus gros que la limite). Chaque partie reprend tous les
-     * indicateurs scalaires et petites listes du snapshot ; les grosses listes sont réparties dans
-     * l'ordre, sans perte ni doublon.
+     * Découpe un `SpokeSnapshotPayload` en plusieurs parties dont la taille JSON sérialisée
+     * ne dépasse pas `maxBytes` si possible. Le découpage se fait en parcourant les gros
+     * tableaux présents dans le snapshot et en les répartissant entre parties.
      *
-     * Linéaire : la taille de chaque élément est calculée une seule fois. L'algorithme précédent
-     * recopiait la liste ET resérialisait toute la partie en cours à chaque élément ajouté
-     * (quadratique) : un snapshot de ~200 000 éléments n'était pas terminé après 12 minutes de
-     * calcul, relancé toutes les heures.
+     * Chaque élément n'est sérialisé qu'UNE fois, pour mesurer sa taille : taille d'une partie =
+     * squelette (scalaires + petites listes, listes découpables vides) + Σ(taille élément + 1 virgule).
+     * Avant, chaque ajout d'élément recopiait toute la partie en cours puis la resérialisait en
+     * entier (jusqu'à 8 Mo) — coût quadratique : sur ~20 000 lignes comptables (60 jours, renvoyées
+     * à chaque snapshot), des dizaines de Go alloués par snapshot, ~15 min de construction avec une
+     * connexion JDBC retenue, et OutOfMemoryError en boucle chez le client (2026-10-13).
      */
-    java.util.List<SpokeSnapshotPayload> splitSnapshotBySize(SpokeSnapshotPayload snapshot, int maxBytes) throws JsonProcessingException {
+    java.util.List<SpokeSnapshotPayload> splitSnapshotBySize(SpokeSnapshotPayload snapshot, int maxBytes) throws com.fasterxml.jackson.core.JsonProcessingException {
         // Base de chaque partie = copie INTÉGRALE du snapshot (toBuilder) : tous les indicateurs
         // scalaires et les petites listes affichées telles quelles par le Hub (caisses,
         // caissesActuelles, topStock, ventes du jour) sont présents dans chaque partie, et seules
@@ -90,73 +122,44 @@ public class SyncEventPublisher {
         // par champ, qui avait oublié les détails ristournes/remises (collecte, paiement) et frais
         // d'enlèvement (année/mois/trimestre) ainsi que les caisses — le Hub, qui relit chaque
         // partie, les recevait à null et les écrasait à 0 à chaque snapshot.
-        java.util.function.Supplier<SpokeSnapshotPayload.SpokeSnapshotPayloadBuilder> baseBuilder = () -> snapshot.toBuilder()
-                .partners(new java.util.ArrayList<>())
-                .products(new java.util.ArrayList<>())
-                .accounts(new java.util.ArrayList<>())
-                .saleInvoices(new java.util.ArrayList<>())
-                .purchaseInvoices(new java.util.ArrayList<>())
-                .accountMoveLines(new java.util.ArrayList<>())
-                .salesOrders(new java.util.ArrayList<>())
-                .purchaseOrders(new java.util.ArrayList<>())
-                .ristournePaiements(new java.util.ArrayList<>())
-                .remisePaiements(new java.util.ArrayList<>())
-                .ristournesRapport(new java.util.ArrayList<>());
+        java.util.function.Supplier<SpokeSnapshotPayload> newPart = () -> {
+            SpokeSnapshotPayload p = snapshot.toBuilder().build();
+            for (SplitList s : SPLIT_LISTS) s.setter().accept(p, new java.util.ArrayList<>());
+            return p;
+        };
+        long baseBytes = objectMapper.writeValueAsBytes(newPart.get()).length;
 
-        java.util.List<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>> listGetters = java.util.List.of(
-                SALE_INVOICES, ACCOUNT_MOVE_LINES, PRODUCTS, PARTNERS, SALES_ORDERS, PURCHASE_INVOICES, PURCHASE_ORDERS,
-                RISTOURNE_PAIEMENTS, REMISE_PAIEMENTS, RISTOURNES_RAPPORT, ACCOUNTS);
-
-        // Taille d'une partie = base (listes vides) + somme des éléments + une virgule par élément :
-        // majorant exact de la taille sérialisée réelle, donc jamais au-dessus de maxBytes.
-        int baseBytes = objectMapper.writeValueAsBytes(baseBuilder.get().build()).length;
         java.util.List<SpokeSnapshotPayload> parts = new java.util.ArrayList<>();
-        java.util.Map<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>, java.util.List<Object>> current = new java.util.LinkedHashMap<>();
+        SpokeSnapshotPayload current = newPart.get();
         long currentBytes = baseBytes;
-        int currentCount = 0;
+        boolean currentHasItems = false;
 
-        for (var getter : listGetters) {
-            java.util.List<?> items = getter.apply(snapshot);
-            if (items == null) continue;
-            for (Object item : items) {
-                int itemBytes = objectMapper.writeValueAsBytes(item).length + 1;
-                if (currentCount > 0 && currentBytes + itemBytes > maxBytes) {
-                    parts.add(buildPart(baseBuilder.get(), current));
-                    current = new java.util.LinkedHashMap<>();
+        for (SplitList s : SPLIT_LISTS) {
+            java.util.List<?> source = s.getter().apply(snapshot);
+            if (source == null) continue;
+            for (Object item : source) {
+                long itemBytes = objectMapper.writeValueAsBytes(item).length + 1L;
+                if (currentHasItems && currentBytes + itemBytes > maxBytes) {
+                    parts.add(current);
+                    current = newPart.get();
                     currentBytes = baseBytes;
-                    currentCount = 0;
+                    currentHasItems = false;
                 }
                 if (baseBytes + itemBytes > maxBytes) {
                     log.warn("Un élément individuel du snapshot dépasse la taille max {} bytes; acceptez une partie plus grande", maxBytes);
                 }
-                current.computeIfAbsent(getter, g -> new java.util.ArrayList<>()).add(item);
+                @SuppressWarnings("unchecked")
+                java.util.List<Object> target = (java.util.List<Object>) s.getter().apply(current);
+                target.add(item);
                 currentBytes += itemBytes;
-                currentCount++;
+                currentHasItems = true;
             }
         }
-        // Dernière partie : gardée si elle porte des éléments, ou si c'est la seule (snapshot sans liste).
-        if (currentCount > 0 || parts.isEmpty()) parts.add(buildPart(baseBuilder.get(), current));
-        return parts;
-    }
 
-    @SuppressWarnings("unchecked")
-    private static SpokeSnapshotPayload buildPart(SpokeSnapshotPayload.SpokeSnapshotPayloadBuilder builder,
-            java.util.Map<java.util.function.Function<SpokeSnapshotPayload, java.util.List<?>>, java.util.List<Object>> lists) {
-        lists.forEach((getter, items) -> {
-            java.util.List raw = items;
-            if (getter == SALE_INVOICES) builder.saleInvoices(raw);
-            else if (getter == ACCOUNT_MOVE_LINES) builder.accountMoveLines(raw);
-            else if (getter == PRODUCTS) builder.products(raw);
-            else if (getter == PARTNERS) builder.partners(raw);
-            else if (getter == SALES_ORDERS) builder.salesOrders(raw);
-            else if (getter == PURCHASE_INVOICES) builder.purchaseInvoices(raw);
-            else if (getter == PURCHASE_ORDERS) builder.purchaseOrders(raw);
-            else if (getter == RISTOURNE_PAIEMENTS) builder.ristournePaiements(raw);
-            else if (getter == REMISE_PAIEMENTS) builder.remisePaiements(raw);
-            else if (getter == RISTOURNES_RAPPORT) builder.ristournesRapport(raw);
-            else if (getter == ACCOUNTS) builder.accounts(raw);
-        });
-        return builder.build();
+        // Dernière partie gardée si elle porte des éléments, ou s'il n'y a aucune partie du tout
+        // (snapshot sans liste découpable : les indicateurs scalaires doivent quand même partir).
+        if (currentHasItems || parts.isEmpty()) parts.add(current);
+        return parts;
     }
 
     /**

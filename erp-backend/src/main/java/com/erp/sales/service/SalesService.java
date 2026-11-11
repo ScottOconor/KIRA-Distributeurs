@@ -2968,6 +2968,15 @@ public class SalesService {
             return;
         }
 
+        // Entrées (déconsignes / retours) avant sorties (consignes / ventes) : pour un même
+        // emballage consigné puis déconsigné sur la facture, appliquer la sortie d'abord la
+        // plafonnait à 0 avant que l'entrée ne soit ajoutée, laissant le quant au-dessus de
+        // l'historique des mouvements.
+        productLines.sort(java.util.Comparator.comparing((LineProduct lp) -> {
+            BigDecimal q = lp.line().getQuantity() != null ? lp.line().getQuantity() : BigDecimal.ONE;
+            return isAvoir ? q.compareTo(ZERO) < 0 : q.compareTo(ZERO) >= 0;
+        }));
+
         // Générer la référence du picking
         String prefix = isAvoir ? "RET/VTE" : "LIV/VTE";
         documentNumberLock.lock("stock.picking." + companyId + "." + prefix);

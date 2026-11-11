@@ -5,6 +5,7 @@ import com.erp.config.repository.AppSettingsRepository;
 import com.erp.sync.entity.SyncEventType;
 import com.erp.sync.repository.OutboxEventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -75,7 +76,7 @@ class RemoteSyncGuardTest {
         OutboxEventRepository outbox = mock(OutboxEventRepository.class);
         RemoteSyncGuard guard = mock(RemoteSyncGuard.class);
         when(guard.isEnabled()).thenReturn(false);
-        SyncEventPublisher publisher = new SyncEventPublisher(outbox, new ObjectMapper(), guard);
+        SyncEventPublisher publisher = new SyncEventPublisher(outbox, new ObjectMapper(), mock(EntityManager.class), guard);
 
         publisher.publish(SyncEventType.SALE_INVOICE_POSTED, "FAC-1", java.util.Map.of("montant", 1000));
 

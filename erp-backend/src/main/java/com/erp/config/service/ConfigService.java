@@ -5,6 +5,8 @@ import com.erp.auth.entity.User;
 import com.erp.auth.repository.UserRepository;
 import com.erp.auth.service.PasswordPolicy;
 import com.erp.common.entity.Company;
+import com.erp.common.entity.CompanyLogo;
+import com.erp.common.repository.CompanyLogoRepository;
 import com.erp.common.repository.CompanyRepository;
 import com.erp.common.service.ImageFiles;
 import com.erp.config.dto.*;
@@ -36,6 +38,7 @@ public class ConfigService {
 
     private final com.erp.common.service.SingleCompany singleCompany;
     private final CompanyRepository         companyRepository;
+    private final CompanyLogoRepository     companyLogoRepository;
     private final RoleRepository            roleRepository;
     private final RolePermissionRepository  permissionRepository;
     private final UserRepository            userRepository;
@@ -77,7 +80,7 @@ public class ConfigService {
         return CompanyDTO.builder()
                 .id(c.getId()).name(c.getName()).sigle(c.getSigle())
                 .logoContentType(c.getLogoContentType())
-                .appName(c.getAppName()).hasAppLogo(c.getAppLogoData() != null && c.getAppLogoData().length > 0)
+                .appName(c.getAppName()).hasAppLogo(c.isHasAppLogo())
                 .active(c.isActive())
                 .build();
     }
@@ -270,18 +273,18 @@ public class ConfigService {
     public void uploadLogo(Long id, byte[] data, String contentType) {
         Company c = companyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Entreprise introuvable"));
-        c.setLogoData(data);
+        CompanyLogo logo = companyLogoRepository.findById(id).orElseThrow();
+        logo.setLogoData(data);
         c.setLogoContentType(contentType);
-        companyRepository.save(c);
     }
 
     @Transactional
     public void uploadAppLogo(Long id, byte[] data, String contentType) {
         Company c = companyRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Entreprise introuvable"));
-        c.setAppLogoData(data);
+        CompanyLogo logo = companyLogoRepository.findById(id).orElseThrow();
+        logo.setAppLogoData(data);
         c.setAppLogoContentType(contentType);
-        companyRepository.save(c);
     }
 
     // GET .../logo et .../app-logo sont consultées avant connexion (écran de login, permitAll
@@ -290,27 +293,29 @@ public class ConfigService {
     @Transactional(readOnly = true)
     public ResponseEntity<byte[]> getLogoResponse(Long id) {
         Company c = companyRepository.findById(id).orElse(null);
-        if (c == null || c.getLogoData() == null || c.getLogoData().length == 0)
+        byte[] data = c == null ? null : companyLogoRepository.findById(id).map(CompanyLogo::getLogoData).orElse(null);
+        if (data == null || data.length == 0)
             return ResponseEntity.notFound().build();
         String ct = ImageFiles.servedType(c.getLogoContentType());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, ct)
                 .header("Content-Security-Policy", ImageFiles.CONTENT_SECURITY_POLICY)
                 .header(HttpHeaders.CACHE_CONTROL, "max-age=86400")
-                .body(c.getLogoData());
+                .body(data);
     }
 
     @Transactional(readOnly = true)
     public ResponseEntity<byte[]> getAppLogoResponse(Long id) {
         Company c = companyRepository.findById(id).orElse(null);
-        if (c == null || c.getAppLogoData() == null || c.getAppLogoData().length == 0)
+        byte[] data = c == null ? null : companyLogoRepository.findById(id).map(CompanyLogo::getAppLogoData).orElse(null);
+        if (data == null || data.length == 0)
             return ResponseEntity.notFound().build();
         String ct = ImageFiles.servedType(c.getAppLogoContentType());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, ct)
                 .header("Content-Security-Policy", ImageFiles.CONTENT_SECURITY_POLICY)
                 .header(HttpHeaders.CACHE_CONTROL, "no-cache")
-                .body(c.getAppLogoData());
+                .body(data);
     }
 
     // ── Mappers ───────────────────────────────────────────────────────────
@@ -320,8 +325,8 @@ public class ConfigService {
                 .id(c.getId()).name(c.getName()).sigle(c.getSigle())
                 .rccm(c.getRccm()).nif(c.getNif()).adresse(c.getAdresse())
                 .telephone(c.getTelephone()).email(c.getEmail()).logoUrl(c.getLogoUrl())
-                .logoData(c.getLogoData()).logoContentType(c.getLogoContentType())
-                .appName(c.getAppName()).hasAppLogo(c.getAppLogoData() != null && c.getAppLogoData().length > 0)
+                .logoContentType(c.getLogoContentType())
+                .appName(c.getAppName()).hasAppLogo(c.isHasAppLogo())
                 .active(c.isActive()).fiscalYearStartMonth(c.getFiscalYearStartMonth())
                 .lockDate(c.getLockDate()).build();
     }
