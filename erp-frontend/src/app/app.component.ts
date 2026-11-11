@@ -147,18 +147,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ke.preventDefault();
 
-    const all = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        'input:not([disabled]):not([type="hidden"]):not([type="button"])' +
-        ':not([type="submit"]):not([type="reset"]):not([type="checkbox"])' +
-        ':not([type="radio"]):not([type="file"]),' +
-        'select:not([disabled]):not(.ss-hidden),' +
-        'textarea:not([disabled])'
-      )
-    ).filter(el => {
-      if ((el as HTMLInputElement).readOnly) return false;
-      return (el as any).offsetParent !== null || el.tagName.toLowerCase() === 'select';
-    });
+    const all = editableFields(document);
+
+    // Dernier champ de la dernière ligne d'un tableau de saisie : Entrée ajoute une ligne
+    // (bouton marqué data-add-line près du tableau) et place le curseur sur son premier champ.
+    if (this.enterAddsLine(target)) return;
 
     const idx = all.indexOf(target);
     if (idx >= 0 && idx < all.length - 1) {
@@ -168,4 +161,53 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  private enterAddsLine(target: HTMLElement): boolean {
+    const row = target.closest('tr');
+    const tbody = row?.parentElement;
+    if (!row || !tbody || tbody.tagName.toLowerCase() !== 'tbody' || tbody.lastElementChild !== row) return false;
+    const fields = editableFields(row);
+    if (fields[fields.length - 1] !== target) return false;
+    // Ligne vide (premier champ non renseigné) : ne pas empiler des lignes vides
+    const first = fields[0] as HTMLInputElement | undefined;
+    if (!first || !(first.value ?? '').trim()) return false;
+
+    let addBtn: HTMLElement | null = null;
+    for (let el = tbody.closest('table')?.parentElement; el && !addBtn; el = el.parentElement) {
+      addBtn = el.querySelector<HTMLElement>('[data-add-line]:not([disabled])');
+    }
+    if (!addBtn) return false;
+
+    const before = tbody.children.length;
+    addBtn.click();
+    // Attendre que la nouvelle ligne soit rendue
+    let tries = 0;
+    const focusNewRow = () => {
+      if (tbody.children.length > before) {
+        const next = editableFields(tbody.lastElementChild as HTMLElement)[0] as HTMLInputElement | undefined;
+        next?.focus();
+        if (next?.tagName.toLowerCase() === 'input') next.select();
+      } else if (++tries < 20) {
+        setTimeout(focusNewRow, 25);
+      }
+    };
+    setTimeout(focusNewRow);
+    return true;
+  }
+}
+
+/** Champs de saisie atteignables au clavier, dans l'ordre du document. */
+function editableFields(root: ParentNode): HTMLElement[] {
+  return Array.from(
+    root.querySelectorAll<HTMLElement>(
+      'input:not([disabled]):not([type="hidden"]):not([type="button"])' +
+      ':not([type="submit"]):not([type="reset"]):not([type="checkbox"])' +
+      ':not([type="radio"]):not([type="file"]),' +
+      'select:not([disabled]):not(.ss-hidden),' +
+      'textarea:not([disabled])'
+    )
+  ).filter(el => {
+    if ((el as HTMLInputElement).readOnly) return false;
+    return (el as any).offsetParent !== null || el.tagName.toLowerCase() === 'select';
+  });
 }
